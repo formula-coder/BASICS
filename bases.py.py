@@ -248,4 +248,6 @@ else:
 
 mensaje = "hola"
 mensaje += "Ernesto"
-numero
+numero = 5
+numero += 3
+print(mensaje,"tu numero es:",numero)
