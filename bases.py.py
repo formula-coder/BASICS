@@ -245,3 +245,7 @@ else:
 """Operador de asignacion, es el simbolo que se utiliza para asignar un valor a una variable"""
 # =, +=, -=, *=, /=, %=, **=, //=
 """ X = 5, X += 5, X -= 5, X *= 5, X /= 5, X %= 5, X **= 5, X //= 5"""
+
+mensaje = "hola"
+mensaje += "Ernesto"
+numero
