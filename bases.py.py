@@ -267,3 +267,8 @@ while X <= 5:
     print(X)
     X += 1
 print("fin del programa")
+
+x = 1
+while x <= 10:
+    print("ernesto")
+    x += 1
