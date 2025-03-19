@@ -251,3 +251,10 @@ mensaje += "Ernesto"
 numero = 5
 numero += 3
 print(mensaje,"tu numero es:",numero)
+
+"""parametro end, es un parametro que se utiliza para indicar que se debe imprimir al final de la instruccion print"""
+print("Esto es un", end="")
+print("ejemplo")
+
+"""sep, es un parametro que se utiliza para indicar que se debe imprimir entre las instrucciones print"""
+print("1","2","3","4","5","6","7","8", sep=",")
