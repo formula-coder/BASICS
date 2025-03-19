@@ -258,3 +258,12 @@ print("ejemplo")
 
 """sep, es un parametro que se utiliza para indicar que se debe imprimir entre las instrucciones print"""
 print("1","2","3","4","5","6","7","8", sep=",")
+
+"""Bucle while, es una estructura de control que se repite mientras una condicion sea verdadera"""
+#while condicion logica:
+    #instrucciones
+X= 1
+while X <= 5:
+    print(X)
+    X += 1
+print("fin del programa")
