@@ -306,4 +306,5 @@ while contador < 10:
         continue
 
     print("Valor actual de la variable:", contador)
-    
+
+""" La funcion len () nos permite obtener la longitud de una cadena  de caracteres, o bien , el numero de elementos que componen un objeto"""
