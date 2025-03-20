@@ -279,3 +279,31 @@ while num_dos < 1597:
     print(num_uno, num_dos, end=" " )
     num_uno = num_uno + num_dos
     num_dos = num_uno + num_dos
+"""Sentencias break y continue, son sentencias que se utilizan para alterar el flujo de ejecucion de un bucle"""
+""" Cabe destacar que en programacion una iteracion es la repeticion de un segmento de codigo dentro de un programa"""
+"""La sentencia break se utiliza para detener la ejecucion de un aiteracion y salir de ella, con lo cual, el programa podra continuar con la ejecucucion del codigo que se encuentre fuera de nuestro bucle"""
+
+# Ejemplo para break
+print("while con la sentencia break \n")
+contador = 0 
+while contador < 10:
+    contador += 1
+
+    if contador == 5:
+        break
+
+    print("Valor actual de la variabale:", contador)
+print("fin del programa, la sentencia break se ha ejecutado")
+
+""" Sentencia continue, es la que permite detener la iteracon actual y volver al principio del bucle para realizar una nueva iteracion, si es que la condicion rige a nuestro bule se sigue cumpliendo."""
+# ejemplo para continue 
+print ("while con la sentencia continue\n")
+contador = 0
+while contador < 10:
+    contador += 1
+
+    if contador == 5:
+        continue
+
+    print("Valor actual de la variable:", contador)
+    
