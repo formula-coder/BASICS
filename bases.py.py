@@ -318,5 +318,5 @@ longitud = len("La geekpedia")
 print("La geekpedia tiene", longitud, "caracteres")
 
 """la concatenacion de cadenas, es la operacion que nos permite unir dos o mas cadenas de caracteres para formar una sola cadena de mayor tamaño, para ello se utiliza el simbolo +"""
-"""El metodo for mat() nos permite formatear una cadena de caracteres, es decir, insertar valores en una cadena de caracteres, utilizando llaves {} como marcadores de posicion"""
+"""El metodo format() nos permite formatear una cadena de caracteres, es decir, insertar valores en una cadena de caracteres, utilizando llaves {} como marcadores de posicion"""
 
