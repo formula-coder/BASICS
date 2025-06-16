@@ -310,5 +310,10 @@ while contador < 10:
 """ La funcion len () nos permite obtener la longitud de una cadena  de caracteres, o bien , el numero de elementos que componen un objeto"""
 len = ("hola mundo")
 len("la geekpedia es una comunidad de programadores")
- #Ejemplo Funcion len()
+     #Ejemplo Funcion len()
+#Opcion 1
+print("Hola tiene", len("Hola"), "caracteres")
+#Opcion 2
+
+
 
