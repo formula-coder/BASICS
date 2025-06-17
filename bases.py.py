@@ -347,3 +347,29 @@ nombre = str(input("ingrese su nombre:"))
 num_uno = int(input("ingrese el primer numero: "))
 num_dos = int(input("ingrese el segundo numero: "))
 print(f"Hola{nombre}, el resultado de la suma de {num_uno} y {num_dos} es {num_uno + num_dos}")
+
+"""el metodo strip() nos permite eliminar los espacios en blanco al inicio y al final de una cadena de caracteres"""
+
+#ejemplo de uso de strip()
+cadena = "Hola mundo"
+cadena = cadena.strip("mun ho")
+print(f"La cadena es:{cadena}")
+
+"""el metodo rstrip() nos permite eliminar los espacios en blanco al final de una cadena de caracteres"""
+#ejemplo de uso de rstrip()
+cadena = "Hola mundo   "
+cadena = cadena.rstrip(" oH")
+print(f"La cadena es:{cadena}")
+
+"""el metodo lstrip() nos permite eliminar los espacios en blanco al inicio de una cadena de caracteres"""
+#ejemplo de uso de lstrip()
+cadena = "   Hola mundo"
+cadena = cadena.lstrip(" oH")
+print(f"La cadena es:{cadena}")
+
+"""El metodo istitle() y istitle() nos permite verificar si una cadena de caracteres esta en formato de titulo, es decir, si la primera letra de cada palabra esta en mayuscula"""
+#ejemplo de uso de istitle() 
+cadena = "Hola Mundo"
+print(nombre.istitle())
+nombre = nombre.title()
+print(f"La cadena es:{cadena}")
