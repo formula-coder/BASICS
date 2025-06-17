@@ -319,4 +319,31 @@ print("La geekpedia tiene", longitud, "caracteres")
 
 """la concatenacion de cadenas, es la operacion que nos permite unir dos o mas cadenas de caracteres para formar una sola cadena de mayor tamaño, para ello se utiliza el simbolo +"""
 """El metodo format() nos permite formatear una cadena de caracteres, es decir, insertar valores en una cadena de caracteres, utilizando llaves {} como marcadores de posicion"""
+# Ejemplo de concatenacion de cadenas
+nombre = "Ernesto"
+edad = 18
 
+print("Hola {}tienes {} años".format(nombre, edad))
+
+print("Hola {nombre}tienes{edad}años".format(nombre="Ernesto", edad=18))
+print("Hola {0} tienes {1} años".format(nombre, edad))
+
+""""f-strings, son una forma de formatear cadenas de caracteres, que nos permite insertar valores en una cadena de caracteres, utilizando llaves {} como marcadores de posicion, y la letra f al inicio de la cadena"""
+nombre = "Ernesto"
+edad = "18"
+print(f"Hola{nombre} tienes {edad} años")
+#ejemplo
+print(f"El resultado de esta operacion es{4+1}")
+
+resultado = 10 / 3
+print(f"El resultado es {resultado:.2f}")
+
+nombre = "Ernesto"
+estatura = 1.75
+edad = 18
+print(f"Hola{nombre}, tienes {edad} años y mides {estatura:.2f} metros")
+
+nombre = str(input("ingrese su nombre:"))
+num_uno = int(input("ingrese el primer numero: "))
+num_dos = int(input("ingrese el segundo numero: "))
+print(f"Hola{nombre}, el resultado de la suma de {num_uno} y {num_dos} es {num_uno + num_dos}")
