@@ -373,3 +373,14 @@ cadena = "Hola Mundo"
 print(nombre.istitle())
 nombre = nombre.title()
 print(f"La cadena es:{cadena}")
+
+#segundo ejemplo de uso de istitle()
+first_name = str(input("Ingrese su nombre: "))
+last_name = str(input("Ingrese su apellido: "))
+full_name = f"{first_name} {last_name}"
+
+print()
+print(f"¿el metodo title() funciona? {full_name.istitle()}")
+print(f"aplicando el metodo title() a la cadena: {full_name.title()}")
+print(f"volvemos a imprimir el nombre completo: {full_name}")
+

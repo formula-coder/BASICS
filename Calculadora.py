@@ -1,8 +1,7 @@
 
 
-print("===========") 
-print("Calculadora")
-print("===========")
+print("===========\ncalculadora\n===========") 
+print()
 
 num_int = int(input("Ingrese un valor entre 1,2,3 y 4:"))
 if num_int == 1:
