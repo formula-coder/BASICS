@@ -367,7 +367,7 @@ cadena = "   Hola mundo"
 cadena = cadena.lstrip(" oH")
 print(f"La cadena es:{cadena}")
 
-"""El metodo istitle() y istitle() nos permite verificar si una cadena de caracteres esta en formato de titulo, es decir, si la primera letra de cada palabra esta en mayuscula"""
+"""El metodo title() arregla el nombre y istitle()true or false nos permite verificar si una cadena de caracteres esta en formato de titulo, es decir, si la primera letra de cada palabra esta en mayuscula"""
 #ejemplo de uso de istitle() 
 cadena = "Hola Mundo"
 print(nombre.istitle())
@@ -380,7 +380,20 @@ last_name = str(input("Ingrese su apellido: "))
 full_name = f"{first_name} {last_name}"
 
 print()
-print(f"¿el metodo title() funciona? {full_name.istitle()}")
+print(f"¿el metodo istitle() funciona? {full_name.istitle()}")
 print(f"aplicando el metodo title() a la cadena: {full_name.title()}")
 print(f"volvemos a imprimir el nombre completo: {full_name}")
 
+print()
+full_name = full_name.title()
+print(f"¿el metodo title() se ha aplicado? {full_name.istitle()}")
+print(f"aplicando el metodo title() a la cadena: {full_name.title()}")  
+
+"""metodo lower()pone todo en minusculas y islower()true or false nos permite verificar si una cadena de caracteres esta en  minuscculas"""
+"""metodo upper() pone todo en mayusculas y isupper() true or false nos permite verificar si una cadena de caracteres esta en mayusculas"""
+#ejemplo de uso
+string = input("Ingrese una cadena de caracteres: ")
+print(f"\nla cadena en minusculas es: {string.lower()}")
+print(f"la cadena en mayusculas es: {string.upper()}")
+print(f"¿la cadena esta en minusculas? {string.islower()}")
+print(f"¿la cadena esta en mayusculas? {string.isupper()}")
