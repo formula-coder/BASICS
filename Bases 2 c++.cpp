@@ -1,6 +1,6 @@
 //Tipos de datos en c++
 
-#include<iostream>
+#include <iostream>
 #include<stdio.h>
 
 using namesapce std;
