@@ -3,7 +3,7 @@
 #include <iostream>
 #include<stdio.h>
 
-using namesapce std;
+using namespace std;
 
 int main(){
     int entero = 15;
@@ -209,4 +209,37 @@ int main() {
     cout << i <<endl;
     i--;
     }
+}
+
+//switch (  alternativa multiple)
+#include <iostream>
+using namespace std;
+
+int main()
+{
+	int op = 0;
+	cout<<"Seleccione una opcion: ";
+	cin>>op;
+	
+	cout<<"\n";
+	switch (op)
+	{
+		case 1:
+			cout<<"Resultado 1";
+			break;
+		case 2:
+			cout<<"Resultado 2";
+			break;
+		case 3:
+			cout<<"Resultado 3";
+			break;
+		case 4:
+			cout<<"Resultado 4";
+			break;
+		case 5:
+			cout<<"Resultado 5";
+			break;
+		default:
+			cout<<"Resultado por defecto si no se elije nada de lo anterior";
+	}
 }
