@@ -261,3 +261,108 @@ promedio =a/5;
 cout<<" el promedio de los valores son: "<<promedio;
 }
 }
+#include <iostream>
+using namespace std;
+
+int main(){
+
+    int i[5]={1,2,3,4,5};
+    string nombre[5];
+    int edad[5];
+    
+    for(int j=0;j<5;j++){
+        cout<<"Ingrese el nombre de la persona "<<j<<endl;
+        cin>>nombre[j];
+        cout<<"Ingrese la edad de la persona "<<j<<endl;
+        cin>>edad[j];
+        
+        
+        if(edad[j]>=18){
+		
+        cout<<"eres mayor de edad "<<nombre[j]<<endl;
+		}
+        else{ 
+		cout<<"eres menor de edad "<<nombre[j]<<endl;
+    
+    }
+}
+}
+//ordenacion
+// (burbuja)es un sencillo algoritmo de ordenacion que recorre un arreglo y compara elementos adyacentes, intercambiandolos si estan en el orden incorrecto. Este proceso se repite hasta que el arreglo este completamente ordenado.
+#include <iostream>
+using namespace std;
+
+int main(){
+    int numeros[] ={4,1,2,3,5};
+    int i,j,aux;
+
+    for(int i=0;i<5;i++){
+        for(int j=0;j<5;j++){
+            if(numeros[j]>numeros[j+1]){
+                aux=numeros[j];
+                numeros[j]=numeros[j+1];
+                numeros[j+1]=aux;
+            }
+        }
+    }
+    cout<<"orden ascendente: ";
+    for(int i=0;i<5;i++){
+        cout<<numeros[i]<<" ";
+    }
+    cout<<"orden descente: ";
+    for(int i=4;i>=0;i--){
+        cout<<numeros[i]<<" ";
+    }
+}
+
+//(inserccion) es un algoritmo de ordenacion que construye una secuencia ordenada de elementos, tomando uno a uno los elementos del arreglo original y colocandolos en la posicion correcta dentro de la secuencia ordenada.
+#include <iostream>
+using namespace std;
+int main(){
+    int numeros[] ={4,2,3,1,5};
+    int i,pos,aux;  
+
+    for(int i=1;i<5;i++){
+        aux=numeros[i];
+        pos=i;
+        while((pos>0)&&(numeros[pos-1]>aux)){
+            numeros[pos]=numeros[pos-1];
+            pos--;
+        }
+        numeros[pos]=aux;
+    }
+    cout<<"orden ascendente: ";
+    for(int i=0;i<5;i++){
+        cout<<numeros[i]<<" ";
+    }
+    cout<<"orden descente: ";
+    for(int i=4;i>=0;i--){
+        cout<<numeros[i]<<" ";
+    }
+}
+//(seleccion) es un algoritmo de ordenacion que divide el arreglo en dos partes: una parte ordenada y otra desordenada. En cada iteracion, selecciona el elemento mas pequeño (o mas grande, dependiendo del orden deseado) de la parte desordenada y lo intercambia con el primer elemento de esa parte, expandiendo asi la parte ordenada.
+#include <iostream>
+using namespace std;
+int main(){
+    int numeros[]={3,2,1,5,4};
+    int i,j,menor,aux;
+    for(int i=0;i<5;i++){
+        menor=i;
+        for(int j=i+1;j<5;j++){
+            if(numeros[j]<numeros[menor]){
+                menor=j;
+            }
+        }
+        aux=numeros[i];
+        numeros[i]=numeros[menor];
+        numeros[menor]=aux;
+    }
+    cout<<"orden ascendente: ";
+    for(int i=0;i<5;i++){
+        cout<<numeros[i]<<" ";
+    }
+    cout<<"orden descente: ";
+    for(int i=4;i>=0;i--){
+        cout<<numeros[i]<<" ";
+    }
+}
