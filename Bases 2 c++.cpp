@@ -243,3 +243,21 @@ int main()
 			cout<<"Resultado por defecto si no se elije nada de lo anterior";
 	}
 }
+//arreglos
+int main(){
+#include<iostream>
+using namespace std;
+int i [5]={1,2,3,4,5};
+int a=0;
+float promedio=0;
+
+int main(){
+ for (int j=0;j<5;j++){
+ cout<<"ingresa un numero: "<<j<<endl;
+ cin>>i[j];
+ a +=i[j];
+}
+promedio =a/5;
+cout<<" el promedio de los valores son: "<<promedio;
+}
+}
