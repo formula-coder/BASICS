@@ -157,6 +157,14 @@ while (numero >= 0)
     cin >> numero;
 }
 
+//do while, es un ciclo que se ejecuta al menos una vez, y luego repite la ejecucion mientras una condicion sea verdadera.
+int main() {
+    int contador = 1;
+    do {
+        cout << contador << ":numero" << endl;
+        contador++;
+    } while (contador <= 10);
+    return 0;
 }
 
 //Clase porgramacion Bv
@@ -364,5 +372,26 @@ int main(){
     cout<<"orden descente: ";
     for(int i=4;i>=0;i--){
         cout<<numeros[i]<<" ";
+    }
+}
+// (funciones) es un bloque de codigo que realiza una tarea especifica y puede ser reutilizado en diferentes partes del programa. Las funciones pueden recibir parametros de entrada y devolver valores de salida.
+int suma(int a, int b);
+int main(){
+    int n1, n2, resultado, numax, mayor;
+    cout<<"ingresa dos numeros: ";
+    cin>>n1>>n2;
+
+   mayor = encontrarmayor(n1,n2);
+   cout<<"el numero mayor es: "<<mayor<<endl;
+    getch();
+    return 0;
+}
+int encontrarmayor(int a, int b){
+    if(a>b){
+        numax = a;
+        return a;
+    }else{
+        nummax=x;
+        return b;
     }
 }
