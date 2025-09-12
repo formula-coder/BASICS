@@ -395,3 +395,80 @@ int encontrarmayor(int a, int b){
         return b;
     }
 }
+
+int suma(){
+/operacion
+}
+int main(){
+suma= suma();
+
+if(a > b){
+    return a;
+}
+cout<<"el resultado de la suma es: "<<suma<<endl;
+}
+//sollicitando datos pero no indicando operaciones.
+void saludar() {
+    cout << "Hola!" << endl;
+}
+
+
+
+//ejemplo de fucion con vector
+#include <iostream>
+using namespace std;
+
+void leervector(int vec[],int elementos);
+int a[5];
+
+int main(){
+    leervector(a,5);
+    return 0;
+}
+void leervector(int vec[],int elementos){
+    for(int i=0;i<elementos;i++){
+        cout<<"ingresa un numero: "<<i<<endl;
+        cin>>vec[i];
+    }
+}
+
+/*ejercicio: Desarrollar un programa que permita cargar 5nombres de personas y sus edades respectivas, luego de
+realizar la carga por teclado de todos los datos, imprimir losnombres de las personas mayores de edad (mayores o iguales
+a 18).Arreglos Paralelos*/
+
+#include <iostream>
+using namespace std;
+
+int imprimir(string nombre[], int edad[]);
+int main(){
+
+	int i[3]={1,2,3};
+	string nombre[3];
+	int edad[3];
+	cout<<"\n-- lista de personas --\n";
+	for(int j=0;j<3;j++){
+		cout<<"Ingresa tu nombre:"<<j<<endl;
+		cin>>nombre[j];
+		
+		cout<<nombre[j]<<" Ingresa tu edad: "<<endl;
+		cin>>edad[j];
+		
+		if(edad[j]>=18){
+			cout<<"eres mayor de edad "<<nombre[j]<<endl;
+		}else{ 
+		cout<<"eres menor de edad "<<nombre[j]<<endl;
+        }
+	}
+	imprimir(nombre,edad);
+}
+int imprimir(string nombre[], int edad[]){
+	cout<< "\n--- Lista de personas---\n";
+	for(int B=0;B<3;B++){
+	cout<<"nombre de la persona: "<< nombre[B]<<" y su edad: "<<edad[B]<<endl;	
+	}
+	return 0;
+}
+	
+
+
+
