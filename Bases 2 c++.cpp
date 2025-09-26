@@ -374,6 +374,53 @@ int main(){
         cout<<numeros[i]<<" ";
     }
 }
+//(busqueda)
+//(secuencial) es un algoritmo de busqueda que recorre un arreglo elemento por elemento, comparando cada elemento con el valor buscado hasta encontrar una coincidencia o llegar al final del arreglo.
+#include <iostream>
+using namespace std;
+int main(){
+    int numeros[]={1,2,3,4,5};
+    int i,valor,bandera=0;
+    cout<<"ingresa un numero a buscar: ";
+    cin>>valor;
+    for(int i=0;i<5;i++){
+        if(numeros[i]==valor){
+            bandera=1;
+            break;
+        }
+    }
+    if(bandera==1){
+        cout<<"el numero fue encontrado"<<endl;
+    }else{
+        cout<<"el numero no fue encontrado"<<endl;
+    }
+}
+//(binaria) es un algoritmo de busqueda que se utiliza en arreglos ordenados. Divide repetidamente el rango de busqueda a la mitad, comparando el valor buscado con el elemento central del rango. Si el valor buscado es igual al elemento central, la busqueda termina. Si es menor, la busqueda continua en la mitad inferior; si es mayor, en la mitad superior. Este proceso se repite hasta encontrar el valor o determinar que no esta presente en el arreglo.
+#include <iostream>
+using namespace std;
+int main(){
+    int numeros[]={1,2,3,4,5};
+    int i,valor,inicio=0,fin=4,medio,bandera=0;
+    cout<<"ingresa un numero a buscar: ";
+    cin>>valor;
+    while(inicio<=fin){
+        medio=(inicio+fin)/2;
+        if(numeros[medio]==valor){
+            bandera=1;
+            break;
+        }else if(numeros[medio]<valor){
+            inicio=medio+1;
+        }else{
+            fin=medio-1;
+        }
+    }
+    if(bandera==1){
+        cout<<"el numero fue encontrado"<<endl;
+    }else{
+        cout<<"el numero no fue encontrado"<<endl;
+    }
+}
+
 // (funciones) es un bloque de codigo que realiza una tarea especifica y puede ser reutilizado en diferentes partes del programa. Las funciones pueden recibir parametros de entrada y devolver valores de salida.
 int suma(int a, int b);
 int main(){
