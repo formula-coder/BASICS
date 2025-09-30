@@ -421,6 +421,284 @@ int main(){
     }
 }
 
+/*2. En un arreglo unidimensional se ha almacenado el número total de toneladas de
+cereales cosechadas durante cada mes del año. Elabore un programa que
+proporcione la siguiente información:
+a.- Promedio anual de toneladas cosechadas.
+b.- Cuántos meses tuvieron una cosecha superior al promedio anual?
+c.- Cuántos meses tuvieron una cosecha inferior al promedio anual?
+d.- Cuál fue el mes en el que se produjeron mayor número de toneladas?*/
+
+#include<iostream>
+#include<stdio.h>
+
+using namespace std;
+
+float promedio(int mes2[], int n);
+int maximo(int mes2[],int n);
+int minimo(int mes2[], int n);
+int superior(int mes2[], int n, int medias);
+int inferior(int mes2[], int n, int medias);
+int main(){
+	int media=0;
+	int max=0;
+	int min=0;
+	int mes[12];
+	int sup=0;
+	int inf=0;
+	int mayor=0;
+	int menor=0;
+	cout<<"========================================"<<endl;
+	cout<<"Toneladas de cereales anuales cosechadas"<<endl;
+	cout<<"========================================"<<endl;
+	
+for(int a=0;a<12;a++){
+	cout<<"ingresa  la cantidad de toneladas en el mes "<<a<<":"<<endl;
+	cin>>mes[a];
+}	
+cout<<"El promedio de anual de las toneladas cosechas es: ";
+media=promedio(mes,12);
+cout<<media<<endl;
+
+cout<<"La maxima cantidad de toneladas son: ";
+max= maximo(mes,12);
+cout<<max<<endl;
+
+cout<<"La minima cantidad de toneladas son: ";
+min =minimo(mes,12);
+cout<<min<<endl;
+
+sup= superior(mes,12,media);
+cout << "Meses con cosecha superior al promedio: "<<endl;
+    for (int i = 0; i < 12; i++) {
+        if (mes[i]>media) cout << (i + 1) << " ";
+    }
+    cout<<endl;
+inf=inferior(mes,12,media);
+cout << "Meses con cosecha inferior al promedio: "<<endl;
+    for (int i = 0; i < 12; i++) {
+        if (mes[i]<media) cout << (i + 1) << " ";
+    }
+return 0;
+}
+
+float promedio(int mes2[],int n){
+int suma=0;	
+for(int i =0;i<n;i++){
+	suma += mes2[i];
+}
+cout<<suma/n;
+return (float)suma / n;
+}
+
+int maximo(int mes2[],int n){
+	int valormax=0;
+	valormax=mes2[0];
+	for(int i=0;i<n;i++){
+		if (valormax<mes2[i]){
+			valormax=mes2[i];
+		}
+	}
+	return valormax;
+}
+int minimo(int mes2[],int n){
+	int valormin=0;
+		valormin=mes2[0];
+	for(int i=0;i<n;i++){
+		if (valormin>mes2[i]){
+			valormin=mes2[i];
+}
+}
+return valormin;
+}
+
+int superior(int mes2[], int n, int medias){
+int sup =0;
+int media=0;
+for(int i=0;i<n;i++){
+	if (mes2[i]>media){
+		sup++;
+	}
+	}
+	return sup;
+}
+int inferior(int mes2[], int n,int medias){
+int inf =0;
+int media=0;
+for (int i=0;i<n;i++){
+	if(mes2[i]<media){
+		inf++;
+	}
+}
+	return inf;
+}
+/*1. Elabore un programa, que lea un vector ordenado con números enteros
+(posiblemente repetidos) y dé como resultado un nuevo vector con números enteros,
+pero sin repeticiones. */
+
+#include<iostream>
+#include<stdio.h>
+
+using namespace std;
+int duplicado1(int a[],int c[],int n);
+int main(){
+	int op1=0;
+	int n=0;
+cout<<"Ingresa el tamaño del arreglo: "<<endl;
+cin>>n;
+int*n3= new int [n];
+int*n1= new int [n];
+
+for(int a=0;a<n;a++){
+	cout<<"Ingrese el valor "<<a<<" del primer arreglo:"<<endl;
+	cin>>n1[a];
+}
+
+op1=duplicado1(n1,n3,n);
+cout<<"El vector arrreglado :) "<<endl;
+for(int i=0;i<op1;i++){
+	cout<<n3[i];
+}
+cout<<endl;
+}
+
+int duplicado1(int a[],int c[],int n){
+	int j=0;
+	c[j]=a[0];
+	for(int i =1;i<n;i++){
+		if(a[i]!=c[j]) {
+			j++;
+			c[j]=a[i];
+		}
+	}
+	return j+1;
+}
+/*3. Elaborar un programa que lea dos arreglos de igual tamaño y forme un tercer
+arreglo mediante el producto de los elementos de los dos arreglos, tomados en orden
+inverso, es decir, productos del primer elemento del primer arreglo con el último del
+segundo; del segundo del primer arreglo con el penúltimo del segundo arreglo; hasta
+llegar al último del primer arreglo con el primero del segundo arreglo. Imprimir el
+arreglo creado. Cree una función para capturar los arreglos y otra función para formar
+el tercer arreglo. El tercer arreglo formado debe imprimirse en el programa principal.*/
+
+#include<iostream>
+#include<stdio.h>
+
+using namespace std;
+
+int tercero(int a[], int b[],int c[],int n);
+int captura(int a[],int b[],int n);
+
+int main(){
+	int n=0;
+	int inverso=0;
+	int fijado=0;
+	cout<<"Ingresa el tamaño del arreglo: ";
+	cin>> n;
+	int*vector1= new int[n];
+	int*vector2= new int[n];
+	int*vector3= new int[n];
+	fijado=captura(vector1,vector2,n);
+	cout<<fijado;
+	
+	cout<<"el inverso de estos arreglos es: ";
+ 	tercero(vector1,vector2,vector3,n);
+    for (int i = 0; i < n; i++) {
+        cout << vector3[i]<<endl;
+    }
+	return 0;
+} 
+
+int tercero(int a[],int b[],int c[],int n){
+	for	(int i=0;i<n/2;i++){
+		c[i] = a[i] * b[n - 1 - i];
+	}
+}
+
+int captura(int a[],int b[],int n){
+	for (int i =0;i<n;i++){
+		cout<<"Ingresa el numero "<<i<<" del primer arreglo: ";
+		cin>>a[i];
+	}
+	for (int i=0;i<n;i++){
+		cout<<"Ingresa el numero "<<i<<" del segundo arreglo: ";
+		cin>>b[i];
+	}
+}
+/*4. Se tienen dos arreglos A y B de m elementos. Partiendo de los dos arreglos,
+elaborar un programa que debe imprimir el arreglo creado para cada caso.
+1. Debe crear un arreglo con la unión de los elementos de los dos arreglos
+2. Debe crear un arreglo con la intersección de los dos arreglos
+3. Debe crear un arreglo con la diferencia A-B. */
+
+#include<iostream>
+#include<stdio.h>
+using namespace std;
+
+int unionarreglo(int A[], int B[], int anion[]);
+int interseccion(int A[],int B[],int inter[]);
+
+int main(){
+	int a[5]={1,2,3,4,5};
+	int valor1[5];
+	int b[5]={1,2,3,4,5};
+	int valor2[5];
+	int rta[10];
+	int rta2[5];
+	int total;
+	int total2;
+	cout<<"ingrese el primer arreglo"<<endl;
+	for(int a=0;a<5;a++){
+		cout<<"Ingrese el valor "<<a<<":"<<endl;
+		cin>>valor1[a];
+	}
+	cout<<"ingrese el segundo arreglo"<<endl;
+	for(int b=0;b<5;b++){
+		cout<<"ingresa el valor "<<b<<":"<<endl;
+		cin>>valor2[b];
+	}
+	cout<<"el resultado de la union fue:"<<endl;
+	total= unionarreglo(valor1,valor2,rta);
+	cout<<total<<endl;
+	cout<<"El resultado de la interseccion fue:"<<endl;
+	total2=interseccion(valor1,valor2,rta2);
+	cout<<total2<<endl;
+}
+
+int unionarreglo(int A[], int B[], int anion[]){
+
+
+for(int i =0; i < 10;i++){
+	if(i<5){
+		anion[i]=A[i];
+	}
+	else if(i>=5){
+		anion[i] =B[i-5];
+	}
+}
+for(int i=0; i < 10;i++){
+	cout<<i+1<<".-"<<anion[i]<<endl;
+}
+}
+
+int interseccion(int A[], int B[],int inter[]){
+int k=0;
+for(int a=0; a < 5;a++){
+for(int b=0;b < 5;b++){
+	if(A[a]==B[b]){
+	inter[k]=A[a];
+	k++;
+	break;
+	}
+}
+}	
+for(int i = 0; i < 5; i++){
+cout <<i + 1<<".- "<<inter[i]<<endl;
+    }
+}
+
+
+
 // (funciones) es un bloque de codigo que realiza una tarea especifica y puede ser reutilizado en diferentes partes del programa. Las funciones pueden recibir parametros de entrada y devolver valores de salida.
 int suma(int a, int b);
 int main(){
