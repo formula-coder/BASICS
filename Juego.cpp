@@ -2,17 +2,17 @@
 #include<stdio.h>
 
 using namespace std;
-int tablero(int columnas, int filas);
 
+int mostrartablero(char tablero[6][7]);
+bool colocarFicha(char tablero[6][7], int columna, char ficha);
 int main(){
 int opcion=0;
-std::string nombre1; 
-std::string nombre2;
-int juego;
-int columnas;
-int filas;
+string nombre1; 
+string nombre2;
 int opcion1=0;
 int opcion2=0;
+char tablero[6][7];
+
 do
 {
     cout<<"Juego de cuatro en linea"<<endl;
@@ -35,8 +35,7 @@ do
             cout<<"Ingrese el nombre del jugador 2: ";
             cin>>nombre2;
             cout<<"El nombre del jugador 2 es: "<<nombre2<<endl;
-            juego = tablero(columnas, filas);
-            cout<<juego;
+            mostrartablero(tablero);
             cout<<"salir(1) o continuar(2)?"<<endl;
                 cin>>opcion2;
             break;
@@ -78,11 +77,52 @@ do
         if(opcion2 == 2){
         cout<<"se acabo el programa";	}
 }
- int tablero(int columnas, int filas){
+ int mostrartablero(char tablero[6][7]){
     for(int i=0; i<8; i++){
         for(int j=0; j<9; j++){
             cout<<"|_|";
         }
         cout<<endl;
     }
+        cout << "---------------" << endl;
+    cout << " 1 2 3 4 5 6 7 " << endl << endl;
  }
+bool colocarFicha(char tablero[6][7], int columna, char ficha){
+    bool turn=true;
+    for (int i = 5; i >= 0; i--) { // desde abajo hacia arriba
+        if (tablero[i][columna] == ' ') {
+            tablero[i][columna] = ficha;
+            return true;
+        }
+    }
+    return false; // columna llena
+while (true) {
+        mostrarTablero(tablero);
+        if (turnoJugador1) {
+            cout << nombre1 << " (X), elige una columna (1-7): ";
+            ficha = 'X';
+        } else {
+            cout << nombre2 << " (O), elige una columna (1-7): ";
+            ficha = 'O';
+        }
+
+        cin >> columna;
+        columna--; // ajustar al índice (0–6)
+
+        if (columna < 0 || columna >= 7) {
+            cout << "Columna inválida. Intente de nuevo." << endl;
+            continue;
+        }
+
+        if (!colocarFicha(tablero, columna, ficha)) {
+            cout << "Columna llena. Intente con otra." << endl;
+            continue;
+        }
+
+        // Cambiar de turno
+        turnoJugador1 = !turnoJugador1;
+    }
+
+    return 0;
+
+}
