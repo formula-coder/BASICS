@@ -793,7 +793,146 @@ int imprimir(string nombre[], int edad[]){
 	}
 	return 0;
 }
-	
+//matrices es un arreglo bidimensional que se utiliza para almacenar datos en filas y columnas.
+#include <iostream>
+using namespace std;
+int main(){
+    int matriz[3][3];
+    //llenar la matriz
+    cout<<"ingresa los valores de la matriz: "<<endl;
+    for(int i=0;i<3;i++){
+        for(int j=0;j<3;j++){
+            cout<<"valor para la posicion ["<<i<<"]["<<j<<"]: ";
+            cin>>matriz[i][j];
+        }
+    }
+    //imprimir la matriz
+    cout<<"\nLa matriz ingresada es: "<<endl;
+    for(int u=0;u<3;u++){
+        for(int e=0;e<3;e++){
+           cout<<matriz[u][e]<<" ";
+        }
+        cout<<endl;
+    }
+}
+//multiplicacion de matrices.
+#include <iostream>
+#include <vector>
+using namespace std;
+int calculo(int matriz[][100],int matriz2[][100],int columna, int fila, int columna2, int fila2,int resultado[][100]);
+int main() {
+    int fila;
+    int columna;
+    int fila2;
+    int columna2;
+    int resultado[100][100];
+cout<<"multiplicaci�n de matrices"<<endl;
+	cout << "Ingresa el valor de la fila: " <<endl;
+    cin >> fila;
+    cout <<"Ingresa el valor de la columna: " <<endl;
+    cin >> columna;
+
+  	cout << "Ingresa el valor de la fila 2: " <<endl;
+    cin >> fila2;
+    cout << "Ingresa el valor de la columna 2: " <<endl;
+    cin >> columna2;
+
+int matriz[100][100];
+int matriz2[100][100];
+    // Llenar la matriz
+    cout << "\nIngresa los valores de la matriz:" <<endl;
+    for (int i = 0; i < fila; i++) {
+        for (int j = 0; j < columna; j++) {
+            cout << "Valor para la posicion [" << i << "][" << j << "]: ";
+            cin >> matriz[i][j]; // Usamos cin para enteros
+        }
+    }
+       cout << "\nIngresa los valores de la matriz 2:" <<endl;
+    for (int z= 0; z < fila2; z++) {
+        for (int x = 0; x < columna2; x++) {
+            cout << "Valor para la posicion [" << z << "][" << x<< "]: ";
+            cin >> matriz2[z][x]; // Usamos cin para enteros
+        }
+    }
+
+
+    // Imprimir la matriz
+    cout << "\nLa matriz ingresada es:" << endl;
+    for (int u = 0; u < fila; u++) {
+        for (int e= 0; e< columna; e++) {
+           cout << matriz[u][e] << " ";
+        }
+        cout<<endl;
+    }
+        cout << "\nLa matriz 2 ingresada es:" << endl;
+    for (int q= 0; q < fila2; q++) {
+        for (int k= 0; k< columna2; k++) {
+           cout << matriz2[q][k] << " ";
+        }
+        cout<<endl;
+    }
+calculo(matriz,matriz2,columna,fila, columna2,fila2,resultado);
+
+    return 0;
+}
+int calculo(int matriz[][100],int matriz2[][100],int columna, int fila, int columna2, int fila2,int resultado[][100]){
+	if (columna!=fila2){
+		cout<<"la matriz no se puede multiplicar :("<<endl;
+	}
+	else{
+		cout<<"la matriz se puede multiplicar :)"<<endl;
+	for (int i = 0; i < fila; i++) {
+        for (int j = 0; j < columna2; j++) {
+            for (int k = 0; k < columna; k++) {
+                resultado[i][j] += matriz[i][k] * matriz2[k][j];
+		}
+}
+	}
+		for(int o=0;o<fila;o++){
+			for(int r=0;r<columna2;r++){
+				cout << resultado[o][r] << " ";
+        }
+        cout << endl;
+			}
+}
+}
+
+//estructuras
+
+#include <iostream>
+#include<stdio.h>
+#include<conio.h>
+using namespace std;
+struct Persona {
+char nombre[20];
+int edad;
+
+}
+persona1;
+persona2;
+
+int main(){
+   cout<<"Ingresa el nombre de la primera persona: "<<endl;
+    cin.getline(persona1.nombre,20);
+    cout<<"Ingresa la edad de la primera persona: "<<endl;
+    cin>>persona1.edad;
+
+    cout<<"Ingresa el nombre de la segunda persona: "<<endl;
+    cin.getline(persona2.nombre,20);
+    cout<<"Ingresa la edad de la segunda persona: "<<endl;
+    cin>>persona2.edad;
+
+    cout<<"Datos de la primera persona: "<<endl;
+    cout<<"Nombre: "<<persona1.nombre<<endl;
+    cout<<"Edad: "<<persona1.edad<<endl;
+    cout<<"Datos de la segunda persona: "<<endl;
+    cout<<"Nombre: "<<persona2.nombre<<endl;
+    cout<<"Edad: "<<persona2.edad<<endl;
+
+    getch();
+
+    return 0;
+}
 
 
 
