@@ -935,4 +935,40 @@ int main(){
 }
 
 
+#include <iostream>
+#include<stdio.h>
+#include<conio.h>
+using namespace std;
+
+struct libro {
+    char titulo[30];
+    char autor[20];
+    char editorial[20];
+    int anio[20];
+} libro;
+int main(){
+    cout << "Ingresa la ccantidad de libros a registrar: ";
+    int n;
+    cin>>n;
+    for(int i=0;i<n;i++){
+        fflsuh(stdin);
+    cout<<"Ingresa el titulo del libro: "<<endl;
+    cin.getline(libro.titulo,30);
+    cout<<"Ingresa el autor del libro: "<<endl;
+    cin.getline(libro.autor,20);
+    cout<<"Ingresa la editorial del libro: "<<endl;
+    cin.getline(libro.editorial,20);
+    cout<<"Ingresa el anio de publicacion del libro: "<<endl;
+    cin.getline(libro.anio,20);
+    cout<<"\nDatos del libro registrado: "<<endl;
+    cout<<"Titulo: "<<libro.titulo<<endl;
+    cout<<"Autor: "<<libro.autor<<endl;
+    cout<<"Editorial: "<<libro.editorial<<endl;
+    cout<<"Anio de publicacion: "<<libro.anio<<endl;
+    break;
+    } 
+
+}
+
+
 
