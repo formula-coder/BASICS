@@ -985,8 +985,8 @@ int main (){
 cout<<"ingresa la cantidad de personas que se van a capturar:"<<endl;
 cin>>n;
 	number contactos[n];
-captura(contacto,n);
-impresion(contacto,n);
+captura(contactos,n);
+impresion(contactos,n);
 }
 
 void captura(number contactos[], int n){
@@ -1002,10 +1002,10 @@ void captura(number contactos[], int n){
 void impresion(number contactos[],int n){
 	cout<<"Contactos registrados"<<endl;
 	for(int i=0;i<n;i++){
-		cout<<"nombres registrados: "<<contactos[i].nombres<<endl;
+		cout<<"nombres registrados: "<<contactos[i].nombre<<endl;
 	}
 	for (int j=0;j<n;j++){
-		cout<<"numeros registrados: "<<contactos[i].numeros<<endl;
+		cout<<"numeros registrados: "<<contactos[i].numero<<endl;
 	}
 }
 
