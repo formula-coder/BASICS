@@ -966,9 +966,46 @@ int main(){
     cout<<"Editorial: "<<libro.editorial<<endl;
     cout<<"Anio de publicacion: "<<libro.anio<<endl;
     break;
-    } 
-
+    }
 }
 
+#include<iostream>
+#include<stdio.h>
 
+using namespace std;
+
+struct number{
+	string nombre;
+	string numero;	
+};
+void captura(number contactos[], int n);
+void impresion(number contactos[],int n);
+int main (){
+	int n=0;
+cout<<"ingresa la cantidad de personas que se van a capturar:"<<endl;
+cin>>n;
+	number contactos[n];
+captura(contacto,n);
+impresion(contacto,n);
+}
+
+void captura(number contactos[], int n){
+	for(int i=0;i<n;i++){
+		cout<<"Contacto"<<i<<endl;
+		cout<<"ingresa tu nombre: "<<endl;
+		getline(cin,contactos[i].nombre);
+		cout<<"ingresa tu numero de celular: "<<endl;
+		getline(cin,contactos[i].numero);
+	}
+}
+
+void impresion(number contactos[],int n){
+	cout<<"Contactos registrados"<<endl;
+	for(int i=0;i<n;i++){
+		cout<<"nombres registrados: "<<contactos[i].nombres<<endl;
+	}
+	for (int j=0;j<n;j++){
+		cout<<"numeros registrados: "<<contactos[i].numeros<<endl;
+	}
+}
 
