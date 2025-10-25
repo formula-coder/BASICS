@@ -6,6 +6,7 @@ using namespace std;
 void mostrartablero(char tablero[6][7]);
 bool colocarFicha(char tablero[6][7], int columna, char ficha);
 void jugarPartida(char tablero[6][7], string nombre1, string nombre2);
+
 int main() {
     int opcion = 0;
     string nombre1;
@@ -15,15 +16,22 @@ int main() {
     char ficha;
     int columna;
     bool turnoJugador1 = true;
-    int players;
-    int jugados;
-    int ganados;
-    int empates;
-    int perdidos;
-    int puntos;
-    int tablero [6][7];
-        cout << "Juego de cuatro en linea" << endl;
-        cout << "-----------------------" << endl;
+    int players = 0;
+    int jugados = 0;
+    int ganados = 0;
+    int empates = 0;
+    int perdidos = 0;
+    int puntos = 0;
+
+    // tablero principal inicializado en espacios
+    char tablero[6][7];
+    for (int i = 0; i < 6; ++i)
+        for (int j = 0; j < 7; ++j)
+            tablero[i][j] = ' ';
+
+    cout << "Juego de cuatro en linea" << endl;
+    cout << "-----------------------" << endl;
+
     do {
         cout << "Menu de opciones" << endl;
         cout << "1. Jugar partida" << endl;
@@ -45,25 +53,31 @@ int main() {
                 cout << "Ingrese el nombre del jugador 2: ";
                 cin >> nombre2;
                 cout << "El nombre del jugador 2 es: " << nombre2 << endl;
-                jugarPartida(tablero,nombre1,nombre2);
+
+                // reiniciar tablero antes de la partida
+                for (int i = 0; i < 6; ++i)
+                    for (int j = 0; j < 7; ++j)
+                        tablero[i][j] = ' ';
+
+                jugarPartida(tablero, nombre1, nombre2);
                 break;
 
             case 2:
                 cout << "Jugar torneo" << endl;
-                cout<<"cuantos jugadores van a participar?"<<endl;
-                cin>> players;
-                for(int i=0; i<players; i++){
+                cout << "Cuantos jugadores van a participar? ";
+                cin >> players;
+                for (int i = 0; i < players; i++) {
                     cout << "Ingrese el nombre del jugador " << i+1 << ": ";
                     string nombre;
                     cin >> nombre;
                     cout << "El nombre del jugador " << i+1 << " es: " << nombre << endl;
                 }
-                cout<<"Ingrese el nombre del torneo: "<<endl;
-                string nombreTorneo;
-                cin>> nombreTorneo;
-                cout<<"El nombre del torneo es: "<< nombreTorneo <<endl;
-                
-
+                cout << "Ingrese el nombre del torneo: ";
+                {
+                    string nombreTorneo;
+                    cin >> nombreTorneo;
+                    cout << "El nombre del torneo es: " << nombreTorneo << endl;
+                }
                 break;
 
             case 3:
@@ -78,14 +92,16 @@ int main() {
                         cout << "===== Estadisticas de la partida =====" << endl;
                         cout << "Jugador     Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
                         cout << "----------------------------------------------" << endl;
-                        cout << nombre1 << "\t"<<jugados<<"\t"<<ganados<<"\t"<<empates<<"\t"<<perdidos<< "\t"<<puntos << endl;
-                        cout << nombre2 << "\t"jugados<<"\t"<<ganados<<"\t"<<empates<<"\t"<<perdidos<< "\t"<<puntos<< endl;
-                    
+                        cout << nombre1 << "\t" << jugados << "\t" << ganados << "\t" << empates << "\t" << perdidos << "\t" << puntos << endl;
+                        cout << nombre2 << "\t" << jugados << "\t" << ganados << "\t" << empates << "\t" << perdidos << "\t" << puntos << endl;
+
                         cout << "Salir(1) o continuar(2)? ";
                         cin >> opcion2;
 
-                        if (opcion2 == 2) {
-                            cout << "Se acabo el programa";
+                        if (opcion2 == 1) {
+                            // continue menu loop
+                        } else if (opcion2 == 2) {
+                            cout << "Se acabo el programa" << endl;
                         }
                         break;
                 }
@@ -102,38 +118,38 @@ int main() {
             default:
                 cout << "Opcion no valida" << endl;
         }
-    } while (opcion !=5);
+    } while (opcion != 5);
 
     if (opcion2 == 2) {
-        cout << "Se acabo el programa";
+        cout << "Se acabo el programa" << endl;
     }
+
+    return 0;
 }
 
 void mostrartablero(char tablero[6][7]) {
+    cout << endl;
     for (int i = 0; i < 6; i++) {
         for (int j = 0; j < 7; j++) {
-            cout << "| |";
+            cout << "|";
+            cout << (tablero[i][j] == ' ' ? ' ' : tablero[i][j]);
+            cout << "|";
         }
         cout << endl;
     }
     cout << "---------------------------" << endl;
-    cout << " 1  2  3  4  5  6  7  8  9 " << endl << endl;
+    cout << " 1  2  3  4  5  6  7 " << endl << endl;
 }
+
 bool colocarFicha(char tablero[6][7], int columna, char ficha) {
-    bool turn = true;
-    int turnoJugador1 = 0;
-
-
     for (int i = 5; i >= 0; i--) { // desde abajo hacia arriba
         if (tablero[i][columna] == ' ') {
             tablero[i][columna] = ficha;
             return true;
         }
     }
-
     return false; // columna llena
 }
-
 
 void jugarPartida(char tablero[6][7], string nombre1, string nombre2) {
     char ficha;
@@ -143,14 +159,26 @@ void jugarPartida(char tablero[6][7], string nombre1, string nombre2) {
         mostrartablero(tablero);
 
         if (turnoJugador1) {
-            cout << nombre1 << " (X), elige una columna (1-7): ";
+            cout << nombre1 << " (X), elige una columna (1-7) o 0 para salir: ";
             ficha = 'X';
         } else {
-            cout << nombre2 << " (O), elige una columna (1-7): ";
+            cout << nombre2 << " (O), elige una columna (1-7) o 0 para salir: ";
             ficha = 'O';
         }
 
-       cin >> columna;
+        cin >> columna;
+        if (!cin) { // simple input guard
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Entrada invalida. Intente de nuevo." << endl;
+            continue;
+        }
+
+        if (columna == 0) {
+            cout << "Saliendo de la partida." << endl;
+            break;
+        }
+
         columna--; // ajustar al índice (0–6)
 
         if (columna < 0 || columna >= 7) {
@@ -162,7 +190,8 @@ void jugarPartida(char tablero[6][7], string nombre1, string nombre2) {
             cout << "Columna llena. Intente con otra." << endl;
             continue;
         }
-mostrartablero(tablero);
+
+        mostrartablero(tablero);
         // Cambiar turno
         turnoJugador1 = !turnoJugador1;
     }
