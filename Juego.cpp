@@ -60,7 +60,7 @@ int main() {
                 jugarPartida(tablero, nombre1, nombre2);
                 break;
             case 2:{
-                cout << "Jugar torneo" << endl;
+                cout << "Se escogio jugar torneo" << endl;
                 cout << "Cuantos jugadores van a participar? ";
                 cin >> players;
                 string nombre[10];//hasta dies jugadores :)
