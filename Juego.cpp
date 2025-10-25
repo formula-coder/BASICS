@@ -59,24 +59,24 @@ int main() {
                         tablero[i][j] = ' ';
                 jugarPartida(tablero, nombre1, nombre2);
                 break;
-            case 2:
+            case 2:{
                 cout << "Jugar torneo" << endl;
                 cout << "Cuantos jugadores van a participar? ";
                 cin >> players;
+                string nombre[10];//hasta dies jugadores :)
                 for (int i = 0; i < players; i++) {
                     cout << "Ingrese el nombre del jugador " << i+1 << ": ";
-                    string nombre;
-                    cin >> nombre;
-                    cout << "El nombre del jugador " << i+1 << " es: " << nombre << endl;
+                    cin >> nombre[i];
+                    cout << "El nombre del jugador " << i+1 << " es: " << nombre[i] << endl;
                 }
                 cout << "Ingrese el nombre del torneo: ";
-                {
                     string nombreTorneo;
                     cin >> nombreTorneo;
                     cout << "El nombre del torneo es: " << nombreTorneo << endl;
-                }
+                      jugarPartida(tablero,nombre[0],nombre[1]); 
+                
                 break;
-
+            }
             case 3:
                 cout << "Ver estadisticas" << endl;
                 cout << "Que estadisticas quiere ver?" << endl;
@@ -104,21 +104,22 @@ int main() {
                 }
                 break;
 
-            case 4:
+            case 4:{
                 cout << "Cargar/guardar" << endl;
                 break;
-
-            case 5:
+            }
+            case 5:{
                 cout << "Salio" << endl;
                 break;
-
+        }
             default:
                 cout << "Opcion no valida" << endl;
-        }
+                break;
+    }   
     } while (opcion != 5);
 
     if (opcion2 == 2) {
-        cout << "Se acabo el programa" << endl;
+        cout << "Se cerro el juego" << endl;
     }
 
     return 0;
