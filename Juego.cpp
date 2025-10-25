@@ -21,6 +21,7 @@ int main() {
     int empates;
     int perdidos;
     int puntos;
+    int tablero [6][7];
         cout << "Juego de cuatro en linea" << endl;
         cout << "-----------------------" << endl;
     do {

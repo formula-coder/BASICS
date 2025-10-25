@@ -8,7 +8,7 @@ int main() {
     int fila2;
     int columna2;
     int resultado[100][100];
-cout<<"multiplicación de matrices"<<endl;
+cout<<"multiplicaciï¿½n de matrices"<<endl;
 	cout << "Ingresa el valor de la fila: " <<endl;
     cin >> fila;
     cout <<"Ingresa el valor de la columna: " <<endl;
