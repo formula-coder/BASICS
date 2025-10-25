@@ -45,11 +45,10 @@ int main() {
 
         switch (opcion) {
             case 1:
-                cout << "Jugar partida" << endl;
+                cout << " Se escogio jugar partida" << endl;
                 cout << "Ingrese el nombre del jugador 1: ";
                 cin >> nombre1;
                 cout << "El nombre del jugador 1 es: " << nombre1 << endl;
-
                 cout << "Ingrese el nombre del jugador 2: ";
                 cin >> nombre2;
                 cout << "El nombre del jugador 2 es: " << nombre2 << endl;
@@ -58,10 +57,8 @@ int main() {
                 for (int i = 0; i < 6; ++i)
                     for (int j = 0; j < 7; ++j)
                         tablero[i][j] = ' ';
-
                 jugarPartida(tablero, nombre1, nombre2);
                 break;
-
             case 2:
                 cout << "Jugar torneo" << endl;
                 cout << "Cuantos jugadores van a participar? ";
@@ -129,21 +126,20 @@ int main() {
 
 void mostrartablero(char tablero[6][7]) {
     cout << endl;
+    cout << "-----------------------------" << endl;
     for (int i = 0; i < 6; i++) {
         for (int j = 0; j < 7; j++) {
-            cout << "|";
-            cout << (tablero[i][j] == ' ' ? ' ' : tablero[i][j]);
-            cout << "|";
+            cout << "| " << tablero[i][j] << " ";  
         }
-        cout << endl;
+        cout << "|"<<endl;
     }
-    cout << "---------------------------" << endl;
-    cout << " 1  2  3  4  5  6  7 " << endl << endl;
+    cout << "-----------------------------" << endl;
+    cout << "  1   2   3   4   5   6   7 " << endl << endl;
 }
 
 bool colocarFicha(char tablero[6][7], int columna, char ficha) {
     for (int i = 5; i >= 0; i--) { // desde abajo hacia arriba
-        if (tablero[i][columna] == ' ') {
+        if (tablero[i][columna] == ' '){
             tablero[i][columna] = ficha;
             return true;
         }
@@ -168,8 +164,6 @@ void jugarPartida(char tablero[6][7], string nombre1, string nombre2) {
 
         cin >> columna;
         if (!cin) { // simple input guard
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cout << "Entrada invalida. Intente de nuevo." << endl;
             continue;
         }
