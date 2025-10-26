@@ -6,33 +6,39 @@ using namespace std;
 void mostrartablero(char tablero[6][7]);
 bool colocarFicha(char tablero[6][7], int columna, char ficha);
 void jugarPartida(char tablero[6][7], string nombre1, string nombre2);
-
+bool verificarGanador(char tablero[6][7], char ficha);
 int main() {
     int opcion = 0;
     string nombre1;
     string nombre2;
+    string nombre[10];
     int opcion1 = 0;
-    int opcion2 = 0;
     char ficha;
     int columna;
     bool turnoJugador1 = true;
     int players = 0;
-    int jugados = 0;
-    int ganados = 0;
-    int empates = 0;
-    int perdidos = 0;
-    int puntos = 0;
+    int jugados[100];
+    int ganados[100];
+    int empates[100];
+    int perdidos[100];
+    int puntos[100];
 
     // tablero principal inicializado en espacios
     char tablero[6][7];
-    for (int i = 0; i < 6; ++i)
-        for (int j = 0; j < 7; ++j)
-            tablero[i][j] = ' ';
+   cout << endl;
+    cout << "-----------------------------" << endl;
+    for (int i = 0; i < 6; i++) {
+        for (int j = 0; j < 7; j++) {
+            cout << "| " << tablero[i][j] << " ";  
+        }
+        cout << "|"<<endl;
+    }
+    cout << "-----------------------------" << endl;
+    cout << "  1   2   3   4   5   6   7 " << endl << endl;
 
     cout << "Juego de cuatro en linea" << endl;
     cout << "-----------------------" << endl;
 
-    do {
         cout << "Menu de opciones" << endl;
         cout << "1. Jugar partida" << endl;
         cout << "2. Jugar torneo" << endl;
@@ -59,72 +65,62 @@ int main() {
                         tablero[i][j] = ' ';
                 jugarPartida(tablero, nombre1, nombre2);
                 break;
-            case 2:{
+
+            case 2: {
                 cout << "Se escogio jugar torneo" << endl;
                 cout << "Cuantos jugadores van a participar? ";
                 cin >> players;
-                string nombre[10];//hasta dies jugadores :)
+                //hasta dies jugadores :)
                 for (int i = 0; i < players; i++) {
                     cout << "Ingrese el nombre del jugador " << i+1 << ": ";
                     cin >> nombre[i];
                     cout << "El nombre del jugador " << i+1 << " es: " << nombre[i] << endl;
                 }
                 cout << "Ingrese el nombre del torneo: ";
-                    string nombreTorneo;
-                    cin >> nombreTorneo;
-                    cout << "El nombre del torneo es: " << nombreTorneo << endl;
-                      jugarPartida(tablero,nombre[0],nombre[1]); 
-                
+                string nombreTorneo;
+                cin >> nombreTorneo;
+                cout << "El nombre del torneo es: " << nombreTorneo << endl;
+                cout<<"jugadores participantes: "<<players<<endl;
+                for(int w=0;w<players;w++){
+                    cout<<"Jugador "<<w+1<<": "<<nombre[w]<<endl;
+                }
+                jugarPartida(tablero,nombre[0],nombre[1]); 
                 break;
             }
+
             case 3:
                 cout << "Ver estadisticas" << endl;
                 cout << "Que estadisticas quiere ver?" << endl;
-                cout << "Estadisticas partida (1)" << endl;
-                cout << "Estadisticas torneo (2)" << endl;
+                cout << "Estadisticas del Torneo(1)" << endl;
+                cout << "Estadisticas  de la Partida(2)" << endl;
                 cin >> opcion1;
 
                 switch (opcion1) {
                     case 1:
-                        cout << "===== Estadisticas de la partida =====" << endl;
+                        cout << "===== Estadisticas del Torneo =====" << endl;
                         cout << "Jugador     Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
                         cout << "----------------------------------------------" << endl;
-                        cout << nombre1 << "\t" << jugados << "\t" << ganados << "\t" << empates << "\t" << perdidos << "\t" << puntos << endl;
-                        cout << nombre2 << "\t" << jugados << "\t" << ganados << "\t" << empates << "\t" << perdidos << "\t" << puntos << endl;
-
-                        cout << "Salir(1) o continuar(2)? ";
-                        cin >> opcion2;
-
-                        if (opcion2 == 1) {
-                            // continue menu loop
-                        } else if (opcion2 == 2) {
-                            cout << "Se acabo el programa" << endl;
+                        for(int s=0;s<players;s++){
+                            cout << nombre[s]<< "         " << jugados[s] << "        " << ganados[s] << "       " << empates[s] << "       " << perdidos[s]<< "       " << puntos[s]<< endl;
                         }
                         break;
                 }
                 break;
 
-            case 4:{
+            case 4:
                 cout << "Cargar/guardar" << endl;
                 break;
-            }
-            case 5:{
+
+            case 5:
                 cout << "Salio" << endl;
                 break;
-        }
+
             default:
                 cout << "Opcion no valida" << endl;
                 break;
-    }   
-    } while (opcion != 5);
-
-    if (opcion2 == 2) {
-        cout << "Se cerro el juego" << endl;
-    }
-
+        }
     return 0;
-}
-
+    }
 void mostrartablero(char tablero[6][7]) {
     cout << endl;
     cout << "-----------------------------" << endl;
@@ -149,6 +145,7 @@ bool colocarFicha(char tablero[6][7], int columna, char ficha) {
 }
 
 void jugarPartida(char tablero[6][7], string nombre1, string nombre2) {
+
     char ficha;
     int columna;
     bool turnoJugador1 = true;
@@ -190,4 +187,17 @@ void jugarPartida(char tablero[6][7], string nombre1, string nombre2) {
         // Cambiar turno
         turnoJugador1 = !turnoJugador1;
     }
+}
+bool verificarGanador(char tablero[6][7], char ficha){
+    // Verificación del ganador :)
+    //Verificación horizontal
+    for(int i=0;i<6;i++){
+        for(int j=0;j<4;j++){
+            if(tablero[i][j]==ficha and tablero[i][j+1] and tablero[i][j+2] and tablero[i][j+3]==ficha){
+                return true;
+            }
+        }
+    }
+//Verificación vertical
+
 }
