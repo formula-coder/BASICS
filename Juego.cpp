@@ -110,6 +110,7 @@ int main() {
         }
     return 0;
     }
+    
 void mostrartablero(char tablero[6][7]) {
     cout << endl;
     cout << "-----------------------------" << endl;
@@ -175,6 +176,7 @@ void jugarPartida(char tablero[6][7], string nombre1, string nombre2) {
         turnoJugador1 = !turnoJugador1;
     }
 }
+
 bool verificarGanador(char tablero[6][7], char ficha){
     // Verificación del ganador :)
     //Verificación horizontal
@@ -186,5 +188,4 @@ bool verificarGanador(char tablero[6][7], char ficha){
         }
     }
 //Verificación vertical
-
 }
