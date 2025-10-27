@@ -7,6 +7,7 @@ void mostrartablero(char tablero[6][7]);
 bool colocarFicha(char tablero[6][7], int columna, char ficha);
 void jugarPartida(char tablero[6][7], string nombre1, string nombre2);
 bool verificarGanador(char tablero[6][7], char ficha);
+
 int main() {
     int opcion = 0;
     string nombre1;
