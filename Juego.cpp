@@ -23,9 +23,10 @@ int main() {
     int perdidos[100];
     int puntos[100];
     char tablero[6][7];
+    cout << "Bienvenido al juego de cuatro en linea" << endl;
+    cout << "-------------------------------------" << endl;
     cout << "Juego de cuatro en linea" << endl;
     cout << "-----------------------" << endl;
-
         cout << "Menu de opciones" << endl;
         cout << "1. Jugar partida" << endl;
         cout << "2. Jugar torneo" << endl;
@@ -169,8 +170,6 @@ void jugarPartida(char tablero[6][7], string nombre1, string nombre2) {
             cout << "Columna llena. Intente con otra." << endl;
             continue;
         }
-
-        mostrartablero(tablero);
         // Cambiar turno
         turnoJugador1 = !turnoJugador1;
     }
