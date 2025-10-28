@@ -188,4 +188,27 @@ bool verificarGanador(char tablero[6][7], char ficha){
         }
     }
 //Verificación vertical
+for(int j=0;j<7;j++){
+    for(int i=0;i<3;i++){
+        if(tablero[i][j]==ficha and tablero[i+1][j] and tablero[i+2][j] and tablero[i+3][j]==ficha){
+            return true;
+        }
+    }
+}
+//Verificación diagonal derecha
+for(int i=0;i<3;i++){
+    for(int j=0;j<4;j++){
+        if(tablero[i][j]==ficha and tablero[i+1][j+1] and tablero[i+2][j+2] and tablero[i+3][j+3]==ficha){
+            return true;
+        }
+    }
+}
+//Verificación diagonal izquierda
+for(int i=0;i<3;i++){
+    for(int j=3;j<7;j++){
+        if(tablero[i][j]==ficha and tablero[i+1][j-1] and tablero[i+2][j-2] and tablero[i+3][j-3]==ficha){
+            return true;
+        }
+    }
+}
 }
