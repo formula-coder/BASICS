@@ -1009,3 +1009,47 @@ void impresion(number contactos[],int n){
 	}
 }
 
+//estructuras anidadas
+#include <iostream>
+#include<stdio.h>
+using namespace std;
+
+struct direccion{
+    char calle[30],numero[10],colonia[20],municipio[20];
+
+};
+struct persona{
+    char nombre[20],apellido[20];
+    int edad;
+    struct direccion direccionPersona;
+}persona[2];
+
+main(){
+    for(int i=0;i<2;i++){
+        cout<<"Ingresa el nombre: "<<endl;
+        cin.getline(persona[i].nombre,20);
+        cout<<"Ingresa el apellido: "<<endl;
+        cin.getline(persona[i].apellido,20);
+        cout<<"Ingresa la edad: "<<endl;
+        cin>>persona[i].edad;
+        fflush(stdin);
+        cout<<"Ingresa la calle: "<<endl;
+        cin.getline(persona[i].direccionPersona.calle,30);
+        cout<<"Ingresa el numero: "<<endl;
+        cin.getline(persona[i].direccionPersona.numero,10);
+        cout<<"Ingresa la colonia: "<<endl;
+        cin.getline(persona[i].direccionPersona.colonia,20);
+        cout<<"Ingresa el municipio: "<<endl;
+        cin.getline(persona[i].direccionPersona.municipio,20);
+    }
+    for(int i=0;i<2;i++){
+        cout<<"\nDatos de la persona "<<i+1<<endl;
+        cout<<"Nombre: "<<persona[i].nombre<<endl;
+        cout<<"Apellido: "<<persona[i].apellido<<endl;
+        cout<<"Edad: "<<persona[i].edad<<endl;
+        cout<<"Calle: "<<persona[i].direccionPersona.calle<<endl;
+        cout<<"Numero: "<<persona[i].direccionPersona.numero<<endl;
+        cout<<"Colonia: "<<persona[i].direccionPersona.colonia<<endl;
+        cout<<"Municipio: "<<persona[i].direccionPersona.municipio<<endl;
+    }
+}
