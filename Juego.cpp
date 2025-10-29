@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -8,22 +9,26 @@ bool colocarFicha(char tablero[6][7], int columna, char ficha);
 void jugarPartida(char tablero[6][7], string nombre1, string nombre2);
 bool verificarGanador(char tablero[6][7], char ficha);
 
+struct jugador{
+    string nombre;
+    int jugados=0;
+    int ganados=0;
+    int empates=0;
+    int perdidos=0;
+    int puntos=0;
+};
+
 int main() {
     int opcion = 0;
     string nombre1;
     string nombre2;
-    string nombre[10];
     int opcion1 = 0;
     char ficha;
     int columna;
     bool turnoJugador1 = true;
     int players = 0;
-    int jugados[100];
-    int ganados[100];
-    int empates[100];
-    int perdidos[100];
-    int puntos[100];
     char tablero[6][7];
+    vector<jugador>jugadores;
     cout << "Bienvenido al juego de cuatro en linea" << endl;
     cout << "-------------------------------------" << endl;
     cout << "Juego de cuatro en linea" << endl;
@@ -59,11 +64,12 @@ int main() {
                 cout << "Se escogio jugar torneo" << endl;
                 cout << "Cuantos jugadores van a participar? ";
                 cin >> players;
+                jugadores.resize(players);
                 //hasta dies jugadores :)
                 for (int i = 0; i < players; i++) {
                     cout << "Ingrese el nombre del jugador " << i+1 << ": ";
-                    cin >> nombre[i];
-                    cout << "El nombre del jugador " << i+1 << " es: " << nombre[i] << endl;
+                    cin >> jugadores[i].nombre;
+                    cout << "El nombre del jugador " << i+1 << " es: " << jugadores[i].nombre << endl;
                 }
                 cout << "Ingrese el nombre del torneo: ";
                 string nombreTorneo;
@@ -71,9 +77,9 @@ int main() {
                 cout << "El nombre del torneo es: " << nombreTorneo << endl;
                 cout<<"jugadores participantes: "<<players<<endl;
                 for(int w=0;w<players;w++){
-                    cout<<"Jugador "<<w+1<<": "<<nombre[w]<<endl;
+                    cout<<"Jugador "<<w+1<<": "<<jugadores[w].nombre<<endl;
                 }
-                jugarPartida(tablero,nombre[0],nombre[1]); 
+                jugarPartida(tablero,jugadores[0].nombre,jugadores[1].nombre); 
                 break;
             }
 
@@ -90,7 +96,7 @@ int main() {
                         cout << "Jugador     Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
                         cout << "----------------------------------------------" << endl;
                         for(int s=0;s<players;s++){
-                            cout << nombre[s]<< "         " << jugados[s] << "        " << ganados[s] << "       " << empates[s] << "       " << perdidos[s]<< "       " << puntos[s]<< endl;
+                            cout << jugadores[s].nombre<< "         " << jugadores[s].jugados<< "        " << jugadores[s].ganados << "       " << jugadores[s].empates<< "       " << jugadores[s].perdidos<< "       " << jugadores[s].puntos<< endl;
                         }
                         break;
                 }
@@ -174,7 +180,7 @@ void jugarPartida(char tablero[6][7], string nombre1, string nombre2) {
         }
         // Cambiar turno
         turnoJugador1 = !turnoJugador1;
-    }
+    } 
 }
 
 bool verificarGanador(char tablero[6][7], char ficha){
@@ -183,7 +189,10 @@ bool verificarGanador(char tablero[6][7], char ficha){
     for(int i=0;i<6;i++){
         for(int j=0;j<4;j++){
             if(tablero[i][j]==ficha and tablero[i][j+1] and tablero[i][j+2] and tablero[i][j+3]==ficha){
+                cout<<"Ganador horizontal"<<endl; 
                 return true;
+
+                
             }
         }
     }
@@ -191,7 +200,9 @@ bool verificarGanador(char tablero[6][7], char ficha){
 for(int j=0;j<7;j++){
     for(int i=0;i<3;i++){
         if(tablero[i][j]==ficha and tablero[i+1][j] and tablero[i+2][j] and tablero[i+3][j]==ficha){
+            cout<<"Ganador vertical"<<endl;
             return true;
+           
         }
     }
 }
@@ -199,7 +210,9 @@ for(int j=0;j<7;j++){
 for(int i=0;i<3;i++){
     for(int j=0;j<4;j++){
         if(tablero[i][j]==ficha and tablero[i+1][j+1] and tablero[i+2][j+2] and tablero[i+3][j+3]==ficha){
+             cout<<"Ganador diagonal derecha"<<endl;
             return true;
+           
         }
     }
 }
@@ -207,7 +220,9 @@ for(int i=0;i<3;i++){
 for(int i=0;i<3;i++){
     for(int j=3;j<7;j++){
         if(tablero[i][j]==ficha and tablero[i+1][j-1] and tablero[i+2][j-2] and tablero[i+3][j-3]==ficha){
+            cout<<"Ganador diagonal izquierda"<<endl;
             return true;
+           
         }
     }
 }
