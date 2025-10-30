@@ -17,11 +17,16 @@ struct jugador{
     int perdidos=0;
     int puntos=0;
 };
-
+struct partida{
+    string player;
+    int jugados1=0;
+    int ganados1=0;
+    int empates1=0;
+    int perdidos1=0;
+    int puntos1=0;
+};
 int main() {
     int opcion = 0;
-    string nombre1;
-    string nombre2;
     int opcion1 = 0;
     char ficha;
     int columna;
@@ -44,22 +49,16 @@ int main() {
         cin >> opcion;
 
         switch (opcion) {
-            case 1:
+            case 1: {
                 cout << " Se escogio jugar partida" << endl;
-                cout << "Ingrese el nombre del jugador 1: ";
-                cin >> nombre1;
-                cout << "El nombre del jugador 1 es: " << nombre1 << endl;
-                cout << "Ingrese el nombre del jugador 2: ";
-                cin >> nombre2;
-                cout << "El nombre del jugador 2 es: " << nombre2 << endl;
-
+    
                 // reiniciar tablero antes de la partida
                 for (int i = 0; i < 6; ++i)
                     for (int j = 0; j < 7; ++j)
                         tablero[i][j] = ' ';
                 jugarPartida(tablero, nombre1, nombre2);
                 break;
-
+            }
             case 2: {
                 cout << "Se escogio jugar torneo" << endl;
                 cout << "Cuantos jugadores van a participar? ";
@@ -83,39 +82,56 @@ int main() {
                 break;
             }
 
-            case 3:
+            case 3: {
                 cout << "Ver estadisticas" << endl;
                 cout << "Que estadisticas quiere ver?" << endl;
                 cout << "Estadisticas del Torneo(1)" << endl;
-                cout << "Estadisticas  de la Partida(2)" << endl;
+                cout << "Estadisticas de la Partida(2)" << endl;
                 cin >> opcion1;
 
                 switch (opcion1) {
-                    case 1:
+                    case 1: {
                         cout << "===== Estadisticas del Torneo =====" << endl;
                         cout << "Jugador     Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
                         cout << "----------------------------------------------" << endl;
-                        for(int s=0;s<players;s++){
-                            cout << jugadores[s].nombre<< "         " << jugadores[s].jugados<< "        " << jugadores[s].ganados << "       " << jugadores[s].empates<< "       " << jugadores[s].perdidos<< "       " << jugadores[s].puntos<< endl;
+                        for(int s = 0; s < players; s++) {
+                            cout << jugadores[s].nombre << "         " 
+                                 << jugadores[s].jugados << "        " 
+                                 << jugadores[s].ganados << "       " 
+                                 << jugadores[s].empates << "       " 
+                                 << jugadores[s].perdidos << "       " 
+                                 << jugadores[s].puntos << endl;
                         }
                         break;
+                    }
+                    case 2: {
+                        cout << "===== Estadisticas de la partida =====" << endl;
+                        cout << "Jugador    Jugados  Ganados  Empates  Perdidos  Puntos" << endl; 
+                        cout << "----------------------------------------------" << endl;
+                        
+                        break;
+                    }
                 }
                 break;
-
-            case 4:
+            }
+            case 4: {
                 cout << "Cargar/guardar" << endl;
                 break;
+            }
 
-            case 5:
+            case 5: {
                 cout << "Salio" << endl;
                 break;
+            }
 
-            default:
+            default: {
                 cout << "Opcion no valida" << endl;
                 break;
+            }
         }
     return 0;
     }
+    
     
 void mostrartablero(char tablero[6][7]) {
     cout << endl;
@@ -157,8 +173,10 @@ void jugarPartida(char tablero[6][7], string nombre1, string nombre2) {
         }
 
         cin >> columna;
-        if (!cin) { // simple input guard
-            cout << "Entrada invalida. Intente de nuevo." << endl;
+        if (cin.fail()){
+            cin.clear();
+            cin.ignore(1000,'\n');
+            cout << "Entrada inválida Intente de nuevo. Debe ingresar un nuevo numero"<<endl;
             continue;
         }
 
@@ -178,6 +196,17 @@ void jugarPartida(char tablero[6][7], string nombre1, string nombre2) {
             cout << "Columna llena. Intente con otra." << endl;
             continue;
         }
+        if (verificarGanador(tablero, ficha)) {
+            mostrartablero(tablero);
+            if (turnoJugador1){
+                cout << "Jugador 1 ganó la partida" <<nombre1 <<endl;
+            }
+            else {
+                cout<< "Jugador 2 ganó la partida" <<nombre2<<endl;
+            }
+            break;
+        }
+        
         // Cambiar turno
         turnoJugador1 = !turnoJugador1;
     } 
@@ -188,18 +217,22 @@ bool verificarGanador(char tablero[6][7], char ficha){
     //Verificación horizontal
     for(int i=0;i<6;i++){
         for(int j=0;j<4;j++){
-            if(tablero[i][j]==ficha and tablero[i][j+1] and tablero[i][j+2] and tablero[i][j+3]==ficha){
+            if(tablero[i][j]== ficha and
+                tablero[i][j+1]== ficha and
+                tablero[i][j+2]== ficha and
+                tablero[i][j+3]==ficha){
                 cout<<"Ganador horizontal"<<endl; 
                 return true;
-
-                
             }
         }
     }
 //Verificación vertical
 for(int j=0;j<7;j++){
     for(int i=0;i<3;i++){
-        if(tablero[i][j]==ficha and tablero[i+1][j] and tablero[i+2][j] and tablero[i+3][j]==ficha){
+        if(tablero[i][j]==ficha and
+             tablero[i+1][j]==ficha and
+             tablero[i+2][j]==ficha and
+              tablero[i+3][j]==ficha){
             cout<<"Ganador vertical"<<endl;
             return true;
            
@@ -209,21 +242,28 @@ for(int j=0;j<7;j++){
 //Verificación diagonal derecha
 for(int i=0;i<3;i++){
     for(int j=0;j<4;j++){
-        if(tablero[i][j]==ficha and tablero[i+1][j+1] and tablero[i+2][j+2] and tablero[i+3][j+3]==ficha){
+        if(tablero[i][j]==ficha and
+             tablero[i+1][j+1]==ficha and
+              tablero[i+2][j+2]==ficha and
+               tablero[i+3][j+3]==ficha){
              cout<<"Ganador diagonal derecha"<<endl;
             return true;
-           
         }
     }
 }
 //Verificación diagonal izquierda
 for(int i=0;i<3;i++){
     for(int j=3;j<7;j++){
-        if(tablero[i][j]==ficha and tablero[i+1][j-1] and tablero[i+2][j-2] and tablero[i+3][j-3]==ficha){
+        if(tablero[i][j]==ficha and
+             tablero[i+1][j-1]==ficha and
+              tablero[i+2][j-2]==ficha and
+               tablero[i+3][j-3]==ficha){
             cout<<"Ganador diagonal izquierda"<<endl;
             return true;
-           
         }
     }
 }
+return false;
 }
+
+/*Puntos ganadores y perdedores para la partida , terminar la estructura, terminar los duelos y terminar archivo guardado*/
