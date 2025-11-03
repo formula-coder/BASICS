@@ -35,6 +35,7 @@ int main() {
     char tablero[6][7];
     vector<jugador>jugadores;
     vector<partida> partidas(2);
+    do{
     cout << "Bienvenido al juego de cuatro en linea" << endl;
     cout << "-------------------------------------" << endl;
     cout << "Juego de cuatro en linea" << endl;
@@ -140,9 +141,10 @@ int main() {
                 cout << "Opcion no valida" << endl;
                 break;
             }
-        }
+        }while(opcion != 5);
     return 0;
     }
+}
     
     
 void mostrartablero(char tablero[6][7]) {
@@ -169,7 +171,7 @@ bool colocarFicha(char tablero[6][7], int columna, char ficha) {
 }
 
 void jugarPartida(char tablero[6][7], string nombre1, string nombre2) {
-
+int pregunta;
     char ficha;
     int columna;
     bool turnoJugador1 = true;
@@ -210,23 +212,53 @@ void jugarPartida(char tablero[6][7], string nombre1, string nombre2) {
         }
         if (verificarGanador(tablero, ficha)) {
             mostrartablero(tablero);
-            if (turnoJugador1){
-                cout << "Jugador 1 ganó la partida" <<nombre1 <<endl;
-                cout<< "Felicidades!" << endl;
-                cout<< "Que lastima para el jugador 2 " <<nombre2<<endl;
+         partidas[0].jugados1++;
+         partidas[1].jugados1++;
+         if(turnoJugador1){
+            cout<<"Felicidades"<<partidas[0].player<<" has ganado!"<<endl;
+            cout<<"Lo siento "<<partidas[1].player<<" has perdido."<<endl;
+            partidas[0].ganados1++;
+            partidas[1].perdidos1++;
+         }else{
+            cout<<"Felicidades "<<partidas[1].player<<" has ganado!"<<endl;
+            cout<<"Lo siento "<<partidas[0].player<<" has perdido."<<endl;
+            partidas[1].ganados1++;
+            partidas[0].perdidos1++;
+         }
+        // calcular puntos
+        partidas[0].puntos1 =partidas[0].ganados1 * 3 + partidas[0].empates1;
+        partidas[1].puntos1 = partidas[1].ganados1 * 3 + partidas[1].empates1;
+            cout << "===== Estadisticas de la partida====="<< endl;
+            cout << "Jugador     Jugados  Ganados  Empates  Perdidos  Puntos"<<endl;
+            cout << "-------------------------------------------------------"<<endl;
+            for (int i = 0; i < 2; i++) {
+                cout << partidas[i].player << "         "
+                     << partidas[i].jugados1 << "        "
+                     << partidas[i].ganados1 << "        "
+                     << partidas[i].empates1 << "        "
+                     << partidas[i].perdidos1 << "        "
+                     << partidas[i].puntos1 << endl;
             }
-            else {
-                cout<< "Jugador 2 ganó la partida" <<nombre2<<endl;
-                cout<< "Felicidades!" << endl;
-                cout<< "Que lastima para el jugador 1 " <<nombre1<<endl;    
 
-            }
-            break;
-        }
-        
+        break;
+         }
         // Cambiar turno
         turnoJugador1 = !turnoJugador1;
     } 
+do{
+    cout <<"Desea ir al menu principal?1.Si 2.No: ";
+    cin >> pregunta;
+    if(pregunta==1){
+        cout<<"Se escogio ir al menu principal"<<endl;
+        return;
+    }else if(pregunta==2){
+        cout<<"Se escogio no ir al menu principal cerrando programa"<<endl;
+        break;
+    }else{
+        cout<<"Opcion no valida,intente de nuevo"<<endl;
+
+}
+}while(pregunta!=1 and preugnta !=2);
 }
 
 bool verificarGanador(char tablero[6][7], char ficha){
