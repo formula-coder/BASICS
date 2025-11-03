@@ -3,12 +3,6 @@
 #include <vector>
 
 using namespace std;
-
-void mostrartablero(char tablero[6][7]);
-bool colocarFicha(char tablero[6][7], int columna, char ficha);
-void jugarPartida(char tablero[6][7], string nombre1, string nombre2);
-bool verificarGanador(char tablero[6][7], char ficha);
-
 struct jugador{
     string nombre;
     int jugados=0;
@@ -25,6 +19,12 @@ struct partida{
     int perdidos1=0;
     int puntos1=0;
 };
+void mostrartablero(char tablero[6][7]);
+bool colocarFicha(char tablero[6][7], int columna, char ficha);
+bool jugarPartida(char tablero[6][7], string nombre1, string nombre2,vector<partida> &partidas);
+bool verificarGanador(char tablero[6][7], char ficha);
+
+
 int main() {
     int opcion = 0;
     int opcion1 = 0;
@@ -33,6 +33,7 @@ int main() {
     bool turnoJugador1 = true;
     int players = 0;
     char tablero[6][7];
+    bool opcion2;
     vector<jugador>jugadores;
     vector<partida> partidas(2);
     do{
@@ -62,7 +63,12 @@ int main() {
                 for (int i = 0; i < 6; ++i)
                     for (int j = 0; j < 7; ++j)
                         tablero[i][j] = ' ';
-                jugarPartida(tablero,partidas[0].player,partidas[1].player);
+
+               opcion2=jugarPartida(tablero,partidas[0].player,partidas[1].player,partidas);
+                if(opcion2==false){
+                cout<<"Cerrando el juego, muchas gracias por jugar :)"<<endl; 
+                return 0;
+                }
                 break;
             }
             case 2: {
@@ -84,7 +90,7 @@ int main() {
                 for(int w=0;w<players;w++){
                     cout<<"Jugador "<<w+1<<": "<<jugadores[w].nombre<<endl;
                 }
-                jugarPartida(tablero,jugadores[0].nombre,jugadores[1].nombre); 
+                jugarPartida(tablero,jugadores[0].nombre,jugadores[1].nombre,partidas); 
                 break;
             }
 
@@ -141,12 +147,11 @@ int main() {
                 cout << "Opcion no valida" << endl;
                 break;
             }
-        }while(opcion != 5);
-    return 0;
-    }
-}
-    
-    
+        
+        }
+} while(opcion != 5);
+return 0;
+}  
 void mostrartablero(char tablero[6][7]) {
     cout << endl;
     cout << "-----------------------------" << endl;
@@ -170,7 +175,7 @@ bool colocarFicha(char tablero[6][7], int columna, char ficha) {
     return false; // columna llena
 }
 
-void jugarPartida(char tablero[6][7], string nombre1, string nombre2) {
+bool jugarPartida(char tablero[6][7], string nombre1, string nombre2,vector<partida> &partidas) {
 int pregunta;
     char ficha;
     int columna;
@@ -215,13 +220,13 @@ int pregunta;
          partidas[0].jugados1++;
          partidas[1].jugados1++;
          if(turnoJugador1){
-            cout<<"Felicidades"<<partidas[0].player<<" has ganado!"<<endl;
-            cout<<"Lo siento "<<partidas[1].player<<" has perdido."<<endl;
+            cout<<"Felicidades "<<partidas[0].player<<" has ganado!"<<endl;
+            cout<<"Lo siento "<<partidas[1].player<<" has perdido."<<endl<<endl;
             partidas[0].ganados1++;
             partidas[1].perdidos1++;
          }else{
             cout<<"Felicidades "<<partidas[1].player<<" has ganado!"<<endl;
-            cout<<"Lo siento "<<partidas[0].player<<" has perdido."<<endl;
+            cout<<"Lo siento "<<partidas[0].player<<" has perdido."<<endl<<endl;
             partidas[1].ganados1++;
             partidas[0].perdidos1++;
          }
@@ -246,19 +251,18 @@ int pregunta;
         turnoJugador1 = !turnoJugador1;
     } 
 do{
-    cout <<"Desea ir al menu principal?1.Si 2.No: ";
+    cout <<"Desea ir al menu principal?1.Si 2.No: "<<endl;
     cin >> pregunta;
     if(pregunta==1){
-        cout<<"Se escogio ir al menu principal"<<endl;
-        return;
+        cout<<"Se escogio ir al menu principal"<<endl<<endl;
+        return true;
     }else if(pregunta==2){
         cout<<"Se escogio no ir al menu principal cerrando programa"<<endl;
-        break;
+        return false;
     }else{
         cout<<"Opcion no valida,intente de nuevo"<<endl;
-
 }
-}while(pregunta!=1 and preugnta !=2);
+}while(pregunta!=1 and pregunta !=2);
 }
 
 bool verificarGanador(char tablero[6][7], char ficha){
@@ -315,4 +319,4 @@ for(int i=0;i<3;i++){
 return false;
 }
 
-/*Puntos ganadores y perdedores para la partida ,definir empate  y mostrar estadisticas despues de la partida, terminar los duelos y terminar archivo guardado*/
+/* quitar pedir nombres cuando se decida ir otra vez,definir empate , terminar los duelos(torneo) y terminar archivo guardado*/
