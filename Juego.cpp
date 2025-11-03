@@ -244,7 +244,6 @@ int pregunta;
                      << partidas[i].perdidos1 << "        "
                      << partidas[i].puntos1 << endl;
             }
-
         break;
          }
         // Cambiar turno
@@ -319,4 +318,4 @@ for(int i=0;i<3;i++){
 return false;
 }
 
-/* quitar pedir nombres cuando se decida ir otra vez,definir empate , terminar los duelos(torneo) y terminar archivo guardado*/
+/*definir empate , terminar los duelos(torneo) y terminar archivo guardado*/
