@@ -105,7 +105,7 @@ int main() {
                     case 1: {
                         cout << "===== Estadisticas del Torneo =====" << endl;
                         cout << "Jugador     Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
-                        cout << "----------------------------------------------" << endl;
+                        cout << "--------------------------------------------------------" << endl;
                         for(int s = 0; s < players; s++) {
                             cout << jugadores[s].nombre << "         " 
                                  << jugadores[s].jugados << "        " 
@@ -119,7 +119,7 @@ int main() {
                     case 2: {
                         cout << "===== Estadisticas de la partida =====" << endl;
                         cout << "Jugador    Jugados  Ganados  Empates  Perdidos  Puntos" << endl; 
-                        cout << "----------------------------------------------" << endl;
+                        cout << "-------------------------------------------------------" << endl;
                         for(int t = 0; t < 2; t++) {
                             cout << partidas[t].player << "         " 
                                  << partidas[t].jugados1 << "        " 
@@ -250,7 +250,7 @@ int pregunta;
         turnoJugador1 = !turnoJugador1;
     } 
 do{
-    cout <<"Desea ir al menu principal?1.Si 2.No: "<<endl;
+    cout <<"\nDesea ir al menu principal? 1.Si 2.No: "<<endl;
     cin >> pregunta;
     if(pregunta==1){
         cout<<"Se escogio ir al menu principal"<<endl<<endl;
@@ -273,7 +273,6 @@ bool verificarGanador(char tablero[6][7], char ficha){
                 tablero[i][j+1]== ficha and
                 tablero[i][j+2]== ficha and
                 tablero[i][j+3]==ficha){
-                cout<<"Ganador horizontal"<<endl; 
                 return true;
             }
         }
@@ -285,7 +284,6 @@ for(int j=0;j<7;j++){
              tablero[i+1][j]==ficha and
              tablero[i+2][j]==ficha and
               tablero[i+3][j]==ficha){
-            cout<<"Ganador vertical"<<endl;
             return true;
            
         }
@@ -298,7 +296,6 @@ for(int i=0;i<3;i++){
              tablero[i+1][j+1]==ficha and
               tablero[i+2][j+2]==ficha and
                tablero[i+3][j+3]==ficha){
-             cout<<"Ganador diagonal derecha"<<endl;
             return true;
         }
     }
@@ -310,12 +307,10 @@ for(int i=0;i<3;i++){
              tablero[i+1][j-1]==ficha and
               tablero[i+2][j-2]==ficha and
                tablero[i+3][j-3]==ficha){
-            cout<<"Ganador diagonal izquierda"<<endl;
             return true;
         }
     }
 }
 return false;
 }
-
 /*definir empate , terminar los duelos(torneo) y terminar archivo guardado*/
