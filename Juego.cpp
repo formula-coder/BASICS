@@ -34,6 +34,7 @@ int main() {
     int players = 0;
     char tablero[6][7];
     vector<jugador>jugadores;
+    vector<partida> partidas(2);
     cout << "Bienvenido al juego de cuatro en linea" << endl;
     cout << "-------------------------------------" << endl;
     cout << "Juego de cuatro en linea" << endl;
@@ -51,12 +52,16 @@ int main() {
         switch (opcion) {
             case 1: {
                 cout << " Se escogio jugar partida" << endl;
-    
+                for(int p=0;p<2;p++){
+                    cout <<"Ingrese el nombre del jugador "<<p+1<<": ";
+                    cin >> partidas[p].player;
+                    cout <<"El nombre del jugador "<<p+1<<" es: "<<partidas[p].player<<endl;
+                }
                 // reiniciar tablero antes de la partida
                 for (int i = 0; i < 6; ++i)
                     for (int j = 0; j < 7; ++j)
                         tablero[i][j] = ' ';
-                jugarPartida(tablero, nombre1, nombre2);
+                jugarPartida(tablero,partidas[0].player,partidas[1].player);
                 break;
             }
             case 2: {
@@ -108,7 +113,14 @@ int main() {
                         cout << "===== Estadisticas de la partida =====" << endl;
                         cout << "Jugador    Jugados  Ganados  Empates  Perdidos  Puntos" << endl; 
                         cout << "----------------------------------------------" << endl;
-                        
+                        for(int t = 0; t < 2; t++) {
+                            cout << partidas[t].player << "         " 
+                                 << partidas[t].jugados1 << "        " 
+                                 << partidas[t].ganados1 << "       " 
+                                 << partidas[t].empates1 << "       " 
+                                 << partidas[t].perdidos1 << "       " 
+                                 << partidas[t].puntos1 << endl;
+                        }
                         break;
                     }
                 }
@@ -200,9 +212,14 @@ void jugarPartida(char tablero[6][7], string nombre1, string nombre2) {
             mostrartablero(tablero);
             if (turnoJugador1){
                 cout << "Jugador 1 ganó la partida" <<nombre1 <<endl;
+                cout<< "Felicidades!" << endl;
+                cout<< "Que lastima para el jugador 2 " <<nombre2<<endl;
             }
             else {
                 cout<< "Jugador 2 ganó la partida" <<nombre2<<endl;
+                cout<< "Felicidades!" << endl;
+                cout<< "Que lastima para el jugador 1 " <<nombre1<<endl;    
+
             }
             break;
         }
@@ -266,4 +283,4 @@ for(int i=0;i<3;i++){
 return false;
 }
 
-/*Puntos ganadores y perdedores para la partida , terminar la estructura, terminar los duelos y terminar archivo guardado*/
+/*Puntos ganadores y perdedores para la partida ,definir empate  y mostrar estadisticas despues de la partida, terminar los duelos y terminar archivo guardado*/
