@@ -23,7 +23,7 @@ void mostrartablero(char tablero[6][7]);
 bool colocarFicha(char tablero[6][7], int columna, char ficha);
 bool jugarPartida(char tablero[6][7], string nombre1, string nombre2,vector<partida> &partidas);
 bool verificarGanador(char tablero[6][7], char ficha);
-
+bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&partidas,);
 
 int main() {
     int opcion = 0;
@@ -90,7 +90,7 @@ int main() {
                 for(int w=0;w<players;w++){
                     cout<<"Jugador "<<w+1<<": "<<jugadores[w].nombre<<endl;
                 }
-                jugarPartida(tablero,jugadores[0].nombre,jugadores[1].nombre,partidas); 
+                jugartorneo(tablero,jugadores,partidas); 
                 break;
             }
 
@@ -217,8 +217,24 @@ int pregunta;
         }
         if (verificarGanador(tablero, ficha)) {
             mostrartablero(tablero);
+            bool lleno=true;
+            for(int i=0; i<6; i++){
+                for(int j=0; j<7; j++){
+                    if(tablero[i][j]==' ') {
+                        lleno=false;
+                        break;
+                    }
+                }
+            }
+
          partidas[0].jugados1++;
          partidas[1].jugados1++;
+         if(lleno){
+            cout<<"El tablero se lleno. Empate."<<endl;
+            partidas[0].empates1++;
+            partidas[1].empates1++;
+         }
+
          if(turnoJugador1){
             cout<<"Felicidades "<<partidas[0].player<<" has ganado!"<<endl;
             cout<<"Lo siento "<<partidas[1].player<<" has perdido."<<endl<<endl;
@@ -262,6 +278,7 @@ do{
         cout<<"Opcion no valida,intente de nuevo"<<endl;
 }
 }while(pregunta!=1 and pregunta !=2);
+
 }
 
 bool verificarGanador(char tablero[6][7], char ficha){
@@ -313,4 +330,63 @@ for(int i=0;i<3;i++){
 }
 return false;
 }
-/*definir empate , terminar los duelos(torneo) y terminar archivo guardado*/
+
+bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&partidas) {
+    int players = jugadores.size();
+    cout << "El torneo ha empezado!!" << endl;
+    cout << "Participan " << players << " jugadores" << endl;
+    
+    for(int i = 0; i < players; i++) {
+        for(int j = i + 1; j < players; j++) {
+            cout << jugadores[i].nombre << " Vs " << jugadores[j].nombre << endl;
+            
+            // Inicializar tablero
+            for(int n = 0; n < 6; n++) {
+                for(int m = 0; m < 7; m++) {
+                    tablero[n][m] = ' ';  // Corregido: usar n,m en lugar de a,b
+                }
+            }
+            
+            partidas[0].player = jugadores[i].nombre;
+            partidas[1].player = jugadores[j].nombre;
+            
+            bool continuar = jugarPartida(tablero, jugadores[i].nombre, jugadores[j].nombre, partidas);
+            if(!continuar) {
+                cout << "El torneo ha sido interrumpido por el usuario" << endl;
+                return false;
+            }
+            
+            jugadores[i].jugados++;
+            jugadores[j].jugados++;
+            
+            if(partidas[0].ganados1 > 0) {  // Corregido: ganados1 en lugar de ganados
+                jugadores[i].ganados++;
+                jugadores[j].perdidos++;
+            } else if(partidas[1].ganados1 > 0) {  // Corregido: partidas en lugar de partida
+                jugadores[j].ganados++;
+                jugadores[i].perdidos++;
+            } else {
+                jugadores[i].empates++;
+                jugadores[j].empates++;
+            }
+            
+            jugadores[i].puntos = jugadores[i].ganados * 3 + jugadores[i].empates;
+            jugadores[j].puntos = jugadores[j].ganados * 3 + jugadores[j].empates;
+            
+            cout << "Estadisticas del torneo" << endl;
+            cout << "Jugador     Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
+            cout << "-------------------------------------------------------" << endl;
+            for(int k = 0; k < players; k++) {  // Cambiado para mostrar todos los jugadores
+                cout << jugadores[k].nombre << "         "
+                     << jugadores[k].jugados << "        "
+                     << jugadores[k].ganados << "        "
+                     << jugadores[k].empates << "        "
+                     << jugadores[k].perdidos << "        "
+                     << jugadores[k].puntos << endl;
+            }
+        }
+    }
+    return true;
+}
+
+/* terminar los duelos(torneo) y terminar archivo guardado*/
