@@ -389,4 +389,4 @@ bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&
     }
     return true;
 }
-/* terminar los duelos(torneo) y terminar archivo guardado*/
+/*  terminar archivo guardado*/
