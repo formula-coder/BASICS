@@ -23,7 +23,7 @@ void mostrartablero(char tablero[6][7]);
 bool colocarFicha(char tablero[6][7], int columna, char ficha);
 bool jugarPartida(char tablero[6][7], string nombre1, string nombre2,vector<partida> &partidas);
 bool verificarGanador(char tablero[6][7], char ficha);
-bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&partidas,);
+bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&partidas,string nombreTorneo);
 
 int main() {
     int opcion = 0;
@@ -90,7 +90,7 @@ int main() {
                 for(int w=0;w<players;w++){
                     cout<<"Jugador "<<w+1<<": "<<jugadores[w].nombre<<endl;
                 }
-                jugartorneo(tablero,jugadores,partidas); 
+                jugartorneo(tablero,jugadores,partidas,nombreTorneo); 
                 break;
             }
 
@@ -331,7 +331,8 @@ for(int i=0;i<3;i++){
 return false;
 }
 
-bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&partidas) {
+bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&partidas, string nombreTorneo) {
+    string nametournament = nombreTorneo;
     int players = jugadores.size();
     cout << "El torneo ha empezado!!" << endl;
     cout << "Participan " << players << " jugadores" << endl;
@@ -373,7 +374,7 @@ bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&
             jugadores[i].puntos = jugadores[i].ganados * 3 + jugadores[i].empates;
             jugadores[j].puntos = jugadores[j].ganados * 3 + jugadores[j].empates;
             
-            cout << "Estadisticas del torneo" << endl;
+            cout << "Estadisticas del torneo: "<<nametournament << endl;
             cout << "Jugador     Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
             cout << "-------------------------------------------------------" << endl;
             for(int k = 0; k < players; k++) {  // Cambiado para mostrar todos los jugadores
@@ -388,5 +389,4 @@ bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&
     }
     return true;
 }
-
 /* terminar los duelos(torneo) y terminar archivo guardado*/
