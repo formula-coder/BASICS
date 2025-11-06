@@ -374,6 +374,12 @@ bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&
     do {
         cout << "\n¿Desea continuar? (1. Sí / 2. No): ";
         cin >> opcion;
+            if (cin.fail()){
+            cin.clear();
+            cin.ignore(1000,'\n');
+            cout << "Entrada inválida Intente de nuevo. Debe ingresar una opción válida."<<endl;
+            continue;
+        }
         if (opcion == 1) {
             cout << "Volviendo al menú principal...\n";
             return true;
