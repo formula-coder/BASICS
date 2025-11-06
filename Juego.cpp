@@ -24,6 +24,7 @@ bool colocarFicha(char tablero[6][7], int columna, char ficha);
 bool jugarPartida(char tablero[6][7], string nombre1, string nombre2,vector<partida> &partidas);
 bool verificarGanador(char tablero[6][7], char ficha);
 bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&partidas,string nombreTorneo);
+bool verificarTorneo(char tablero[6][7],vector<jugador>&jugadores, vector<partida>&partidas,string nombreTorneo);
 
 int main() {
     int opcion = 0;
@@ -34,8 +35,8 @@ int main() {
     int players = 0;
     char tablero[6][7];
     bool opcion2;
-    vector<jugador>jugadores;
-    vector<partida> partidas(2);
+    vector<jugador>jugadores;//torneo
+    vector<partida> partidas(2);//partida
     do{
     cout << "Bienvenido al juego de cuatro en linea" << endl;
     cout << "-------------------------------------" << endl;
@@ -75,6 +76,12 @@ int main() {
                 cout << "Se escogio jugar torneo" << endl;
                 cout << "Cuantos jugadores van a participar? ";
                 cin >> players;
+            if (cin.fail()){
+            cin.clear();
+            cin.ignore(1000,'\n');
+            cout << "Entrada inválida Intente de nuevo. Debe ingresar una cantidad de jugadores válida."<<endl;
+            continue;
+        }
                 jugadores.resize(players);
                 //hasta dies jugadores :)
                 for (int i = 0; i < players; i++) {
@@ -334,45 +341,21 @@ return false;
 bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&partidas, string nombreTorneo) {
     string nametournament = nombreTorneo;
     int players = jugadores.size();
-    cout << "El torneo ha empezado!!" << endl;
+    cout << "El torneo ha empezado!! "<<nametournament<< endl;
     cout << "Participan " << players << " jugadores" << endl;
     
     for(int i = 0; i < players; i++) {
         for(int j = i + 1; j < players; j++) {
-            cout << jugadores[i].nombre << " Vs " << jugadores[j].nombre << endl;
-            
-            // Inicializar tablero
-            for(int n = 0; n < 6; n++) {
-                for(int m = 0; m < 7; m++) {
-                    tablero[n][m] = ' ';  // Corregido: usar n,m en lugar de a,b
-                }
-            }
-            
-            partidas[0].player = jugadores[i].nombre;
-            partidas[1].player = jugadores[j].nombre;
-            
-            bool continuar = jugarPartida(tablero, jugadores[i].nombre, jugadores[j].nombre, partidas);
+            cout <<"Enfrentamiento entre: "<< jugadores[i].nombre << " Vs " << jugadores[j].nombre << endl;
+            // reiniciar tablero antes de la partida
+            for (int m = 0; m < 6; ++m)
+                for (int n = 0; n < 7; ++n)
+                    tablero[m][n] = ' ';
+            bool continuar = verificarTorneo(tablero, jugadores, partidas, nametournament);
             if(!continuar) {
                 cout << "El torneo ha sido interrumpido por el usuario" << endl;
                 return false;
             }
-            
-            jugadores[i].jugados++;
-            jugadores[j].jugados++;
-            
-            if(partidas[0].ganados1 > 0) {  // Corregido: ganados1 en lugar de ganados
-                jugadores[i].ganados++;
-                jugadores[j].perdidos++;
-            } else if(partidas[1].ganados1 > 0) {  // Corregido: partidas en lugar de partida
-                jugadores[j].ganados++;
-                jugadores[i].perdidos++;
-            } else {
-                jugadores[i].empates++;
-                jugadores[j].empates++;
-            }
-            
-            jugadores[i].puntos = jugadores[i].ganados * 3 + jugadores[i].empates;
-            jugadores[j].puntos = jugadores[j].ganados * 3 + jugadores[j].empates;
             
             cout << "Estadisticas del torneo: "<<nametournament << endl;
             cout << "Jugador     Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
@@ -384,9 +367,105 @@ bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&
                      << jugadores[k].empates << "        "
                      << jugadores[k].perdidos << "        "
                      << jugadores[k].puntos << endl;
-            }
+            }  
+         }
         }
-    }
+        int opcion;
+    do {
+        cout << "\n¿Desea continuar? (1. Sí / 2. No): ";
+        cin >> opcion;
+        if (opcion == 1) {
+            cout << "Volviendo al menú principal...\n";
+            return true;
+        } else if (opcion == 2) {
+            cout << "Finalizando el programa. ¡Gracias por jugar!\n";
+            return false;
+        } else {
+            cout << "Opción inválida. Intente de nuevo.\n";
+        }
+    } while (opcion != 1 && opcion != 2);
     return true;
+}
+
+bool verificarTorneo(char tablero[6][7],vector<jugador>&jugadores, vector<partida>&partidas,string nombreTorneo){
+    int pregunta;
+    char ficha;
+    int columna;
+    bool turnoJugador1 = true;
+    while (true) {
+        mostrartablero(tablero);
+
+        if (turnoJugador1) {
+            cout << jugadores[0].nombre << " (X), elige una columna (1-7) o 0 para salir: ";
+            ficha = 'X';
+        } else {
+            cout << jugadores[1].nombre << " (O), elige una columna (1-7) o 0 para salir: ";
+            ficha = 'O';
+        }
+
+        cin >> columna;
+        if (cin.fail()){
+            cin.clear();
+            cin.ignore(1000,'\n');
+            cout << "Entrada inválida Intente de nuevo. Debe ingresar un nuevo numero"<<endl;
+            continue;
+        }
+
+        if (columna == 0) {
+            cout << "Saliendo de la partida." << endl;
+            break;
+        }
+
+        columna--; // ajustar al índice (0–6)
+
+        if (columna < 0 || columna >= 7) {
+            cout << "Columna invalida. Intente de nuevo." << endl;
+            continue;
+        }
+
+        if (!colocarFicha(tablero, columna, ficha)) {
+            cout << "Columna llena. Intente con otra." << endl;
+            continue;
+        }
+        if (verificarGanador(tablero, ficha)) {
+            mostrartablero(tablero);
+            bool lleno=true;
+            for(int i=0; i<6; i++){
+                for(int j=0; j<7; j++){
+                    if(tablero[i][j]==' ') {
+                        lleno=false;
+                        break;
+                    }
+                }
+            }
+
+         jugadores[0].jugados++;
+         jugadores[1].jugados++;
+         if(lleno){
+            cout<<"El tablero se lleno. Empate."<<endl;
+            jugadores[0].empates++;
+            jugadores[1].empates++;
+         }
+
+         if(turnoJugador1){
+            cout<<"Felicidades "<<jugadores[0].nombre<<" has ganado!"<<endl;
+            cout<<"Lo siento "<<jugadores[1].nombre<<" has perdido."<<endl<<endl;
+            jugadores[0].ganados++;
+            jugadores[1].perdidos++;
+         }else{
+            cout<<"Felicidades "<<jugadores[1].nombre<<" has ganado!"<<endl;
+            cout<<"Lo siento "<<jugadores[0].nombre<<" has perdido."<<endl<<endl;
+            jugadores[1].ganados++;
+            jugadores[0].perdidos++;
+         }
+        // calcular puntos
+        jugadores[0].puntos = jugadores[0].ganados * 3 + jugadores[0].empates;
+        jugadores[1].puntos = jugadores[1].ganados * 3 + jugadores[1].empates;
+        break;
+         }
+        // Cambiar turno
+        turnoJugador1 = !turnoJugador1;
+    } 
+return true;
 }
 /*  terminar archivo guardado*/
