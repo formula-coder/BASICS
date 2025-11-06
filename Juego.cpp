@@ -474,4 +474,4 @@ bool verificarTorneo(char tablero[6][7],vector<jugador>&jugadores, vector<partid
     } 
 return true;
 }
-/*  terminar archivo guardado*/
+/*  organizar mejor los duelos, terminar archivo guardado*/
