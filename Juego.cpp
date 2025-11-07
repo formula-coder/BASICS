@@ -366,7 +366,7 @@ bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&
                      << jugadores[k].jugados << "        "
                      << jugadores[k].ganados << "        "
                      << jugadores[k].empates << "        "
-                     << jugadores[k].perdidos << "        "
+                     << jugadores[k].perdidos << "       "
                      << jugadores[k].puntos << endl;
             }  
          }
