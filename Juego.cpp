@@ -142,6 +142,7 @@ int main() {
             }
             case 4: {
                 cout << "Cargar/guardar" << endl;
+                cout <<" Desea guardar o cargar partida? 1.Guardar 2.Cargar: ";
                 break;
             }
 
@@ -280,7 +281,7 @@ do{
         return true;
     }else if(pregunta==2){
         cout<<"Se escogio no ir al menu principal cerrando programa"<<endl;
-        return false;
+        exit(0);
     }else{
         cout<<"Opcion no valida,intente de nuevo"<<endl;
 }
@@ -363,11 +364,11 @@ bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&
             cout << "Jugador     Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
             cout << "-------------------------------------------------------" << endl;
             for(int k = 0; k < players; k++) {  // Cambiado para mostrar todos los jugadores
-                cout << jugadores[k].nombre << "\t"
-                     << jugadores[k].jugados << "\t"
-                     << jugadores[k].ganados << "\t"
-                     << jugadores[k].empates << "\t"
-                     << jugadores[k].perdidos << "\t"
+                cout << jugadores[k].nombre << "         "
+                     << jugadores[k].jugados << "        "
+                     << jugadores[k].ganados << "        "
+                     << jugadores[k].empates << "        "
+                     << jugadores[k].perdidos << "        "
                      << jugadores[k].puntos << endl;
             }  
          }
