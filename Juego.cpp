@@ -3,6 +3,7 @@
 #include <vector>
 #include <fstream>
 #include <stdlib.h>
+
 using namespace std;
 struct jugador{
     string nombre;
@@ -20,6 +21,7 @@ struct partida{
     int perdidos1=0;
     int puntos1=0;
 };
+
 void mostrartablero(char tablero[6][7]);
 bool colocarFicha(char tablero[6][7], int columna, char ficha);
 bool jugarPartida(char tablero[6][7], string nombre1, string nombre2,vector<partida> &partidas);
