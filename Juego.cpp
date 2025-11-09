@@ -1,7 +1,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+#include <fstream>
+#include <stdlib.h>
 using namespace std;
 struct jugador{
     string nombre;
@@ -25,16 +26,24 @@ bool jugarPartida(char tablero[6][7], string nombre1, string nombre2,vector<part
 bool verificarGanador(char tablero[6][7], char ficha);
 bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&partidas,string nombreTorneo);
 bool verificarTorneo(char tablero[6][7],vector<jugador>&jugadores, vector<partida>&partidas,string nombreTorneo, int i, int j);
+void guardarPartida(const vector<partida>& partidas, const string& nombreArchivo);
+void cargarPartida(const string& nombreArchivo, vector<partida>& partidas);
+void guardarTorneo(const vector<jugador>& jugadores, const string & nombreArchivo);
+void cargarTorneo(const vector<jugador>& jugadores, const string & nombreArchivo);
 
 int main() {
     int opcion = 0;
     int opcion1 = 0;
+    int opcion2 = 0;
+    int opcion3 = 0;
+    bool opcion4=true;
     char ficha;
     int columna;
     bool turnoJugador1 = true;
     int players = 0;
     char tablero[6][7];
-    bool opcion2;
+
+
     vector<jugador>jugadores;//torneo
     vector<partida> partidas(2);//partida
     do{
@@ -66,7 +75,7 @@ int main() {
                         tablero[i][j] = ' ';
 
                opcion2=jugarPartida(tablero,partidas[0].player,partidas[1].player,partidas);
-                if(opcion2==false){
+                if(opcion4==false){
                 cout<<"Cerrando el juego, muchas gracias por jugar :)"<<endl; 
                 return 0;
                 }
@@ -142,7 +151,45 @@ int main() {
             }
             case 4: {
                 cout << "Cargar/guardar" << endl;
-                cout <<" Desea guardar o cargar partida? 1.Guardar 2.Cargar: ";
+                cout <<" Desea cargar o guardar la partida o torneo? 1.Partida 2. Torneo: ";
+                cin >> opcion2;
+                switch(opcion2){
+                    case 1: {
+                        cout<<"¿Desea cargar o guardar la partida?"<<endl;
+                        cout<<"1. Cargar  2. Guardar"<<endl;
+                        cin>>opcion3;
+                        if(opcion3==1){
+                            cout<<"Se va a cargar la partida"<<endl;
+                            cargarPartida("partida",partidas);
+                        } else if (opcion3==2){
+                            cout<<"Se va a guardar la partida"<<endl;
+                            guardarPartida(partidas,"partida");
+                        } else {
+                            cout << "Opcion no valida" << endl;
+                        }
+                        break;
+                    }
+                    case 2: {
+                        cout<<"¿Desea cargar o guardar el torneo?"<<endl;
+                        cout<<"1. Cargar  2.Guardar"<<endl;
+                        cin>>opcion3;
+                        if(opcion3==1){
+                            cout<<"Se va a cargar el torneo"<<endl;
+                            cargarTorneo(jugadores, "torneo");
+                            
+                        } else if (opcion3==2){
+                            cout<<"Se va a guardar el torneo"<<endl;
+                            guardarTorneo(jugadores, "torneo");
+                        } else {
+                            cout << "Opcion no valida" << endl;
+                        }
+                        break;
+                    }
+                    default: {
+                        cout << "Opcion no valida" << endl;
+                        break;
+                    }
+                }
                 break;
             }
 
@@ -160,6 +207,7 @@ int main() {
 } while(opcion != 5);
 return 0;
 }  
+
 void mostrartablero(char tablero[6][7]) {
     cout << endl;
     cout << "-----------------------------" << endl;
@@ -364,11 +412,11 @@ bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&
             cout << "Jugador     Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
             cout << "-------------------------------------------------------" << endl;
             for(int k = 0; k < players; k++) {  // Cambiado para mostrar todos los jugadores
-                cout << jugadores[k].nombre << "         "
-                     << jugadores[k].jugados << "        "
-                     << jugadores[k].ganados << "        "
-                     << jugadores[k].empates << "        "
-                     << jugadores[k].perdidos << "        "
+                cout << jugadores[k].nombre << "\t"
+                     << jugadores[k].jugados << "\t"
+                     << jugadores[k].ganados << "\t"
+                     << jugadores[k].empates << "\t"
+                     << jugadores[k].perdidos << "\t"
                      << jugadores[k].puntos << endl;
             }  
          }
@@ -411,7 +459,7 @@ bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&
             return true;
         } else if (opcion == 2) {
             cout << "Finalizando el programa. ¡Gracias por jugar!\n";
-            return false;
+            exit (1);
         } else {
             cout << "Opción inválida. Intente de nuevo.\n";
         }
@@ -500,4 +548,114 @@ bool verificarTorneo(char tablero[6][7],vector<jugador>&jugadores, vector<partid
     } 
 return true;
 }
-// terminar archivo guardado
+
+void guardarPartida(const vector<partida>& partidas, const string& nombreArchivo) {
+
+    string guardado;
+     ofstream archivo(guardado, ios::out);
+    cout<<"Ingrese el nombre del archivo donde se va a guardar la partida"<<endl;
+    cin.ignore();
+    getline(cin, guardado);
+    archivo.open(guardado.c_str(), ios::out);
+
+       if (guardado.find(".txt") == string::npos) {
+        guardado += ".txt";
+    }
+      
+    if (archivo.fail()){
+        cout<<"No se pudo abrir el archivo del juego"<<endl;
+        exit(1);
+    }
+    archivo<<"estadisticas de la partida"<<endl;
+    archivo<<"Jugador    Jugados  Ganados  Empates  Perdidos  Puntos" << endl; 
+    archivo << "-------------------------------------------------------" << endl;
+                     for(int t = 0; t < 2; t++) {
+                            archivo << partidas[t].player << "\t" 
+                                 << partidas[t].jugados1 << "\t" 
+                                 << partidas[t].ganados1 << "\t" 
+                                 << partidas[t].empates1 << "\t" 
+                                 << partidas[t].perdidos1 << "\t" 
+                                 << partidas[t].puntos1 << endl;
+                        }
+    archivo.close();
+    cout<<"Partida Guardada exitosamente"<<endl;
+}
+
+void cargarPartida(const string& nombreArchivo, vector<partida>& partidas) {
+     ifstream archivo;
+     string guardado;
+     string texto;
+    cout<<"Ingrese el nombre del archivo desde donde se va a cargar la partida"<<endl;
+    cin.ignore();
+    getline(cin, guardado);
+    if (guardado.find(".txt") == string::npos) {
+        guardado += ".txt";
+    }
+    archivo.open(guardado.c_str(),ios::in);
+
+    if (archivo.fail()){
+        cout<<"No se pudo abrir el archivo del juego"<<endl;
+        exit(1);
+    }
+    cout<<"Contenido de la partida "<<guardado<<endl;
+    while(getline(archivo, texto)){
+        cout<<texto<<endl;
+    }
+    archivo.close();
+cout<<"Partida cargada correctamente."<<endl;
+}
+
+void guardarTorneo(const vector<jugador>& jugadores, const string & nombreArchivo){
+    string guardado;
+    ofstream archivo(guardado, ios::out);
+    int players = jugadores.size();
+    cout<<"Ingrese el nombre del archivo donde se va a guardar el torneo"<<endl;
+    cin.ignore();
+    getline(cin, guardado);
+    archivo.open(guardado.c_str(), ios::out);
+    if (guardado.find(".txt")==string::npos){
+        guardado += ".txt";
+    }
+    if (archivo.fail()){
+        cout<<"No se puedo abrir el archivo del torneo"<<endl;
+        exit(1);
+    }
+    archivo<<"Estadisticas del torneo"<<endl;
+    archivo<<"Jugador     Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
+    archivo << "-------------------------------------------------------" << endl;
+        for(int k = 0; k< players; k++) {
+                            archivo << jugadores[k].nombre << "\t" 
+                                 << jugadores[k].jugados << "\t" 
+                                 << jugadores[k].ganados << "\t" 
+                                 << jugadores[k].empates << "\t" 
+                                 << jugadores[k].perdidos << "\t" 
+                                 << jugadores[k].puntos << endl;
+                                
+}
+archivo.close();
+cout<<"Torneo guardado exitosamente!"<<endl;
+}
+
+void cargarTorneo(const vector<jugador>& jugadores, const string & nombreArchivo){
+    ifstream archivo;
+    string guardado;
+    string texto;
+    cout<<"Ingrese el nombre del archivo donde se va a cargar el torneo: "<<endl;
+    cin.ignore();
+    getline(cin, guardado);
+    if (guardado.find(".txt") == string::npos){
+        guardado += ".txt";
+    }
+    archivo.open(guardado.c_str(), ios::in);
+
+    if (archivo.fail()){
+        cout<<"No se pudo abrir el archivo del juego."<<endl;
+        exit(1);
+    }
+    cout<<"Contenido del torneo"<<guardado<<endl;
+    while (getline(archivo, texto)){
+        cout<<texto<<endl;
+    }
+    archivo.close();
+cout<<"Torneo cargado exitosamente!"<<endl;
+}
