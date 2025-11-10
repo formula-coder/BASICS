@@ -22,12 +22,12 @@ struct partida{
     int puntos1=0;
 };
 
-void mostrartablero(char tablero[6][7]);
-bool colocarFicha(char tablero[6][7], int columna, char ficha);
-bool jugarPartida(char tablero[6][7], string nombre1, string nombre2,vector<partida> &partidas);
-bool verificarGanador(char tablero[6][7], char ficha);
-bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&partidas,string nombreTorneo);
-bool verificarTorneo(char tablero[6][7],vector<jugador>&jugadores, vector<partida>&partidas,string nombreTorneo, int i, int j);
+void mostrartablero(char tablero[8][9]);
+bool colocarFicha(char tablero[8][9], int columna, char ficha);
+bool jugarPartida(char tablero[8][9], string nombre1, string nombre2,vector<partida> &partidas);
+bool verificarGanador(char tablero[8][9], char ficha);
+bool jugartorneo(char tablero[8][9], vector<jugador>&jugadores, vector<partida>&partidas,string nombreTorneo);
+bool verificarTorneo(char tablero[8][9],vector<jugador>&jugadores, vector<partida>&partidas,string nombreTorneo, int i, int j);
 void guardarPartida(const vector<partida>& partidas, const string& nombreArchivo);
 void cargarPartida(const string& nombreArchivo, vector<partida>& partidas);
 void guardarTorneo(const vector<jugador>& jugadores, const string & nombreArchivo);
@@ -43,7 +43,7 @@ int main() {
     int columna;
     bool turnoJugador1 = true;
     int players = 0;
-    char tablero[6][7];
+    char tablero[8][9]; //tablero de 8 filas y 9 columnas
 
 
     vector<jugador>jugadores;//torneo
@@ -72,8 +72,8 @@ int main() {
                     cout <<"El nombre del jugador "<<p+1<<" es: "<<partidas[p].player<<endl;
                 }
                 // reiniciar tablero antes de la partida
-                for (int i = 0; i < 6; ++i)
-                    for (int j = 0; j < 7; ++j)
+                for (int i = 0; i < 8; ++i)
+                    for (int j = 0; j < 9; ++j)
                         tablero[i][j] = ' ';
 
                opcion2=jugarPartida(tablero,partidas[0].player,partidas[1].player,partidas);
@@ -210,21 +210,21 @@ int main() {
 return 0;
 }  
 
-void mostrartablero(char tablero[6][7]) {
+void mostrartablero(char tablero[8][9]) {
     cout << endl;
-    cout << "-----------------------------" << endl;
-    for (int i = 0; i < 6; i++) {
-        for (int j = 0; j < 7; j++) {
+    cout << " ------------------------------------" << endl;
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 9; j++) {
             cout << "| " << tablero[i][j] << " ";  
         }
         cout << "|"<<endl;
     }
-    cout << "-----------------------------" << endl;
-    cout << "  1   2   3   4   5   6   7 " << endl << endl;
+    cout << " ------------------------------------" << endl;
+    cout << "  1   2   3   4   5   6   7   8   9 " << endl << endl;
 }
 
-bool colocarFicha(char tablero[6][7], int columna, char ficha) {
-    for (int i = 5; i >= 0; i--) { // desde abajo hacia arriba
+bool colocarFicha(char tablero[8][9], int columna, char ficha) {
+    for (int i = 7; i >= 0; i--) { // desde abajo hacia arriba
         if (tablero[i][columna] == ' '){
             tablero[i][columna] = ficha;
             return true;
@@ -233,7 +233,7 @@ bool colocarFicha(char tablero[6][7], int columna, char ficha) {
     return false; // columna llena
 }
 
-bool jugarPartida(char tablero[6][7], string nombre1, string nombre2,vector<partida> &partidas) {
+bool jugarPartida(char tablero[8][9], string nombre1, string nombre2,vector<partida> &partidas) {
 int pregunta;
     char ficha;
     int columna;
@@ -276,8 +276,8 @@ int pregunta;
         if (verificarGanador(tablero, ficha)) {
             mostrartablero(tablero);
             bool lleno=true;
-            for(int i=0; i<6; i++){
-                for(int j=0; j<7; j++){
+            for(int i=0; i<8; i++){
+                for(int j=0; j<9; j++){
                     if(tablero[i][j]==' ') {
                         lleno=false;
                         break;
@@ -339,11 +339,11 @@ do{
 return true;
 }
 
-bool verificarGanador(char tablero[6][7], char ficha){
+bool verificarGanador(char tablero[8][9], char ficha){
     // Verificación del ganador :)
     //Verificación horizontal
-    for(int i=0;i<6;i++){
-        for(int j=0;j<4;j++){
+    for(int i=0;i<8;i++){
+        for(int j=0;j<6;j++){
             if(tablero[i][j]== ficha and
                 tablero[i][j+1]== ficha and
                 tablero[i][j+2]== ficha and
@@ -353,8 +353,8 @@ bool verificarGanador(char tablero[6][7], char ficha){
         }
     }
 //Verificación vertical
-for(int j=0;j<7;j++){
-    for(int i=0;i<3;i++){
+for(int j=0;j<9;j++){
+    for(int i=0;i<5;i++){
         if(tablero[i][j]==ficha and
              tablero[i+1][j]==ficha and
              tablero[i+2][j]==ficha and
@@ -365,8 +365,8 @@ for(int j=0;j<7;j++){
     }
 }
 //Verificación diagonal derecha
-for(int i=0;i<3;i++){
-    for(int j=0;j<4;j++){
+for(int i=0;i<5;i++){
+    for(int j=0;j<6;j++){
         if(tablero[i][j]==ficha and
              tablero[i+1][j+1]==ficha and
               tablero[i+2][j+2]==ficha and
@@ -376,8 +376,8 @@ for(int i=0;i<3;i++){
     }
 }
 //Verificación diagonal izquierda
-for(int i=0;i<3;i++){
-    for(int j=3;j<7;j++){
+for(int i=0;i<5;i++){
+    for(int j=3;j<9;j++){
         if(tablero[i][j]==ficha and
              tablero[i+1][j-1]==ficha and
               tablero[i+2][j-2]==ficha and
@@ -389,7 +389,7 @@ for(int i=0;i<3;i++){
 return false;
 }
 
-bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&partidas, string nombreTorneo) {
+bool jugartorneo(char tablero[8][9], vector<jugador>&jugadores, vector<partida>&partidas, string nombreTorneo) {
     string nametournament = nombreTorneo;
     int i=0;
     int j=0;
@@ -401,8 +401,8 @@ bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&
         for(int j = i + 1; j < players; j++) {
             cout <<"Enfrentamiento entre: "<< jugadores[i].nombre << " Vs " << jugadores[j].nombre << endl;
             // reiniciar tablero antes de la partida
-            for (int m = 0; m < 6; ++m)
-                for (int n = 0; n < 7; ++n)
+            for (int m = 0; m < 8; ++m)
+                for (int n = 0; n < 9; ++n)
                     tablero[m][n] = ' ';
             bool continuar = verificarTorneo(tablero, jugadores, partidas, nametournament, i,j);
             if(!continuar) {
@@ -469,7 +469,7 @@ bool jugartorneo(char tablero[6][7], vector<jugador>&jugadores, vector<partida>&
     return true;
 }
 
-bool verificarTorneo(char tablero[6][7],vector<jugador>&jugadores, vector<partida>&partidas,string nombreTorneo,int i,int j){
+bool verificarTorneo(char tablero[8][9],vector<jugador>&jugadores, vector<partida>&partidas,string nombreTorneo,int i,int j){
     int pregunta;
     char ficha;
     int columna;
@@ -512,8 +512,8 @@ bool verificarTorneo(char tablero[6][7],vector<jugador>&jugadores, vector<partid
         if (verificarGanador(tablero, ficha)) {
             mostrartablero(tablero);
             bool lleno=true;
-            for(int p=0; p<6; p++){
-                for(int n=0; n<7; n++){
+            for(int p=0; p<8; p++){
+                for(int n=0; n<9; n++){
                     if(tablero[p][n]==' ') {
                         lleno=false;
                         break;
