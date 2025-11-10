@@ -1054,3 +1054,113 @@ main(){
     }
 }
 //archivos
+#include <iostream>
+#include <fstream>
+#include <stdlib.h>
+
+using namespace std;
+
+void escribirArchivo();
+void leerArchivo();
+
+int main(){
+    escribirArchivo();
+    leerArchivo();
+    return 0;
+}
+void escribirArchivo(){
+   string texto;
+   string texto2;
+    ofstream archivo;
+cout <<"Escribiendo el nombre del archivo..."<<endl;
+getline(cin, texto);
+    archivo.open(texto.c_str(), ios::out);// Darle un nombre al archivo escribiendolo
+    
+    /*archivo.open("d://prueba//datos.txt",ios::out);*/// darle un nombre al archivo ya puesto en una direccion fija
+    if(archivo.fail()){
+        cout<<"No se pudo crear el archivo"<<endl;
+        exit(1);
+    }
+
+    archivo<<"Hola, este es un archivo de texto creado con C++."<<endl;
+    archivo<<"Esta es la segunda linea del archivo."<<endl;//contenido del archivo ya puesto 
+    archivo.close();// cerrar el archivo
+
+    cout <<"Digite el texto del archivo: "<<endl;
+    getline(cin,texto2);
+    archivo<<texto2;//contenido del archivo escrito por el usuario
+
+    archivo.close();// cerrar el archivo
+}
+
+void leerArchivo(){
+    ifstream archivo;
+    string texto;
+Archivo.open("d://prueba//datos.txt", ios::in);//abrir el archivo para leerlo
+if (archivo.fail()){
+    cout<< "No se pudo abrir el archivo"<<endl;
+    exit (1);
+}
+while(!archivo.eof()){//mientras no sea el final del archivo que lo siga  leyendo 
+    getline(archivo,texto);
+    cout<<texto<<endl;
+}
+archivo. close();//cerrar el archivo
+}
+
+//ejercicio de el juego 
+
+void guardarTorneo(const vector<jugador>& jugadores, const string & nombreArchivo){
+    string guardado;
+    ofstream archivo(guardado, ios::out);
+    int players = jugadores.size();
+    cout<<"Ingrese el nombre del archivo donde se va a guardar el torneo"<<endl;
+    cin.ignore();
+    getline(cin, guardado);
+    archivo.open(guardado.c_str(), ios::out);
+    if (guardado.find(".txt")==string::npos){
+        guardado += ".txt";
+    }
+    if (archivo.fail()){
+        cout<<"No se puedo abrir el archivo del torneo"<<endl;
+        exit(1);
+    }
+    archivo<<"Estadisticas del torneo"<<endl;
+    archivo<<"Jugador     Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
+    archivo << "-------------------------------------------------------" << endl;
+        for(int k = 0; k< players; k++) {
+                            archivo << jugadores[k].nombre << "\t" 
+                                 << jugadores[k].jugados << "\t" 
+                                 << jugadores[k].ganados << "\t" 
+                                 << jugadores[k].empates << "\t" 
+                                 << jugadores[k].perdidos << "\t" 
+                                 << jugadores[k].puntos << endl;
+                                
+}
+archivo.close();
+cout<<"Torneo guardado exitosamente!"<<endl;
+}
+
+void cargarTorneo(const vector<jugador>& jugadores, const string & nombreArchivo){
+    ifstream archivo;
+    string guardado;
+    string texto;
+    cout<<"Ingrese el nombre del archivo donde se va a cargar el torneo: "<<endl;
+    cin.ignore();
+    getline(cin, guardado);
+    if (guardado.find(".txt") == string::npos){
+        guardado += ".txt";
+    }
+    archivo.open(guardado.c_str(), ios::in);
+
+    if (archivo.fail()){
+        cout<<"No se pudo abrir el archivo del juego."<<endl;
+        exit(1);
+    }
+    cout<<"Contenido del torneo"<<guardado<<endl;
+    while (getline(archivo, texto)){
+        cout<<texto<<endl;
+    }
+    archivo.close();
+cout<<"Torneo cargado exitosamente!"<<endl;
+}
