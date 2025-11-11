@@ -262,9 +262,9 @@ int pregunta;
             break;
         }
 
-        columna--; // ajustar al índice (0–6)
+        columna--; // ajustar al índice (0–8)
 
-        if (columna < 0 || columna >= 7) {
+        if (columna < 0 || columna >= 9) {
             cout << "Columna invalida. Intente de nuevo." << endl;
             continue;
         }
@@ -500,7 +500,7 @@ bool verificarTorneo(char tablero[8][9],vector<jugador>&jugadores, vector<partid
 
         columna--; // ajustar al índice (0–6)
 
-        if (columna < 0 || columna >= 7) {
+        if (columna < 0 || columna >= 9) {
             cout << "Columna invalida. Intente de nuevo." << endl;
             continue;
         }
@@ -552,9 +552,8 @@ return true;
 }
 
 void guardarPartida(const vector<partida>& partidas, const string& nombreArchivo) {
-
     string guardado;
-     ofstream archivo(guardado, ios::out);
+    ofstream archivo(guardado, ios::out);
     cout<<"Ingrese el nombre del archivo donde se va a guardar la partida"<<endl;
     cin.ignore();
     getline(cin, guardado);
