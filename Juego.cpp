@@ -48,9 +48,9 @@ int main() {
     vector<partida> partidas(2);//partida
     do{
     cout << "Bienvenido al juego de cuatro en linea" << endl;
-    cout << "-------------------------------------" << endl;
+    cout << "--------------------------------------" << endl;
     cout << "Juego de cuatro en linea" << endl;
-    cout << "-----------------------" << endl;
+    cout << "------------------------" << endl;
         cout << "Menu de opciones" << endl;
         cout << "1. Jugar partida" << endl;
         cout << "2. Jugar torneo" << endl;
@@ -93,7 +93,7 @@ int main() {
             if (cin.fail()){
             cin.clear();
             cin.ignore(1000,'\n');
-            cout << "Entrada inválida Intente de nuevo. Debe ingresar una cantidad de jugadores válida."<<endl;
+            cout << "Entrada invalida Intente de nuevo. Debe ingresar una cantidad de jugadores valida."<<endl;
             continue;
         }
                 jugadores.resize(players);
@@ -138,14 +138,15 @@ int main() {
                     }
                     case 2: {
                         cout << "===== Estadisticas de la partida =====" << endl;
-                        cout << "Jugador    Jugados  Ganados  Empates  Perdidos" << endl; 
-                        cout << "----------------------------------------------" << endl;
+                        cout << "Jugador    Jugados  Ganados  Empates  Perdidos  Puntos" << endl; 
+                        cout << "------------------------------------------------------" << endl;
                         for(int t = 0; t < 2; t++) {
                             cout << partidas[t].player << "\t" 
                                  << partidas[t].jugados1 << "\t" 
                                  << partidas[t].ganados1 << "\t" 
                                  << partidas[t].empates1 << "\t" 
-                                 << partidas[t].perdidos1 << endl;  
+                                 << partidas[t].perdidos1 << "\t"
+                                 << partidas[t].puntos1 << endl; 
                         }
                         break;
                     }
@@ -240,10 +241,10 @@ int pregunta;
         mostrartablero(tablero);
 
         if (turnoJugador1) {
-            cout << nombre1 << " (X), elige una columna (1-7) o 0 para salir: ";
+            cout << nombre1 << " (X), elige una columna (1-9) o 0 para salir: ";
             ficha = 'X';
         } else {
-            cout << nombre2 << " (O), elige una columna (1-7) o 0 para salir: ";
+            cout << nombre2 << " (O), elige una columna (1-9) o 0 para salir: ";
             ficha = 'O';
         }
 
@@ -282,7 +283,6 @@ int pregunta;
                     }
                 }
             }
-
          partidas[0].jugados1++;
          partidas[1].jugados1++;
          if(lleno){
@@ -290,7 +290,6 @@ int pregunta;
             partidas[0].empates1++;
             partidas[1].empates1++;
          }
-
          if(turnoJugador1){
             cout<<"Felicidades "<<partidas[0].player<<" has ganado!"<<endl;
             cout<<"Lo siento "<<partidas[1].player<<" has perdido."<<endl<<endl;
@@ -306,14 +305,14 @@ int pregunta;
         partidas[0].puntos1 =partidas[0].ganados1 * 3 + partidas[0].empates1;
         partidas[1].puntos1 = partidas[1].ganados1 * 3 + partidas[1].empates1;
             cout << "===== Estadisticas de la partida====="<< endl;
-            cout << "Jugador     Jugados  Ganados  Empates  Perdidos  Puntos"<<endl;
-            cout << "-------------------------------------------------------"<<endl;
+            cout << "Jugador  Jugados  Ganados  Empates  Perdidos  Puntos"<<endl;
+            cout << "----------------------------------------------------"<<endl;
             for (int i = 0; i < 2; i++) {
-                cout << partidas[i].player << "\t"
-                     << partidas[i].jugados1 << "\t"
-                     << partidas[i].ganados1 << "\t"
-                     << partidas[i].empates1 << "\t"
-                     << partidas[i].perdidos1 << "\t"
+                cout << partidas[i].player << "\t "
+                     << partidas[i].jugados1 << "\t "
+                     << partidas[i].ganados1 << "\t "
+                     << partidas[i].empates1 << "\t "
+                     << partidas[i].perdidos1 << "\t "
                      << partidas[i].puntos1 << endl;
             }
         break;
@@ -409,14 +408,14 @@ bool jugartorneo(char tablero[8][9], vector<jugador>&jugadores, vector<partida>&
             }
             
             cout << "Estadisticas del torneo: "<<nametournament << endl;
-            cout << "Jugador     Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
-            cout << "-------------------------------------------------------" << endl;
+            cout << "Jugador  Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
+            cout << "----------------------------------------------------" << endl;
             for(int k = 0; k < players; k++) {  // Cambiado para mostrar todos los jugadores
-                cout << jugadores[k].nombre << "\t"
-                     << jugadores[k].jugados << "\t"
-                     << jugadores[k].ganados << "\t"
-                     << jugadores[k].empates << "\t"
-                     << jugadores[k].perdidos << "\t"
+                cout << jugadores[k].nombre <<"\t "
+                     << jugadores[k].jugados <<"\t "
+                     << jugadores[k].ganados <<"\t "
+                     << jugadores[k].empates <<"\t "
+                     << jugadores[k].perdidos <<"\t "
                      << jugadores[k].puntos << endl;
             }  
          }
@@ -442,11 +441,11 @@ bool jugartorneo(char tablero[8][9], vector<jugador>&jugadores, vector<partida>&
                 }
             }
         } else{
-            cout<<"El ganador del torneo"<<nametournament<<" es...."<<ganador.nombre<<"con...."<<ganador.puntos<<" FELICIDADES :D!!"<<endl;
+            cout<<"El ganador del torneo "<<nametournament<<" es...."<<ganador.nombre<<" con...."<<ganador.puntos<<" FELICIDADES :D!!"<<endl;
         }
         int opcion;
     do {
-        cout << "\n¿Desea continuar? (1. Sí / 2. No): ";
+        cout << "\n¿Desea continuar? (1. Si / 2. No): ";
         cin >> opcion;
             if (cin.fail()){
             cin.clear();
@@ -476,10 +475,10 @@ bool verificarTorneo(char tablero[8][9],vector<jugador>&jugadores, vector<partid
         mostrartablero(tablero);
 
         if (turnoJugador1) {
-            cout << jugadores[i].nombre << " (X), elige una columna (1-7) o 0 para salir: ";
+            cout << jugadores[i].nombre << " (X), elige una columna (1-9) o 0 para salir: ";
             ficha = 'X';
         } else {
-            cout << jugadores[j].nombre << " (O), elige una columna (1-7) o 0 para salir: ";
+            cout << jugadores[j].nombre << " (O), elige una columna (1-9) o 0 para salir: ";
             ficha = 'O';
         }
 
@@ -518,7 +517,6 @@ bool verificarTorneo(char tablero[8][9],vector<jugador>&jugadores, vector<partid
                     }
                 }
             }
-
          jugadores[i].jugados++;
          jugadores[j].jugados++;
          if(lleno){
@@ -526,7 +524,6 @@ bool verificarTorneo(char tablero[8][9],vector<jugador>&jugadores, vector<partid
             jugadores[i].empates++;
             jugadores[j].empates++;
          }
-
          if(turnoJugador1){
             cout<<"Felicidades "<<jugadores[i].nombre<<" has ganado!"<<endl;
             cout<<"Lo siento "<<jugadores[j].nombre<<" has perdido."<<endl<<endl;
@@ -566,14 +563,14 @@ void guardarPartida(const vector<partida>& partidas, const string& nombreArchivo
         exit(1);
     }
     archivo<<"estadisticas de la partida"<<endl;
-    archivo<<"Jugador    Jugados  Ganados  Empates  Perdidos  Puntos" << endl; 
-    archivo << "-------------------------------------------------------" << endl;
+    archivo<<"Jugador  Jugados  Ganados  Empates  Perdidos  Puntos" << endl; 
+    archivo<<"----------------------------------------------------" << endl;
                      for(int t = 0; t < 2; t++) {
-                            archivo << partidas[t].player << "\t" 
-                                 << partidas[t].jugados1 << "\t" 
-                                 << partidas[t].ganados1 << "\t" 
-                                 << partidas[t].empates1 << "\t" 
-                                 << partidas[t].perdidos1 << "\t" 
+                            archivo << partidas[t].player << "\t " 
+                                 << partidas[t].jugados1 << "\t " 
+                                 << partidas[t].ganados1 << "\t " 
+                                 << partidas[t].empates1 << "\t " 
+                                 << partidas[t].perdidos1 << "\t " 
                                  << partidas[t].puntos1 << endl;
                         }
     archivo.close();
@@ -620,14 +617,14 @@ void guardarTorneo(const vector<jugador>& jugadores, const string & nombreArchiv
         exit(1);
     }
     archivo<<"Estadisticas del torneo"<<endl;
-    archivo<<"Jugador     Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
-    archivo << "-------------------------------------------------------" << endl;
+    archivo<<"Jugador  Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
+    archivo<<"----------------------------------------------------" << endl;
         for(int k = 0; k< players; k++) {
-                            archivo << jugadores[k].nombre << "\t" 
-                                 << jugadores[k].jugados << "\t" 
-                                 << jugadores[k].ganados << "\t" 
-                                 << jugadores[k].empates << "\t" 
-                                 << jugadores[k].perdidos << "\t" 
+                            archivo << jugadores[k].nombre << "\t " 
+                                 << jugadores[k].jugados << "\t " 
+                                 << jugadores[k].ganados << "\t " 
+                                 << jugadores[k].empates << "\t " 
+                                 << jugadores[k].perdidos << "\t " 
                                  << jugadores[k].puntos << endl;
                                 
 }
