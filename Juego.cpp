@@ -44,8 +44,6 @@ int main() {
     bool turnoJugador1 = true;
     int players = 0;
     char tablero[8][9]; //tablero de 8 filas y 9 columnas
-
-
     vector<jugador>jugadores;//torneo
     vector<partida> partidas(2);//partida
     do{
@@ -62,10 +60,15 @@ int main() {
         cout << "---------------------" << endl;
         cout << "Ingrese una opcion: ";
         cin >> opcion;
-
+            if (cin.fail()){
+            cin.clear();
+            cin.ignore(1000,'\n');
+            cout << "Entrada invalida Intente de nuevo. Debe ingresar una opcion valida."<<endl;
+            continue;
+            }
         switch (opcion) {
             case 1: {
-                cout << " Se escogio jugar partida" << endl;
+                cout << "Se escogio jugar partida" << endl;
                 for(int p=0;p<2;p++){
                     cout <<"Ingrese el nombre del jugador "<<p+1<<": ";
                     cin >> partidas[p].player;
@@ -111,7 +114,6 @@ int main() {
                 jugartorneo(tablero,jugadores,partidas,nombreTorneo); 
                 break;
             }
-
             case 3: {
                 cout << "Ver estadisticas" << endl;
                 cout << "Que estadisticas quiere ver?" << endl;
@@ -136,15 +138,14 @@ int main() {
                     }
                     case 2: {
                         cout << "===== Estadisticas de la partida =====" << endl;
-                        cout << "Jugador    Jugados  Ganados  Empates  Perdidos  Puntos" << endl; 
-                        cout << "-------------------------------------------------------" << endl;
+                        cout << "Jugador    Jugados  Ganados  Empates  Perdidos" << endl; 
+                        cout << "----------------------------------------------" << endl;
                         for(int t = 0; t < 2; t++) {
                             cout << partidas[t].player << "\t" 
                                  << partidas[t].jugados1 << "\t" 
                                  << partidas[t].ganados1 << "\t" 
                                  << partidas[t].empates1 << "\t" 
-                                 << partidas[t].perdidos1 << "\t" 
-                                 << partidas[t].puntos1 << endl;
+                                 << partidas[t].perdidos1 << endl;  
                         }
                         break;
                     }
@@ -194,17 +195,14 @@ int main() {
                 }
                 break;
             }
-
             case 5: {
                 cout << "Salio" << endl;
                 break;
             }
-
             default: {
                 cout << "Opcion no valida" << endl;
                 break;
             }
-        
         }
 } while(opcion != 5);
 return 0;
@@ -212,14 +210,14 @@ return 0;
 
 void mostrartablero(char tablero[8][9]) {
     cout << endl;
-    cout << " ------------------------------------" << endl;
+    cout << "-------------------------------------" << endl;
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 9; j++) {
             cout << "| " << tablero[i][j] << " ";  
         }
         cout << "|"<<endl;
     }
-    cout << " ------------------------------------" << endl;
+    cout << "-------------------------------------" << endl;
     cout << "  1   2   3   4   5   6   7   8   9 " << endl << endl;
 }
 
