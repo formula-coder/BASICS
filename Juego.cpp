@@ -3,6 +3,8 @@
 #include <vector>
 #include <fstream>
 #include <stdlib.h>
+#include<iomanip>
+#include<limits>
 
 using namespace std;
 struct jugador{
@@ -32,6 +34,8 @@ void guardarPartida(const vector<partida>& partidas, const string& nombreArchivo
 void cargarPartida(const string& nombreArchivo, vector<partida>& partidas);
 void guardarTorneo(const vector<jugador>& jugadores, const string & nombreArchivo);
 void cargarTorneo(const vector<jugador>& jugadores, const string & nombreArchivo);
+void guardarPartidaAuto(const vector<partida>& partidas);
+void guardarTorneoAuto(const vector<jugador>& jugadores);
 
 int main() {
     int opcion = 0;
@@ -68,10 +72,11 @@ int main() {
             }
         switch (opcion) {
             case 1: {
-                cout << "Se escogio jugar partida" << endl;
+                cout << "Se escogio jugar partida" << endl; 
+                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 for(int p=0;p<2;p++){
                     cout <<"Ingrese el nombre del jugador "<<p+1<<": ";
-                    cin >> partidas[p].player;
+                    getline(cin, partidas[p].player);
                     cout <<"El nombre del jugador "<<p+1<<" es: "<<partidas[p].player<<endl;
                 }
                 // reiniciar tablero antes de la partida
@@ -98,9 +103,10 @@ int main() {
         }
                 jugadores.resize(players);
                 //hasta dies jugadores :)
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 for (int i = 0; i < players; i++) {
                     cout << "Ingrese el nombre del jugador " << i+1 << ": ";
-                    cin >> jugadores[i].nombre;
+                    getline(cin,jugadores[i].nombre);
                     cout << "El nombre del jugador " << i+1 << " es: " << jugadores[i].nombre << endl;
                 }
                 cout << "Ingrese el nombre del torneo: ";
@@ -124,30 +130,42 @@ int main() {
                 switch (opcion1) {
                     case 1: {
                         cout << "       ===== Estadisticas del Torneo =====" << endl;
-                        cout << "Jugador  Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
-                        cout << "----------------------------------------------------" << endl;
-                        for(int s = 0; s < players; s++) {
-                            cout << jugadores[s].nombre << "\t    " 
-                                 << jugadores[s].jugados << "\t    " 
-                                 << jugadores[s].ganados << "\t    " 
-                                 << jugadores[s].empates << "\t    " 
-                                 << jugadores[s].perdidos << "\t    " 
-                                 << jugadores[s].puntos << endl;
-                        }
+                        cout << left << setw(15) << "Jugador"
+                             << setw(10) << "Jugados"
+                             << setw(10) << "Ganados"
+                             << setw(10) << "Empates"
+                             << setw(10) << "Perdidos"
+                             << setw(10) << " Puntos" << endl;
+                        cout << "--------------------------------------------------------------" << endl;
+                     for (int s = 0; s < players; s++) {
+                        cout << left << setw(16) << jugadores[s].nombre
+                             << setw(11) << jugadores[s].jugados
+                             << setw(11) << jugadores[s].ganados
+                             << setw(11) << jugadores[s].empates
+                             << setw(11) << jugadores[s].perdidos
+                             << setw(9) << jugadores[s].puntos
+                                << endl;
+                                }
                         break;
                     }
                     case 2: {
                         cout << "       ===== Estadisticas de la partida =====" << endl;
-                        cout << "Jugador  Jugados  Ganados  Empates  Perdidos  Puntos" << endl; 
-                        cout << "----------------------------------------------------" << endl;
-                        for(int t = 0; t < 2; t++) {
-                            cout << partidas[t].player << "\t    " 
-                                 << partidas[t].jugados1 << "\t    " 
-                                 << partidas[t].ganados1 << "\t    " 
-                                 << partidas[t].empates1 << "\t    " 
-                                 << partidas[t].perdidos1 << "\t    "
-                                 << partidas[t].puntos1 << endl; 
-                        }
+                           cout << left << setw(15) << "Jugador"
+                             << setw(10) << "Jugados"
+                             << setw(10) << "Ganados"
+                             << setw(10) << "Empates"
+                             << setw(10) << "Perdidos"
+                             << setw(10) << " Puntos" << endl;
+                        cout << "--------------------------------------------------------------" << endl;
+                    for(int t = 0; t < 2; t++) {
+                            cout << left << setw(16) << partidas[t].player
+                                 <<setw(11) << partidas[t].jugados1
+                                 <<setw(11) << partidas[t].ganados1
+                                 <<setw(11) << partidas[t].empates1
+                                 <<setw(11) << partidas[t].perdidos1
+                                 <<setw(9) << partidas[t].puntos1
+                                    << endl;
+                                  }
                         break;
                     }
                 }
@@ -305,21 +323,36 @@ int pregunta;
         partidas[0].puntos1 =partidas[0].ganados1 * 3 + partidas[0].empates1;
         partidas[1].puntos1 = partidas[1].ganados1 * 3 + partidas[1].empates1;
             cout << "===== Estadisticas de la partida====="<< endl;
-            cout << "Jugador  Jugados  Ganados  Empates  Perdidos  Puntos"<<endl;
-            cout << "----------------------------------------------------"<<endl;
+                           cout << left << setw(15) << "Jugador"
+                             << setw(10) << "Jugados"
+                             << setw(10) << "Ganados"
+                             << setw(10) << "Empates"
+                             << setw(10) << "Perdidos"
+                             << setw(10) << " Puntos" << endl;
+            cout << "--------------------------------------------------------------" << endl;
             for (int i = 0; i < 2; i++) {
-                cout << partidas[i].player << "\t "
-                     << partidas[i].jugados1 << "\t "
-                     << partidas[i].ganados1 << "\t "
-                     << partidas[i].empates1 << "\t "
-                     << partidas[i].perdidos1 << "\t "
-                     << partidas[i].puntos1 << endl;
+            cout << left << setw(16) << partidas[i].player
+                 <<setw(11) << partidas[i].jugados1
+                 <<setw(11) << partidas[i].ganados1
+                 <<setw(11) << partidas[i].empates1
+                 <<setw(11) << partidas[i].perdidos1
+                 <<setw(9) << partidas[i].puntos1
+                 << endl;
             }
         break;
          }
         // Cambiar turno
         turnoJugador1 = !turnoJugador1;
-    } 
+    }
+    int pregunta2;
+    cout<<"desea guardar la partida automaticamente? 1.Si 2.No: "<<endl;
+    cin>>pregunta2;
+    if(pregunta2 == 1) {
+        guardarPartidaAuto(partidas);
+    }
+    else{
+        cout<<"La partida no va a ser guardado automatico"<<endl;
+    }
 do{
     cout <<"\nDesea ir al menu principal? 1.Si 2.No: "<<endl;
     cin >> pregunta;
@@ -408,15 +441,20 @@ bool jugartorneo(char tablero[8][9], vector<jugador>&jugadores, vector<partida>&
             }
             
             cout << "Estadisticas del torneo: "<<nametournament << endl;
-            cout << "Jugador  Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
-            cout << "----------------------------------------------------" << endl;
+                cout << left << setw(15) << "Jugador"
+                     << setw(10) << "Jugados"
+                     << setw(10) << "Ganados"
+                     << setw(10) << "Empates"
+                     << setw(10) << "Perdidos"
+                     << setw(10) << " Puntos" << endl;
+            cout << "--------------------------------------------------------------" << endl;
             for(int k = 0; k < players; k++) {  // Cambiado para mostrar todos los jugadores
-                cout << jugadores[k].nombre <<"\t "
-                     << jugadores[k].jugados <<"\t "
-                     << jugadores[k].ganados <<"\t "
-                     << jugadores[k].empates <<"\t "
-                     << jugadores[k].perdidos <<"\t "
-                     << jugadores[k].puntos << endl;
+                cout << left << setw(16) << jugadores[k].nombre
+                     << setw(11) << jugadores[k].jugados
+                     << setw(11) << jugadores[k].ganados
+                     << setw(11) << jugadores[k].empates
+                     << setw(11) << jugadores[k].perdidos
+                     << setw(9) << jugadores[k].puntos << endl;
             }  
          }
         }
@@ -442,6 +480,15 @@ bool jugartorneo(char tablero[8][9], vector<jugador>&jugadores, vector<partida>&
             }
         } else{
             cout<<"El ganador del torneo "<<nametournament<<" es...."<<ganador.nombre<<" con...."<<ganador.puntos<<" FELICIDADES :D!!"<<endl;
+        }
+        int pregunta;
+        cout<<"desea guardar el torneo automaticamente? 1.Si 2.No: "<<endl;
+        cin>>pregunta;
+        if(pregunta == 1) {
+            guardarTorneoAuto(jugadores);
+        }
+        else{
+            cout<<"El torneo no va a ser guardado automatico"<<endl;
         }
         int opcion;
     do {
@@ -562,16 +609,22 @@ void guardarPartida(const vector<partida>& partidas, const string& nombreArchivo
         cout<<"No se pudo abrir el archivo del juego"<<endl;
         exit(1);
     }
-    archivo<<"estadisticas de la partida"<<endl;
-    archivo<<"Jugador  Jugados  Ganados  Empates  Perdidos  Puntos" << endl; 
-    archivo<<"----------------------------------------------------" << endl;
+    archivo<< "       ===== Estadisticas de la partida =====" << endl;
+            archivo<< left << setw(15) << "Jugador"
+                 << setw(10) << "Jugados"
+                 << setw(10) << "Ganados"
+                 << setw(10) << "Empates"
+                 << setw(10) << "Perdidos"
+                 << setw(10) << " Puntos" << endl;
+    archivo<< "--------------------------------------------------------------" << endl;
                      for(int t = 0; t < 2; t++) {
-                            archivo << partidas[t].player << "\t " 
-                                 << partidas[t].jugados1 << "\t " 
-                                 << partidas[t].ganados1 << "\t " 
-                                 << partidas[t].empates1 << "\t " 
-                                 << partidas[t].perdidos1 << "\t " 
-                                 << partidas[t].puntos1 << endl;
+                 archivo<< left << setw(16) << partidas[t].player
+                        <<setw(11) << partidas[t].jugados1
+                        <<setw(11) << partidas[t].ganados1
+                        <<setw(11) << partidas[t].empates1
+                        <<setw(11) << partidas[t].perdidos1
+                        <<setw(9) << partidas[t].puntos1
+                        << endl;
                         }
     archivo.close();
     cout<<"Partida Guardada exitosamente"<<endl;
@@ -616,16 +669,22 @@ void guardarTorneo(const vector<jugador>& jugadores, const string & nombreArchiv
         cout<<"No se puedo abrir el archivo del torneo"<<endl;
         exit(1);
     }
-    archivo<<"Estadisticas del torneo"<<endl;
-    archivo<<"Jugador  Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
-    archivo<<"----------------------------------------------------" << endl;
+    archivo<< "       ===== Estadisticas del Torneo =====" << endl;
+    archivo<< left << setw(15) << "Jugador"
+           << setw(10) << "Jugados"
+           << setw(10) << "Ganados"
+           << setw(10) << "Empates"
+           << setw(10) << "Perdidos"
+           << setw(10) << " Puntos" << endl;
+    archivo<< "--------------------------------------------------------------" << endl;
         for(int k = 0; k< players; k++) {
-                            archivo << jugadores[k].nombre << "\t " 
-                                 << jugadores[k].jugados << "\t " 
-                                 << jugadores[k].ganados << "\t " 
-                                 << jugadores[k].empates << "\t " 
-                                 << jugadores[k].perdidos << "\t " 
-                                 << jugadores[k].puntos << endl;
+            archivo<< left << setw(16) << jugadores[k].nombre
+                   << setw(11) << jugadores[k].jugados
+                   << setw(11) << jugadores[k].ganados
+                   << setw(11) << jugadores[k].empates
+                   << setw(11) << jugadores[k].perdidos
+                   << setw(9) << jugadores[k].puntos
+                    << endl;
                                 
 }
 archivo.close();
@@ -654,4 +713,66 @@ void cargarTorneo(const vector<jugador>& jugadores, const string & nombreArchivo
     }
     archivo.close();
 cout<<"Torneo cargado exitosamente!"<<endl;
+}
+
+void guardarPartidaAuto(const vector<partida>& partidas) {
+    static int contador=1;
+    string nombreArchivo = "partida_auto" + to_string(contador) + ".txt";
+    ofstream archivo(nombreArchivo);
+
+    if (archivo.fail()){
+        cout<<"Error al guardar automaticamente la partida"<<endl;
+        exit(1);
+    }
+    archivo<< "       ===== Estadisticas de la partida =====" << endl;
+                           archivo << left << setw(15) << "Jugador"
+                             << setw(10) << "Jugados"
+                             << setw(10) << "Ganados"
+                             << setw(10) << "Empates"
+                             << setw(10) << "Perdidos"
+                             << setw(10) << " Puntos" << endl;
+                        archivo << "--------------------------------------------------------------" << endl;
+                    for(int t = 0; t < 2; t++) {
+                            archivo << left << setw(16) << partidas[t].player
+                                 <<setw(11) << partidas[t].jugados1
+                                 <<setw(11) << partidas[t].ganados1
+                                 <<setw(11) << partidas[t].empates1
+                                 <<setw(11) << partidas[t].perdidos1
+                                 <<setw(9) << partidas[t].puntos1
+                                    << endl;
+                                  }
+    
+    archivo.close();
+    cout << "Partida guardada automaticamente en: " << nombreArchivo << endl;
+    contador++;
+}
+
+void guardarTorneoAuto(const vector<jugador>& jugadores) {
+    static int contador=1;
+    string nombreArchivo = "torneo_auto" + to_string(contador) + ".txt";
+    ofstream archivo(nombreArchivo);
+    int players = jugadores.size();
+
+    if (archivo.fail()){
+        cout<<"Error al guardar automaticamente el torneo"<<endl;
+        exit(1);
+    }
+    archivo<< "       ===== Estadisticas del Torneo =====" << endl;
+    archivo<< left << setw(15) << "Jugador"
+           << setw(10) << "Jugados"
+           << setw(10) << "Ganados"
+           << setw(10) << "Empates"
+           << setw(10) << "Perdidos"
+           << setw(10) << " Puntos" << endl;
+    archivo<< "--------------------------------------------------------------" << endl;
+        for(int k = 0; k< players; k++) {
+            archivo<< left << setw(16) << jugadores[k].nombre
+                   << setw(11) << jugadores[k].jugados
+                   << setw(11) << jugadores[k].ganados
+                   << setw(11) << jugadores[k].empates
+                   << setw(11) << jugadores[k].perdidos
+                   << setw(9) << jugadores[k].puntos
+                    << endl;
+                                
+}
 }
