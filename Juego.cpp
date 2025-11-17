@@ -123,29 +123,29 @@ int main() {
 
                 switch (opcion1) {
                     case 1: {
-                        cout << "===== Estadisticas del Torneo =====" << endl;
-                        cout << "Jugador     Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
-                        cout << "--------------------------------------------------------" << endl;
+                        cout << "       ===== Estadisticas del Torneo =====" << endl;
+                        cout << "Jugador  Jugados  Ganados  Empates  Perdidos  Puntos" << endl;
+                        cout << "----------------------------------------------------" << endl;
                         for(int s = 0; s < players; s++) {
-                            cout << jugadores[s].nombre << "\t" 
-                                 << jugadores[s].jugados << "\t" 
-                                 << jugadores[s].ganados << "\t" 
-                                 << jugadores[s].empates << "\t" 
-                                 << jugadores[s].perdidos << "\t" 
+                            cout << jugadores[s].nombre << "\t    " 
+                                 << jugadores[s].jugados << "\t    " 
+                                 << jugadores[s].ganados << "\t    " 
+                                 << jugadores[s].empates << "\t    " 
+                                 << jugadores[s].perdidos << "\t    " 
                                  << jugadores[s].puntos << endl;
                         }
                         break;
                     }
                     case 2: {
-                        cout << "===== Estadisticas de la partida =====" << endl;
-                        cout << "Jugador    Jugados  Ganados  Empates  Perdidos  Puntos" << endl; 
-                        cout << "------------------------------------------------------" << endl;
+                        cout << "       ===== Estadisticas de la partida =====" << endl;
+                        cout << "Jugador  Jugados  Ganados  Empates  Perdidos  Puntos" << endl; 
+                        cout << "----------------------------------------------------" << endl;
                         for(int t = 0; t < 2; t++) {
-                            cout << partidas[t].player << "\t" 
-                                 << partidas[t].jugados1 << "\t" 
-                                 << partidas[t].ganados1 << "\t" 
-                                 << partidas[t].empates1 << "\t" 
-                                 << partidas[t].perdidos1 << "\t"
+                            cout << partidas[t].player << "\t    " 
+                                 << partidas[t].jugados1 << "\t    " 
+                                 << partidas[t].ganados1 << "\t    " 
+                                 << partidas[t].empates1 << "\t    " 
+                                 << partidas[t].perdidos1 << "\t    "
                                  << partidas[t].puntos1 << endl; 
                         }
                         break;
