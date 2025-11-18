@@ -257,7 +257,6 @@ int pregunta;
     bool turnoJugador1 = true;
     while (true) {
         mostrartablero(tablero);
-
         if (turnoJugador1) {
             cout << nombre1 << " (X), elige una columna (1-9) o 0 para salir: ";
             ficha = 'X';
@@ -265,7 +264,6 @@ int pregunta;
             cout << nombre2 << " (O), elige una columna (1-9) o 0 para salir: ";
             ficha = 'O';
         }
-
         cin >> columna;
         if (cin.fail()){
             cin.clear();
@@ -273,19 +271,15 @@ int pregunta;
             cout << "Entrada inválida Intente de nuevo. Debe ingresar un nuevo numero"<<endl;
             continue;
         }
-
         if (columna == 0) {
             cout << "Saliendo de la partida." << endl;
             break;
         }
-
         columna--; // ajustar al índice (0–8)
-
         if (columna < 0 || columna >= 9) {
             cout << "Columna invalida. Intente de nuevo." << endl;
             continue;
         }
-
         if (!colocarFicha(tablero, columna, ficha)) {
             cout << "Columna llena. Intente con otra." << endl;
             continue;
@@ -426,7 +420,6 @@ bool jugartorneo(char tablero[8][9], vector<jugador>&jugadores, vector<partida>&
     int players = jugadores.size();
     cout << "El torneo ha empezado!! "<<nametournament<< endl;
     cout << "Participan " << players << " jugadores" << endl;
-    
     for(int i = 0; i < players; i++) {
         for(int j = i + 1; j < players; j++) {
             cout <<"Enfrentamiento entre: "<< jugadores[i].nombre << " Vs " << jugadores[j].nombre << endl;
@@ -439,7 +432,6 @@ bool jugartorneo(char tablero[8][9], vector<jugador>&jugadores, vector<partida>&
                 cout << "El torneo ha sido interrumpido por el usuario" << endl;
                 return false;
             }
-            
             cout << "Estadisticas del torneo: "<<nametournament << endl;
                 cout << left << setw(15) << "Jugador"
                      << setw(10) << "Jugados"
@@ -520,7 +512,6 @@ bool verificarTorneo(char tablero[8][9],vector<jugador>&jugadores, vector<partid
     bool turnoJugador1 = true;
     while (true) {
         mostrartablero(tablero);
-
         if (turnoJugador1) {
             cout << jugadores[i].nombre << " (X), elige una columna (1-9) o 0 para salir: ";
             ficha = 'X';
@@ -528,7 +519,6 @@ bool verificarTorneo(char tablero[8][9],vector<jugador>&jugadores, vector<partid
             cout << jugadores[j].nombre << " (O), elige una columna (1-9) o 0 para salir: ";
             ficha = 'O';
         }
-
         cin >> columna;
         if (cin.fail()){
             cin.clear();
@@ -536,19 +526,15 @@ bool verificarTorneo(char tablero[8][9],vector<jugador>&jugadores, vector<partid
             cout << "Entrada inválida Intente de nuevo. Debe ingresar un nuevo numero"<<endl;
             continue;
         }
-
         if (columna == 0) {
             cout << "Saliendo de la partida." << endl;
             break;
         }
-
         columna--; // ajustar al índice (0–6)
-
         if (columna < 0 || columna >= 9) {
             cout << "Columna invalida. Intente de nuevo." << endl;
             continue;
         }
-
         if (!colocarFicha(tablero, columna, ficha)) {
             cout << "Columna llena. Intente con otra." << endl;
             continue;
@@ -604,7 +590,6 @@ void guardarPartida(const vector<partida>& partidas, const string& nombreArchivo
        if (guardado.find(".txt") == string::npos) {
         guardado += ".txt";
     }
-      
     if (archivo.fail()){
         cout<<"No se pudo abrir el archivo del juego"<<endl;
         exit(1);
@@ -641,7 +626,6 @@ void cargarPartida(const string& nombreArchivo, vector<partida>& partidas) {
         guardado += ".txt";
     }
     archivo.open(guardado.c_str(),ios::in);
-
     if (archivo.fail()){
         cout<<"No se pudo abrir el archivo del juego"<<endl;
         exit(1);
@@ -684,8 +668,7 @@ void guardarTorneo(const vector<jugador>& jugadores, const string & nombreArchiv
                    << setw(11) << jugadores[k].empates
                    << setw(11) << jugadores[k].perdidos
                    << setw(9) << jugadores[k].puntos
-                    << endl;
-                                
+                    << endl;                  
 }
 archivo.close();
 cout<<"Torneo guardado exitosamente!"<<endl;
@@ -702,7 +685,6 @@ void cargarTorneo(const vector<jugador>& jugadores, const string & nombreArchivo
         guardado += ".txt";
     }
     archivo.open(guardado.c_str(), ios::in);
-
     if (archivo.fail()){
         cout<<"No se pudo abrir el archivo del juego."<<endl;
         exit(1);
@@ -752,7 +734,6 @@ void guardarTorneoAuto(const vector<jugador>& jugadores) {
     string nombreArchivo = "torneo_auto" + to_string(contador) + ".txt";
     ofstream archivo(nombreArchivo);
     int players = jugadores.size();
-
     if (archivo.fail()){
         cout<<"Error al guardar automaticamente el torneo"<<endl;
         exit(1);
@@ -772,7 +753,6 @@ void guardarTorneoAuto(const vector<jugador>& jugadores) {
                    << setw(11) << jugadores[k].empates
                    << setw(11) << jugadores[k].perdidos
                    << setw(9) << jugadores[k].puntos
-                    << endl;
-                                
+                    << endl;                    
 }
 }
