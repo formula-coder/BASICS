@@ -1,10 +1,10 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <fstream>
-#include <stdlib.h>
-#include<iomanip>
-#include<limits>
+#include <iostream>   // Entrada y salida (cout, cin)
+#include <string>   // Manejo de strings
+#include <vector>   // Manejo de vectores dinamicos
+#include <fstream>   // Manejo de archivos
+#include <stdlib.h>   // Funciones generales de utilidad exit()
+#include<iomanip>   // Formato de tablas (setw)
+#include<limits>  // numeric_limits (limpiar buffer)
 
 using namespace std;
 struct jugador{
