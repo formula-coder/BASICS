@@ -1164,3 +1164,4 @@ void cargarTorneo(const vector<jugador>& jugadores, const string & nombreArchivo
     archivo.close();
 cout<<"Torneo cargado exitosamente!"<<endl;
 }
+#endif
