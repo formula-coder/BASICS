@@ -46,3 +46,21 @@ cin >> cantidad;
         cout << "Fecha: " << colecciones[j].fecha_compra << endl;
     }
 }
+
+//Archivos
+
+#include <iostream>
+#include <stdlib.h>
+#include <fstream>
+
+using namespace std;
+
+void escribir();
+
+int main() {
+    escribir();
+    system("pause");
+    return 0;
+}
+
+void escribir
