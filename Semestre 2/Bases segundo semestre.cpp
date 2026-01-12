@@ -129,29 +129,6 @@ int main(){
 #include <iostream>
 #include<conio.h>
 using namespace std;
-
-int main(){
-    int numero;
-    int *dir_num;
-
-    cout<<"Digite un numero: ";cin>>numero;
-    dir_num=&numero;
-    
-    if(*dir_num%2==0){
-        cout<<"El numero "<<*dir_num<<" es par"<<endl;
-        cout <<"Direccion de memoria: "<<dir_num<<endl;
-    }
-    else{
-        cout<<"El numero "<<*dir_num<<" es impar"<<endl;
-        cout<<"Direccion de memoria: "<<dir_num<<endl;
-    }
-    getch();
-    return 0;
-}
-
-#include <iostream>
-#include<conio.h>
-using namespace std;
 int main(){
     int num;
     int *dir_num;
@@ -180,24 +157,6 @@ int main(){
     return 0;
 }
 
-#include <iostream>
-#include<conio.h>
-using namespace std;
-int main(){
-    int numeros[10]={1,2,3,4,5,6,7,8,9,10};
-    int *dir_numeros;
-    dir_numeros=numeros;
-
-    for(int i=0;i<10;i++){
-        cout<<"Elemento "<<i+1<<": "<<*(dir_numeros+i)<<endl;
-    }
-    for(int i=0;i<10;i++){
-        cout<<"Posición de memoria de el elemento"<<numeros[i]<<": "<<(dir_numeros+i)<<endl;
-    }
-getch();
-return 0;
-}
-
 #include<iostream>
 #include<conio.h>
 
@@ -223,3 +182,102 @@ int main(){
         }
     }
 }
+
+int *p = new int;
+*p = 20;
+delete p;
+
+
+#include <iostream>
+using namespace std;
+
+int main() {
+    int n;
+    char opcion;
+
+    cout << "Cuantas personas van a estar? ";
+    cin >> n;
+
+    // Crear memoria dinámica
+    int *personas = new int[n];
+
+    cout << "Se creo espacio para " << n << " personas.\n";
+
+    cout << "Te equivocaste? (s/n): ";
+    cin >> opcion;
+
+    if (opcion == 's' || opcion == 'S') {
+        cout << "Nueva cantidad: ";
+        cin >> n;
+
+        // Liberar memoria anterior
+        delete[] personas;
+
+        // Crear nueva memoria
+        personas = new int[n];
+
+        cout << "Ahora el espacio es para " << n << " personas.\n";
+    }
+
+    // Liberar memoria al final
+    delete[] personas;
+
+    return 0;
+}
+
+
+//cadenas de caracteres
+#include <iostream>
+#include<string.h>
+using namespace std;
+
+int main(){
+    char palabra[]="alejandro";
+    cout<<"La palabra es: "<<palabra<<endl;
+    cout<<"La longitud de la palabra es: "<<strlen(palabra)<<endl;
+    cout<<"La palabra en mayusculas es: ";
+    for(int i=0;i<strlen(palabra);i++){
+        cout<<(char)toupper(palabra[i]);
+    }
+    charpalabra2[]={"ANDRES"};
+    cout<<"\nLa palabra en minusculas es: ";
+    for(int i=0;i<strlen(palabra2);i++){
+        cout<<(char)tolower(palabra2[i]);
+    }
+    char palabra3[20];
+    cout<<"\nDigite una palabra no menor de 20 caracteres: ";
+    cin.getline(palabra3,20);
+    cout<<"La palabra digitada es: "<<palabra3<<endl;
+
+}
+#include <iostream>
+#include <string.h>
+using namespace std;
+int main(){
+    char nombre[]="Alejandro";
+    char nombre2[20];
+    cout<<"El nombre es: "<<nombre<<endl;
+    strcpy(nombre2,nombre);
+    cout<<"El nombre copiado es: "<<nombre2<<endl;
+}
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+int main(){
+    char palabra1[]="Hola";
+    char palabra2[]="Mundo";
+    if(strcmp(palabra1,palabra2)==0){
+        cout<<"Las palabras son iguales"<<endl;
+}
+    else{
+        cout<<"Las palabras son diferentes"<<endl;
+    }
+    if (strcmp(palabra1,palabra2)<0){
+        cout<<"La primera palabra es menor que la segunda"<<endl;
+    }
+    else{
+        cout<<"La primera palabra es mayor que la segunda"<<endl;
+    }
+}
+
