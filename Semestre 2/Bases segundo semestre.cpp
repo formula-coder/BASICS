@@ -281,3 +281,72 @@ int main(){
     }
 }
 
+#include <iostream>
+#include <string.h>
+
+using namespace std;
+
+int main( ){
+    char cad1[]="Hola";
+    char cad2[]="Mundo";
+    char cad3[30];
+
+    strcpy(cad3,cad1);//copiar cad1 en cad3
+    strcat(cad3,cad2);//concatenar cad2 al final de cad3
+    cout << "La cadena concatenada es: " << cad3 << endl;
+}
+
+#include <iostream>
+#include <string.h>
+
+using namespace std;
+
+int main(){
+    char cad1[]="hola mundo";
+    strrev(cad1);
+    cout<<"La cadena invertida es: "<<cad1<<endl;
+
+}
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+int main(){
+    char palabra[]="programacion";
+    strupr(palabra);
+    cout<<"La palabra en mayusculas es: "<<palabra<<endl;
+}
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+int main(){
+    char palabra[]="PROGRAMACION";
+    strlwr(palabra);
+    cout<<"La palabra en minusculas es: "<<palabra<<endl;
+}
+
+#include <iostream>
+#include <stdlib.h>
+
+using namespace std;
+
+int main(){
+    char cadena[]="12345";
+    float numeros;
+    numeros=atof(cadena);
+    cout<<"El numero es: "<<numeros<<endl;
+    int numero;
+    numero=atoi(cadena);
+    cout<<"El numero es: "<<numero<<endl;
+}
+
+
+//programacion orientada a objetos..
+
+//clases: Una clase es una plantilla para crear objetos, que define atributos y comportamientos comunes.
+//Objetos: Un objeto es una instancia de una clase que encapsula datos y funcionalidades relacionadas.
+//abstraccion: La abstraccion es el proceso de simplificar un sistema complejo al enfocarse en los aspectos esenciales y ocultar los detalles innecesarios.
+//encapsulamiento: El encapsulamiento es el principio de ocultar los datos internos de un objeto y proporcionar acceso a ellos solo a traves de metodos publicos.
+//herencia: La herencia es un mecanismo que permite a una clase derivada heredar atributos y metodos de una clase base, promoviendo la reutilizacion de codigo.
+//polimorfismo: El polimorfismo es la capacidad de un objeto para tomar diferentes formas, permitiendo que una misma interfaz pueda ser utilizada para diferentes tipos de objetos.
