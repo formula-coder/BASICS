@@ -350,3 +350,79 @@ int main(){
 //encapsulamiento: El encapsulamiento es el principio de ocultar los datos internos de un objeto y proporcionar acceso a ellos solo a traves de metodos publicos.
 //herencia: La herencia es un mecanismo que permite a una clase derivada heredar atributos y metodos de una clase base, promoviendo la reutilizacion de codigo.
 //polimorfismo: El polimorfismo es la capacidad de un objeto para tomar diferentes formas, permitiendo que una misma interfaz pueda ser utilizada para diferentes tipos de objetos.
+#include<iostream>
+#include<string>
+#include<stdlib.h>
+#include<conio.h>
+using namespace std;
+
+class persona{
+    private://atributos
+        int edad;
+        string nombre;
+    public://metodos
+    persona(int, string);//constructor
+    void leer();
+    void correr();
+
+};
+//definicion del constructor: nos sirve para inicializar los atributos de la clase
+persona::persona(int _edad, string _nombre){
+    edad=_edad;
+    nombre=_nombre;
+}
+
+void persona::leer(){
+    cout<<"La persona "<<nombre<<" esta leyendo"<<endl;
+}
+void persona::correr(){
+    cout<<"La persona "<<nombre<<" esta corriendo"<<endl;
+}
+int main(){
+persona p1= persona (20,"Alejandro");
+p1.leer();
+
+persona p2= persona (25,"Andres");
+p2.correr();
+
+persona p3= persona (30,"Maria");
+p3.leer();
+p3.correr();
+getch();
+    return 0;
+}
+
+#include <iostream>
+#include<stdlib.h>
+
+using namespace std;
+
+class fecha{
+    private:
+        int dia;
+        int mes;
+        int anio;
+    public:
+        fecha(int, int, int);
+        void mostrarFecha();
+};
+
+fecha::fecha(int _dia, int _mes, int _anio){
+    dia=_dia;
+    mes=_mes;
+    anio=_anio;
+}
+fecha::mostrarfecha(){
+    anio = int (fecha/10000);
+    mes = int ((fecha%10000)/100);
+    dia = int (fecha%100);
+}
+void fecha::mostrarfecha(){
+    cout<<" la fecha es:"<<dia<<"/"<<mes<<"/"<<anio<<endl;
+}
+int main(){
+    fecha hoy(9,6,2024);
+    fecha ayer(8,6,2024);
+    ayer.mostrarFecha();
+    hoy.mostrarFecha();
+}
