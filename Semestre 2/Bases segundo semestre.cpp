@@ -426,3 +426,185 @@ int main(){
     ayer.mostrarFecha();
     hoy.mostrarFecha();
 }
+//destructores: es un metodo especial que se llama automaticamente cuando un objeto de una clase es destruido o sale de su ambito
+#include <iostream>
+#include <stdlib.h>
+#include <string>
+using namespace std;
+
+class perro{
+    private:
+        string nombre;
+        string raza;
+    public:
+        perro(string, string);//constructor
+        ~perro();   // aquí
+        void ladrar();
+        void mostrarDatos();
+};
+//definicion del constructor
+perro::perro(string _nombre, string _raza){
+    nombre=_nombre;
+    raza=_raza;
+}
+//definicion del destructor: se utiliza para liberar recursos cuando un objeto ya no es necesario
+perro::~perro() {  // y aquí
+    cout << "El perro " << nombre << " se ha ido" << endl;
+}
+void perro::mostrarDatos(){
+    cout<<"Nombre: "<<nombre<<endl;
+    cout<<"Raza: "<<raza<<endl;
+}
+void perro::ladrar(){
+    cout<<"Guau Guau"<<endl;
+    cout<<"El perro "<<nombre<<" esta ladrando"<<endl;
+}
+
+int main(){
+    perro p1("Firulais", "Labrador");
+    p1.mostrarDatos();
+    p1.ladrar();
+    system("pause");  // espera a que pulses una tecla
+    return 0;
+}
+//setters y getters: son metodos que permiten establecer y obtener los valores de los atributos privados de una clase
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+
+class punto{
+    private://atributos
+        int x;
+        int y;
+    public://metodos
+        punto();//constructor
+        void setPunto(int,int);
+        int getpuntoX();  
+        int getpuntoY();   
+};
+punto::punto(){
+}
+//establecer valores a los atributos: setter
+void punto::setPunto(int _x, int _y){
+    x=_x;
+    y=_y;
+}
+int punto::getpuntoX(){//obtener valores de los atributos: getter
+    return x;
+}
+int punto::getpuntoY(){
+    return y;
+}
+int main(){
+    punto punto1;
+    punto1.setPunto(5,10);
+    cout<<punto1.getpuntoX()<<endl;
+    cout<<punto1.getpuntoY()<<endl;
+}
+
+//Herencia: es un mecanismo que permite a una clase derivada heredar atributos y metodos de una clase base, promoviendo la reutilizacion de codigo.
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+class persona{
+    private:
+        string nombre;
+        int edad;
+    public:
+     persona(string,int);//constructor
+        void mostrarDatos();
+};
+class estudiante: public persona{
+    private:
+        string carrera;
+        float promedio;
+    public:
+    estudiante(string,int,string,float);
+        void mostrarEstudiante();
+};
+void persona::mostrarDatos(){
+    cout<<"Nombre: "<<nombre<<endl;
+    cout<<"Edad: "<<edad<<endl;
+}
+persona::persona(string _nombre, int _edad){
+    nombre=_nombre;
+    edad=_edad;
+}
+estudiante::estudiante(string _nombre, int _edad, string _carrera, float _promedio):persona(_nombre,_edad){
+    carrera=_carrera;
+    promedio=_promedio;
+}
+void estudiante::mostrarEstudiante(){
+    mostrarDatos();
+    cout<<"Carrera: "<<carrera<<endl;
+    cout<<"Promedio: "<<promedio<<endl;
+}
+
+int main(){
+    Estudiante est1("Alejandro",20,"Ingenieria de Sistemas",4.5);
+    est1.mostrarEstudiante();
+    system("pause");
+}
+
+//polimorfismo: es la capacidad de un objeto para tomar diferentes formas, permitiendo que una misma interfaz pueda ser utilizada para diferentes tipos de objetos.
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+
+class persona{
+    private:
+        string nombre;
+        int edad;
+    public:
+        persona(string,int);//constructor
+        virtual void mostrar();//metodo virtual
+};
+ class estudiante:public persona{
+    private:
+        float nota;
+    public:
+        estudiante(string,int,float);
+        void mostrar();
+ };  
+ class profesor: public persona{
+    provate:
+        string asignatura;
+    public:
+        profesor(string,int,string);
+        void mostrar();
+ };
+ profesor::profesor(string _nombre,int _edad,string _asignatura):persona(_nombre,_edad){
+    asignatura=_asignatura;}
+
+persona::persona(string _nombre,int _edad){
+    nombre=_nombre;
+    edad=_edad;
+}
+estudiante::estudiante(string _nombre,int _edad,float _nota):persona(_nombre,_edad){
+    nota=_nota;
+}
+void estudiante::mostrar(){
+    persona::mostrar();
+    cout<<"Nota: "<<nota<<endl;
+}
+void persona::mostrar(){
+    cout<<"Nombre: "<<nombre<<endl;
+    cout<<"Edad: "<<edad<<endl;
+}
+void profesor::mostrar(){
+    persona::mostrar();
+    cout<<"Asignatura: "<<asignatura<<endl;
+}
+int main(){
+    persona *grupo[3];
+    grupo[0]=new estudiante("Alejandro",20,4.5);
+    grupo[1]=new profesor("Andres",35,"Matematicas");
+    grupo[2]=new estudiante("Maria",22,4.8);
+
+    for(int i=0;i<3;i++){
+        grupo[i]->mostrar();
+        cout<<endl;
+    }
+    system("pause");
+    return 0;
+}
