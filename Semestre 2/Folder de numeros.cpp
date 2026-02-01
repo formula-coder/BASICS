@@ -78,7 +78,7 @@ void agregarcontacto(contacto agenda[], int& total){
    int opcion2; 
     do{
     int n;  
-    cout<<"Cuantos contactos desea agregar?( recuerde que solo puede agregar hasta 100 contactos en total): ";
+    cout<<"Cuantos contactos desea agregar? (max 100): ";
     cin>>n;
 
      if (cin.fail()){
@@ -109,7 +109,6 @@ void agregarcontacto(contacto agenda[], int& total){
             if(cin.fail()){
             cin.clear();
             cin.ignore(1000,'\n');
-            opcion2 = 2;
             cout<<"Entrada invalida Intente de nuevo. Debe ingresar una opcion valida."<<endl;
             }
 }while(opcion2==1);
