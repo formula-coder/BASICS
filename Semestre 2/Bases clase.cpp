@@ -148,3 +148,34 @@ int main(){
         archivo.close();
     }
 }
+
+//flags de apertura:
+ //ios::in -> lectura
+ //ios::out -> escritura
+ //ios::app -> agregar al final del archivo
+ //ios::ate -> mover el puntero al final del archivo
+ //ios::trunc -> borrar el contenido del archivo
+ //ios::binary -> abrir en modo binario
+
+ //Funciones de acceso a archivos binarios:Especializados en la manipulacion de archivos binarios.
+//seek: Navegar una cantidad de bytes en especifica direccion (inicio, actual, final).
+//ios::beg -> inicio del archivo
+//ios::cur -> posicion actual del puntero
+//ios::end -> final del archivo
+//seekg: Mover el puntero de lectura
+//seekp: Mover el puntero de escritura
+
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+archivo.seekg(0, ios::beg); // Mover al inicio del archivo
+archivo.seekg(10, ios::cur); // Mover 10 bytes desde la posicion actual
+archivo.seekg(-5, ios::end); // Mover 5 bytes antes del final del archivo
+
+//tell: Obtener la posicion actual del puntero de lectura o escritura
+//tellg(): para lectura
+//tellp(): para escritura
+
+int pos = archivo.tellg(); // Obtener la posicion actual del puntero de lectura
+cout << "Posicion actual del puntero de lectura: " << pos << endl;
