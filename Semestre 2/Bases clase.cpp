@@ -179,3 +179,36 @@ archivo.seekg(-5, ios::end); // Mover 5 bytes antes del final del archivo
 
 int pos = archivo.tellg(); // Obtener la posicion actual del puntero de lectura
 cout << "Posicion actual del puntero de lectura: " << pos << endl;
+
+//clase 3: Librerias
+
+//stdlib.h: Proporciona funciones para gestionar memoria dinamica, conversion de tipos, generacion de numeros aleatorios, entre otras utilidades generales.
+
+//Conversion de cadenas a numeros
+//atof(): Convierte una cadena a un numero de punto flotante (float).
+//atoi(): Convierte una cadena a un numero entero (int).
+//rand(): Genera un numero aleatorio entero entre 0 y RAND_MAX.
+//rand(int n): Genera un numero aleatorio entre 0 y n-1.
+//exit(int status): Termina la ejecucion del programa con un estado especifico.
+
+//libreria time
+//Proporciona funciones para manipular y formatear fechas y horas.
+//time(): Obtiene la hora actual en segundos desde el 1 de enero de 1970.
+//localtime(): Convierte un valor de tiempo en una estructura tm con la hora local.
+//time_t: Tipo de dato para representar tiempo en segundos desde el 1 de enero de 1970.
+//tm: Estructura que contiene componentes de fecha y hora (año, mes, dia, hora, minuto, segundo, etc.).
+//ctime(): Convierte una estructura tm en una cadena de caracteres con formato legible.
+
+#include <iostream>
+#include <ctime>
+using namespace std;
+
+int main(){
+    time_t ahora = time(0);
+    cout <<ctime(&ahora);
+    tm *ltm = localtime(&ahora);
+    cout << "Año: " << 1900 + ltm->tm_year << endl;
+    cout << "Mes: " << 1 + ltm->tm_mon << endl;
+    cout << "Dia: " << ltm->tm_mday << endl;
+    return 0;
+}
