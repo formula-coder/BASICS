@@ -212,3 +212,12 @@ int main(){
     cout << "Dia: " << ltm->tm_mday << endl;
     return 0;
 }
+
+//libreria math.h
+//Proporciona funciones matematicas comunes para operaciones aritmeticas y trigonométricas.
+//sqrt(double x): Calcula la raiz cuadrada de x.
+//pow(double base, double exponente): Calcula la potencia de base elevado a exponente.
+//sin(double x): Calcula el seno de x (en radianes).
+//cos(double x): Calcula el coseno de x (en radianes).
+//exp(double x): Calcula e elevado a la x.
+//log(double x): Calcula el logaritmo natural (base e) de x.
