@@ -221,3 +221,6 @@ int main(){
 //cos(double x): Calcula el coseno de x (en radianes).
 //exp(double x): Calcula e elevado a la x.
 //log(double x): Calcula el logaritmo natural (base e) de x.
+
+
+
