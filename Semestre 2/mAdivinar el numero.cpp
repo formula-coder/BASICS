@@ -7,7 +7,7 @@ int main(){
     int no;
     cout<<"Ingrese un numero para iniciar el juego: ";
     cin>>no;
-    srand(no); // Semilla para la generacion de numeros aleatorios
+    srand(time(NULL)); // Semilla para la generacion de numeros aleatorios
     int numerosospechoso = rand() % 100 + 1 + no; // Numero aleatorio entre 1 y 100
 
     int intento;
