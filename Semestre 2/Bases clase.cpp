@@ -234,7 +234,7 @@ int main(){
 
 //libreria personalizada: Es una libreria creada por el usuario para contener funciones, clases o estructuras que pueden ser reutilizadas en diferentes partes del programa o en diferentes proyectos. Permite organizar el código de manera modular y facilita su mantenimiento y reutilización.
 
-#include <ejemplo.h> // Incluir la libreria personalizada
+//#include <ejemplo.h> // Incluir la libreria personalizada
 #include <iostream>
 using namespace std;
 
