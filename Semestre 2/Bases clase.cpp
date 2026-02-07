@@ -222,5 +222,28 @@ int main(){
 //exp(double x): Calcula e elevado a la x.
 //log(double x): Calcula el logaritmo natural (base e) de x.
 
+//estructuras de datos: Permiten organizar y almacenar datos de manera eficiente, facilitando su manipulación y acceso. Ejemplos comunes incluyen listas, pilas, colas, árboles y grafos. Cada estructura tiene sus propias ventajas y desventajas dependiendo del tipo de datos y las operaciones que se necesiten realizar.
+//vector: Es una estructura de datos que almacena elementos de manera contigua en memoria, permitiendo acceso aleatorio y redimensionamiento dinámico. Es parte de la biblioteca estándar de C++ (STL) y ofrece funciones para agregar, eliminar y acceder a elementos de manera eficiente.
+//set: Es una estructura de datos que almacena elementos únicos en un orden específico. No permite elementos duplicados y se utiliza comúnmente para realizar operaciones de conjunto como unión, intersección y diferencia.
+//map: Es una estructura de datos que almacena pares clave-valor, donde cada clave es única. Permite acceder a los valores asociados a las claves de manera eficiente y se utiliza comúnmente para realizar búsquedas rápidas y almacenar datos relacionados.
+//stack: Es una estructura de datos que sigue el principio LIFO (Last In, First Out), donde el último elemento agregado es el primero en ser eliminado. Se utiliza comúnmente para almacenar datos temporales y realizar operaciones de retroceso.
+//queue: Es una estructura de datos que sigue el principio FIFO (First In, First Out), donde el primer elemento agregado es el primero en ser eliminado. Se utiliza comúnmente para almacenar datos en orden de llegada y realizar operaciones de procesamiento en secuencia.
+//deque: Es una estructura de datos que permite agregar y eliminar elementos tanto al inicio como al final de la secuencia. Es una combinación de stack y queue, ofreciendo flexibilidad en la manipulación de datos.
+//list: Es una estructura de datos que almacena elementos de manera no contigua en memoria, permitiendo inserciones y eliminaciones eficientes en cualquier posición. Es parte de la biblioteca estándar de C++ (STL) y se utiliza comúnmente para almacenar datos que requieren modificaciones frecuentes.
 
 
+//libreria personalizada: Es una libreria creada por el usuario para contener funciones, clases o estructuras que pueden ser reutilizadas en diferentes partes del programa o en diferentes proyectos. Permite organizar el código de manera modular y facilita su mantenimiento y reutilización.
+
+#include <ejemplo.h> // Incluir la libreria personalizada
+#include <iostream>
+using namespace std;
+
+int main(){
+    // Utilizar funciones o clases de la libreria personalizada
+    saludar(); // Llamar a una función definida en ejemplo.h
+    return 0;
+}
+
+void saludar(){
+    cout<<"Hola desde la libreria personalizada!"<<endl;
+}
