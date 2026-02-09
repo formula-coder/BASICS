@@ -409,3 +409,24 @@ int main(){
     delete p; // Liberar la memoria asignada a la persona
     return 0; 
 }
+//metodo de organización nuevo:Selection Sort
+
+#include<iostream>
+using namespace std;
+int main(){
+    int arr[5]= {1,0,4,2,3};
+    for (int i=0; i <n-1;i++){
+        int imin =i;
+        for (int j=i+1; j<n;j++){
+            if(arr[j]<arr[imin]){
+                imin =j;
+            }
+            if(imin !=i){
+                int aux = arr[imin];
+                arr[imin] = arr[i];
+                arr[i] = aux;
+            }
+        }
+    }
+    return 0;
+}

@@ -1,0 +1,1 @@
+//Ejercicio:Construir un sistema el cual,a partir de un arreglo de tamaño10 creado con numero aleatorios entre el 1  y el 100, cree un arreglo auxiliar con sus psoiciones en memoria y realice un ordenamiento sobre este sin alterar el arreglo original.  Es obligatorio el uso de aritmetica de apuntadores.
