@@ -247,3 +247,165 @@ int main(){
 void saludar(){
     cout<<"Hola desde la libreria personalizada!"<<endl;
 }
+
+//Clase 4: Punteros y creación de libreria personalizada.
+
+#include<iostream>
+#include "mi_libreria.h" // Incluir la libreria personalizada
+
+using namespace std;
+
+int main (){
+    imprimirContactos(); // Llamar a la función de la libreria personalizada para imprimir contactos
+    return 0;
+}
+
+
+#ifndef MI_LIBRERIA_H
+#define MI_LIBRERIA_H
+
+struct Contacto {
+    string nombre;
+    string telefono;
+};
+
+void imprimirContactos() {
+    Contacto c1 = {"Juan Perez", "123456789"};
+    Contacto c2 = {"Maria Gomez", "987654321"};
+    
+    cout << "Contacto 1: " << c1.nombre << ", " << c1.telefono << endl;
+    cout << "Contacto 2: " << c2.nombre << ", " << c2.telefono << endl;
+}
+#endif
+
+//punteros: Es una variable que almacena la direccion de memoria de otra variable, permitiendo acceder y manipular el valor almacenado en esa direccion. Se utilizan para gestionar memoria dinamica, crear estructuras de datos complejas y facilitar la comunicacion entre funciones.
+
+#include <iostream>
+
+using namespace std;
+
+int main(){
+    int a =10;
+    int* ptr = &a; // ptr almacena la direccion de memoria de a
+    cout << "Valor de a: " << a << endl; // Imprime el valor de a
+    cout << "Direccion de memoria de a: " << &a << endl; // Imprime la direccion de memoria de a
+    cout << "Valor almacenado en ptr: " << ptr << endl; // Imprime
+    cout << "Valor al que apunta ptr: " << *ptr << endl; // Imprime el valor al que apunta ptr (valor de a)
+    return 0;
+}
+
+//Paso por referencia: Es una tecnica de paso de parametros a funciones donde se pasa la direccion de memoria de una variable en lugar de su valor, permitiendo que la funcion modifique directamente el valor original de la variable.
+//paso por valor: Es una tecnica de paso de parametros a funciones donde se pasa una copia del valor de la variable, lo que significa que cualquier modificacion realizada dentro de la funcion no afectara el valor original de la variable fuera de la funcion.
+
+#include <iostream>
+using namespace std;
+void func(int a)(a++); // Paso por valor, se modifica solo dentro de la funcion
+void funcRef(int* a){(*a)++;} // Paso por referencia, se modifica el valor
+
+int main(){
+    int a =10;
+    func(a); // Llama a la funcion con paso por valor
+    cout << "Valor de a despues de paso por valor: " << a << endl; // Imprime el valor de a (10)
+    int* ptr = &a; // Crea un puntero que apunta a a
+    funcRef(ptr); // Llama a la funcion con paso por referencia
+    cout << "Valor de a despues de paso por referencia: " << a << endl;
+    return 0;
+}
+
+//Stack vs heap
+//Stack: Es una region de memoria utilizada para almacenar variables locales y datos de funciones. Las variables en el stack se crean y destruyen automaticamente a medida que las funciones se llaman y retornan. El acceso a las variables en el stack es rapido, pero el tamaño del stack es limitado.
+//Heap: Es una region de memoria utilizada para almacenar datos dinamicos que pueden crecer o reducir
+//Variables:Se puede definir un apuntador y directamente  asignar una posición aleatoria de memoria, pero esto puede causar errores si esa posición ya esta siendo utilizada por otra variable o si no se tiene permiso para acceder a esa dirección. Es importante utilizar funciones de asignación de memoria dinámica (como new en C++) para asegurarse de que se asigna memoria de manera segura y controlada.
+
+#include <iostream>
+using namespace std;
+
+int main(){
+    int* ptr = new int(10);
+    cout << "Valor al que apunta ptr: " << *ptr << endl; // Imprime el valor al que apunta ptr (10)
+    delete ptr; // Libera la memoria asignada a ptr
+    return 0;
+}
+
+//Arreglos:El compilador de c++ asigna los arreglos de forma eficiente por medio de apuntadore, pero estos pueden ser definidios directamente en el heap para almacenar una mayor información.
+
+#include <iostream>
+using namespace std;
+
+int main(){
+    //definición normal
+    int arr[5] = {1, 2, 3, 4, 5};
+    //definición en el heap
+    cout<<arr<<endl;
+    //definicion por puntero
+int*arr2 = new int[5];
+return 0;
+}
+
+//aritmetica de apuntadores:Se hace referencia a las posiciones de los arreglos a traves de un desplazamiento del apuntador sobre los bytes de la estructura de datos.
+
+#include <iostream>
+
+using namespace std;
+
+int main(){
+    int arreglo[5];
+    arreglo[1]-123;
+    cout << "Valor del segundo elemento: " << arreglo[1] << endl; // Imprime el valor del segundo elemento (123)
+    
+    int* arreglo = new int[5]; // Asignación dinámica de un arreglo de 5 enteros
+    *(arreglo +1)=123; // Asignación utilizando aritmética de punteros
+    cout << "Valor del segundo elemento: " << *(arreglo + 1) << endl; // Imprime el valor del segundo elemento (123)
+    delete[] arreglo; // Liberar la memoria asignada al arreglo
+}
+
+//Arreglos n -dimensionales:Se almacenan como arreglos cuyp contenido son apuntadores, de los  cuales cada uno de ellos puede ser asignado como un arreglo en si mismo.
+#include <iostream>
+
+using namespace std;
+
+int main (){
+    int **arreglo = new int*[3]; // Crear un arreglo de punteros para 3 filas
+    for(int i=0; i<3; i++){
+        arreglo[i] = new int[4]; // Asignar un arreglo de 4 enteros para cada fila
+    }
+    return 0;
+}
+
+//matrices: Se pueden definir como arreglos bidimensionales, donde cada elemento es un arreglo unidimensional. Pueden ser almacenados de manera estática o dinámica dependiendo de las necesidades del programa.
+#include <iostream>
+using namespace std;
+int main(){
+    int matriz[3][4]; // Declaración de una matriz de 3 filas y 4 columnas
+    int** matrizDinamica = new int*[3]; // Crear un arreglo de punteros para 3 filas
+    for(int i=0; i<3; i++){
+        matrizDinamica[i] = new int[4]; // Asignar un arreglo de 4 enteros para cada fila
+    }
+    for(int i=0; i<3; i++){
+        for(int j=0; j<4; j++){
+            matriz[i][j] = i + j; // Asignar valores a la matriz estática
+            matrizDinamica[i][j] = i + j; // Asignar valores a la matriz dinámica
+        }
+    }
+    return 0;
+}
+//Estructuras:
+// Las estructuras pueden ser almacendads de manera completa en el heap utilizando su constructor para asignar memoria dinamica a cada uno de sus atributos, o pueden ser almacenados como un apuntador a la estructura, lo que permite una mayor flexibilidad en la manipulación de los datos.
+//El operador de flecha (->) se utiliza para hacer alusión a la estructura directamente desde su posición en memoria.
+#include <iostream>
+
+using namespace std;
+
+struct persona {
+    string nombre;
+    int edad;
+    persona( string nombre, int edad){}
+};
+
+int main(){
+    Persona *p= new Persona("Juan", 30); // Crear una instancia de persona en el heap
+    cout << "Nombre: " << p->nombre << endl; // Acceder al nombre utilizando el operador de flecha
+    cout << "Edad: " << p->edad << endl; // Acceder a la edad utilizando el operador de flecha
+    delete p; // Liberar la memoria asignada a la persona
+    return 0; 
+}
