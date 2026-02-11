@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <stdlib.h>
+#include "Estructura de datos libreria.h"
 using namespace std;
 
 void agregarnumero(int *&lista,int &total);
@@ -54,67 +55,4 @@ int main(){
     }
 }  
 return 0;
-}
-
-void agregarnumero(int *&lista,int &total){
-    int opcion;
-    do{
-    int n;
-    cout<<"cuantos numeros desea agregar? (max 100): ";
-    cin>>n;
-    if (cin.fail()){
-            cin.clear();
-            cin.ignore(1000,'\n');
-            cout << "Entrada invalida Intente de nuevo. Debe ingresar una opcion valida."<<endl;
-            return;
-    }
-    for(int i =0; i <n; i++){
-        cout<<"Ingrese el numero: ";
-        cin>>lista[total];
-        total++;
-    }
-    cout<<endl;
-    cout<<"Se han agregado "<<n<<" numeros a la lista"<<endl;
-    cout<<endl;
-    cout<<"desea agregar mas numeros? 1.si 2.no: ";
-    cin>>opcion;
-    if (cin.fail()){
-            cin.clear();
-            cin.ignore(1000,'\n');
-            cout << "Entrada invalida Intente de nuevo. Debe ingresar una opcion valida."<<endl;
-            return;
-    }
-}while(opcion==1);
-}
-
-void mostrarlista(int *lista, int total){
-    if(total==0){
-        cout<<"La lista esta vacia"<<endl;
-        return;
-    }
-    cout<<"Numeros en la lista:"<<endl;
-    for(int i=0; i<total; i++){
-        cout<<lista[i]<<endl;
-    }
-}
-
-void eliminarnumero(int *&lista, int &total){
-    if(total==0){
-        cout<<"La lista esta vacia, no hay numeros para eliminar"<<endl;
-        return;
-    }
-    int numero;
-    cout<<"Ingrese el numero que desea eliminar: ";
-    cin>>numero;
-    for(int i=0; i<total; i++){
-        if(lista[i]==numero){
-            for(int j=i; j<total-1; j++){
-                lista[j]=lista[j+1];
-            }
-            total--;
-            cout<<"Numero eliminado exitosamente"<<endl;
-            return;
-        }
-    }
-    cout<<"Numero no encontrado en la lista"<<endl;
 }
