@@ -4,8 +4,9 @@
 #include <stdlib.h>
 using namespace std;
 
-void agregarnumero(int lista*,int total);
-void mostrarlista(int lista[], int total);
+void agregarnumero(int *&lista,int &total);
+void mostrarlista(int *lista, int total);
+void eliminarnumero(int *&lista, int &total);
 
 int main(){
     int* lista = nullptr; // Puntero a la lista dinámica
@@ -55,7 +56,7 @@ int main(){
 return 0;
 }
 
-void agregarnumero(int lista*,int total){
+void agregarnumero(int *&lista,int &total){
     int opcion;
     do{
     int n;
@@ -82,11 +83,11 @@ void agregarnumero(int lista*,int total){
             cin.ignore(1000,'\n');
             cout << "Entrada invalida Intente de nuevo. Debe ingresar una opcion valida."<<endl;
             return;
-    }while(opcion==1);
-}
+    }
+}while(opcion==1);
 }
 
-void mostrarlista(int lista[], int total){
+void mostrarlista(int *lista, int total){
     if(total==0){
         cout<<"La lista esta vacia"<<endl;
         return;
@@ -97,7 +98,7 @@ void mostrarlista(int lista[], int total){
     }
 }
 
-void eliminarnumero(int lista[], int& total){
+void eliminarnumero(int *&lista, int &total){
     if(total==0){
         cout<<"La lista esta vacia, no hay numeros para eliminar"<<endl;
         return;
