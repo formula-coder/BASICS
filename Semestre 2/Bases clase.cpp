@@ -430,3 +430,73 @@ int main(){
     }
     return 0;
 }
+
+//clase 5: Memoria Dinamica 
+//memoria estatica: Es la memoria asignada en tiempo de compilacion, donde se almacenan variables globales, locales y constantes. El tamaño de la memoria estatica es fijo y se determina durante la compilacion del programa.
+#include "ejemplo.h";
+#define valor 10; // Definición de una constante utilizando #define
+//memoria dinamica: Es la memoria asignada en tiempo de ejecucion, donde se pueden crear y destruir variables de manera flexible. La memoria dinamica se gestiona a traves de funciones de asignacion y liberacion de memoria, como new y delete en C++.
+
+//memoria automatica: Es la memoria asignada para variables locales dentro de funciones, donde se crean y destruyen automaticamente a medida que las funciones se llaman y retornan. La memoria automatica se gestiona en el stack del programa.
+
+
+//Asignar memoria dinamica: Se utiliza la palabra clave new para asignar memoria en el heap, permitiendo crear variables o estructuras de datos que pueden crecer o reducir su tamaño durante la ejecucion del programa.
+
+#include <iostream>
+using namespace std;
+int main(){
+    int* ptr = new int(10); // Asignar memoria para un entero y asignar el valor 10
+    cout << "Valor al que apunta ptr: " << *ptr << endl; // Imprime el valor al que apunta ptr (10)
+    delete ptr; // Liberar la memoria asignada a ptr
+    return 0;
+}
+
+//Liberar memoria dinamica: Se utiliza la palabra clave delete para liberar la memoria asignada en el heap, evitando fugas de memoria y asegurando un uso eficiente de los recursos del sistema.    
+#include <iostream>
+using namespace std;
+int main(){
+    int* ptr = new int(10); // Asignar memoria para un entero y asignar el valor 10
+    cout << "Valor al que apunta ptr: " << *ptr << endl; // Imprime el valor al que apunta ptr (10)
+    delete ptr; // Liberar la memoria asignada a ptr
+    return 0;
+}
+//Destructor: Es una función miembro especial de una clase que se llama automáticamente cuando un objeto de esa clase es destruido. El destructor se utiliza para liberar recursos, como memoria dinámica, archivos abiertos o conexiones de red, asegurando que el programa no tenga fugas de memoria ni otros problemas relacionados con la gestión de recursos.
+
+#include <iostream>
+using namespace std;
+
+struct contacto{
+    string nombre;
+    string telefono;
+    ~contacto(){ // Destructor para liberar recursos
+        this->telefono.clear(); // Limpiar el número de teléfono
+    }
+};
+
+int main(){
+    contacto c;
+    c.nombre = "Juan";
+    c.telefono = "123456789";   
+    return 0;
+}
+//Libreria memoria:
+<memory> es una libreria de C++ que proporciona herramientas para la gestión de memoria dinámica, incluyendo punteros inteligentes como std::unique_ptr, std::shared_ptr y std::weak_ptr, que ayudan a prevenir fugas de memoria y facilitan la gestión de recursos en programas complejos.
+#include<memory>
+int main(){
+    unique_ptr<int> uptr = make_unique<int>(10); // Crear un puntero inteligente único que apunta a un entero con valor 10
+    cout << "Valor al que apunta uptr: " << *uptr << endl; // Imprime el valor al que apunta uptr (10)
+    unique_ptr<int> uptr2 = move(uptr); // Transferir la propiedad del puntero inteligente a uptr2
+    cout << "Valor al que apunta uptr2: " << *uptr2 << endl; // Imprime el valor al que apunta uptr2 (10)
+    shared_ptr<int> sptr1 = make_shared<int>(20); // Crear un puntero inteligente compartido que apunta a un entero con valor 20
+    shared_ptr<int> sptr2 = sptr1; // Compartir la propiedad del puntero inteligente entre sptr1 y sptr2
+    cout << "Valor al que apunta sptr1: " << *sptr1 << endl; // Imprime el valor al que apunta sptr1 (20)
+    cout << "Valor al que apunta sptr2: " << *sptr2 << endl;
+    weak_ptr<int>wptr =sptr1; // Crear un puntero inteligente débil que observa el mismo objeto que sptr1
+    cout << "Valor al que apunta wptr: " << *wptr.lock() << endl; // Imprime el valor al que apunta wptr (20)
+    return 0;
+}
+
+
+
+
+
