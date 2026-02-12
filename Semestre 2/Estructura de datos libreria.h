@@ -1,6 +1,4 @@
 #include <iostream>
-#include <stdlib.h>
-
 using namespace std;
 void agregarnumero(int *&lista, int &total){
     int n;
