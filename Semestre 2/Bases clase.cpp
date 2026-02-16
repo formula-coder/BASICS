@@ -496,7 +496,112 @@ int main(){
     return 0;
 }
 
+//clase 6: Cadena de caracteres 
+
+//Cadena de caracteres: Las cadenas de caracteres se representan en memoria como un arreglo de caracteres con el delimitador  ('\0') al final para indicar el final de la cadena. Se pueden manipular utilizando funciones de la biblioteca estándar de C++ como strlen, strcpy, strcat, entre otras, o utilizando la clase std::string que proporciona una interfaz más fácil de usar para trabajar con cadenas de caracteres.
+
+char cadena[]= "Hola, mundo!"; // Declaración de una cadena de caracteres como un arreglo de caracteres
+char arreglo[] ={'H', 'o', 'l', 'a', '\0'}; // Declaración de una cadena de caracteres utilizando un arreglo de caracteres con el delimitador '\0' al final
+cout << "Cadena: " << cadena << endl; // Imprime la cadena de caracteres
+cout << "Arreglo: " << arreglo << endl; // Imprime el arreglo de caracteres como una cadena de caracteres
 
 
+//string: Tipo de dato particular para representar cadenas de caracteres en el sistema de c++, dispone de componentes, operadores y funciones especiales para manipular cadenas de manera implicita.
+#include <iostream>
+using namespace std;
 
+int main (){
+    string nombre = "Juan"; // Declaración de una variable de tipo string
+    string apellido = "Perez"; // Declaración de otra variable de tipo string
+    string nombreCompleto = nombre + " " + apellido; // Concatenación de strings utilizando el operador +
+    cout << "Nombre completo: " << nombreCompleto << endl; // Imprime el nombre completo
+    return 0;
+}
 
+//leer cadenas:Se utiliza la función getline()para leer cadenas de caracteres con un delimitado especifico, si no se determina el delimitador es el salto de linea, lo que permite leer cadenas con espacios sin problemas.
+
+#include <iostream>
+using namespace std;
+
+int main(){
+    char* cadena = new char[10];
+    cin.getline(cadena, 10, 'a'); // Leer una cadena de caracteres con un límite de 10 caracteres
+cout << "Cadena leída: " << cadena << endl; // Imprime la cadena leída
+delete[] cadena; // Liberar la memoria asignada a la cadena
+}
+
+//libreria <string.h>: Libreria encargada de proveer laas funciones y cosntantes especializadas para el tratamiento de cadenas de caracteres.
+
+//strlen(cadena): Devuelve la longitud de una cadena de caracteres, excluyendo el delimitador '\0' al final.
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+int main (){
+    char cadena[] = "Hola, mundo!"; // Declaración de una cadena de caracteres
+    cout << "Longitud de la cadena: " << strlen(cadena) << endl; // Imprime la longitud de la cadena
+    return 0;
+}
+
+//strcpy(destino, origen): Copia una cadena de caracteres desde la variable origen a la variable destino, asegurándose de incluir el delimitador '\0' al final.
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+int main(){
+    char cadena[] = "Hola, mundo!"; // Declaración de una cadena de caracteres
+    char* copia = new char[strlen(cadena)];
+    strcpy(copia, cadena); // Copia la cadena original a la nueva variable
+    cout << "Cadena original: " << cadena << endl; // Imprime la cadena original
+    cout << "Copia de la cadena: " << copia << endl; // Imprime la copia de la cadena
+    delete[] copia; // Liberar la memoria asignada a la copia
+    return 0;
+}
+
+//strtok(cadena, delimitadores): Divide una cadena de caracteres en tokens utilizando los delimitadores especificados, devolviendo un puntero al siguiente token cada vez que se llama a la función.
+#include <iostream>
+#include <string.h>
+
+using namespace std;
+
+int main(){
+char cadena[] = "Hola, mundo!"; // Declaración de una cadena de caracteres
+char* ptr = strtok(cadena, ""); // Dividir la cadena en tokens utilizando los delimitadores ',' y ' '
+cout<< cadena <<endl;
+cout << "Tokens: " << endl;
+cout << ptr << endl; // Imprime el primer token    
+return 0;
+}
+
+//leer archvio. CSV
+//Los archivos separados por comas(CSV)se pueden leer como archivos planos y separar sus datos, para luego transformarlos a los tipos de datos esperados.
+//41, marco antonio, estrada, 38.
+
+//strcat(destino, origen):Concatenar cadenas, crear una unica cadena a artir de dos o mas cadenas diferentes.
+
+#include <iostream>
+#include <string.h>
+
+using namespace std;
+
+int main(){
+    cahr c1[]=" Jimmy";
+    char c2[]=" Hendrix";
+    cout<< c1 << endl;
+    strcat(c1, c2); // Concatenar c2 al final de c1
+    cout << "Cadena concatenada: " << c1 << endl; // Imprime la cadena concatenada
+    return 0;
+}
+//strcmp(cadena 1, cadena 2): Comparar dos cadenas de caracteres, devolviendo un valor entero que indica la relación entre las cadenas (0 si son iguales, un valor negativo si la primera cadena es menor que la segunda, y un valor positivo si la primera cadena es mayor que la segunda).
+#include <iostream>
+#include <string.h>
+
+using namespace std;
+int main(){
+    char c1[] = "Hola";
+    char c2[] = "hola";
+cout<< strcmp(c1, c2) << endl; // Imprime el resultado de la comparación (0 si son iguales, un valor negativo si c1 es menor que c2, y un valor positivo si c1 es mayor que c2)
+cout<<strcmp(c2, c1) << endl; // Imprime el resultado de la comparación (0 si son iguales, un valor negativo si c2 es menor que c1, y un valor positivo si c2 es mayor que c1)
+cout<<strcmp(c1, c1) << endl; // Imprime el resultado de la comparación (0 si son iguales, un valor negativo si c1 es menor que c1, y un valor positivo si c1 es mayor que c1) 
+return 0;
+}
