@@ -605,3 +605,39 @@ cout<<strcmp(c2, c1) << endl; // Imprime el resultado de la comparación (0 si s
 cout<<strcmp(c1, c1) << endl; // Imprime el resultado de la comparación (0 si son iguales, un valor negativo si c1 es menor que c1, y un valor positivo si c1 es mayor que c1) 
 return 0;
 }
+
+//clase 7: Listas enlazadas
+//Lista enlazada: Es una estructura de datos que consiste en una secuencia de nodos
+//Cada nodo contiene un valor y un puntero al siguiente nodo en la secuencia, lo que permite una inserción y eliminación eficiente de elementos en cualquier posición de la lista. Las listas enlazadas pueden ser simples (con un solo puntero al siguiente nodo) o dobles (con punteros tanto al siguiente como al nodo anterior).
+
+//Nodo: Es una estructura de datos que representa un elemento individual en una lista enlazada, conteniendo un valor y un puntero al siguiente nodo en la secuencia. En una lista enlazada simple, cada nodo tiene un puntero al siguiente nodo, mientras que en una lista enlazada doble, cada nodo tiene punteros tanto al siguiente como al nodo anterior.
+
+//lista vs vector: Para los arreglos es necesario que los espacios de memoria sean secuenciales, mientras que en una lista enlazada los nodos pueden estar almacenados en cualquier parte de la memoria, lo que permite una mayor flexibilidad en la manipulación de los datos. Sin embargo, el acceso a los elementos en una lista enlazada es más lento que en un vector debido a la necesidad de recorrer la lista para encontrar un elemento específico, mientras que en un vector se puede acceder directamente a cualquier elemento utilizando su índice.
+
+struct Nodo{
+int dato;
+nodo* siguiente;
+};
+
+struct lista {
+    Nodo* raiz;
+    int tam;
+    lista(){
+        this->raiz = nullptr; // Inicializar el puntero raíz a nullptr
+        this->tam = 0; // Inicializar el tamaño de la lista a 0
+    }
+    ~lista(){
+        Nodo* actual = raiz; // Comenzar desde la raíz de la lista
+        while (actual != nullptr) { // Recorrer la lista hasta el final
+            Nodo* siguiente = actual->siguiente; // Guardar el puntero al siguiente nodo
+            delete actual; // Eliminar el nodo actual
+            actual = siguiente; // Mover al siguiente nodo
+        }
+    }
+};
+
+//como se recorre una lista enlazada: Se comienza desde el nodo raíz y se sigue el puntero al siguiente nodo hasta llegar al final de la lista (cuando el puntero siguiente es nullptr), permitiendo acceder a cada elemento de la lista en secuencia.
+
+//Agregar elementos a una lista enlazada: Para agregar un elemento a una lista enlazada, se crea un nuevo nodo con el valor deseado y se ajustan los punteros para insertar el nuevo nodo en la posición correcta de la lista, ya sea al inicio, al final o en medio de la lista, dependiendo de la lógica de inserción que se desee implementar.
+//Eliminar elementos de una lista enlazada: Para eliminar un elemento de una lista enlazada, se busca el nodo que contiene el valor a eliminar y se ajustan los punteros del nodo anterior y del nodo siguiente para excluir el nodo a eliminar de la lista, seguido de la liberación de la memoria asignada al nodo eliminado para evitar fugas de memoria.
+    
