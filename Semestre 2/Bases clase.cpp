@@ -640,4 +640,97 @@ struct lista {
 
 //Agregar elementos a una lista enlazada: Para agregar un elemento a una lista enlazada, se crea un nuevo nodo con el valor deseado y se ajustan los punteros para insertar el nuevo nodo en la posición correcta de la lista, ya sea al inicio, al final o en medio de la lista, dependiendo de la lógica de inserción que se desee implementar.
 //Eliminar elementos de una lista enlazada: Para eliminar un elemento de una lista enlazada, se busca el nodo que contiene el valor a eliminar y se ajustan los punteros del nodo anterior y del nodo siguiente para excluir el nodo a eliminar de la lista, seguido de la liberación de la memoria asignada al nodo eliminado para evitar fugas de memoria.
-    
+
+//clase 8:Templates
+//Templates: Son una característica de C++ que permite crear funciones y clases genéricas, que pueden trabajar con cualquier tipo de dato sin necesidad de duplicar el código para cada tipo específico. Los templates se definen utilizando la palabra clave template seguida de parámetros de tipo entre corchetes angulares (<>) y se pueden utilizar para crear funciones y clases que operen con diferentes tipos de datos de manera flexible y eficiente.
+
+int add(int a, int b) {
+    return a + b; // Función para sumar dos enteros
+}
+T add(T a, T b) {
+    return a + b; // Función template para sumar dos valores de cualquier tipo
+}
+
+//plantilla de función: Establecer el tipo de parametros y de retorno de las funciones de manera dinamica.
+
+#include <iostream>
+using namespace std;
+template <typename T>
+T add(T a, T b) {
+    return a + b; // Función template para sumar dos valores de cualquier tipo
+}
+
+int main(){
+    cout<< add(5, 10) << endl; // Llama a la función template con enteros
+    cout<< add(3.14, 2.71) << endl; // Llama a la función template con números de punto flotante
+    return 0;
+}
+//plantilla de estructura:Permite definir atributos y campos de metodos para conervitir a la estructura de forma dinamica de su contenido.
+#include <iostream>
+using namespace std;
+template <typename T>
+struct valores{
+    T v1;
+    T v2;
+};
+
+int main(){
+    valores<int> v1(5,3);
+    valores<double> v2(3.14, 2.71);
+    cout << "Valores enteros: " << v1.v1 << ", " << v1.v2 << endl; // Imprime los valores enteros
+    cout << "Valores de punto flotante: " << v2.v1 << ", " << v2.v2 << endl; // Imprime los valores de punto flotante
+    return 0;
+}
+
+//Plantilla multiple : Permite definir multiples parametros de tipo para una funcion o clase template, lo que aumenta la flexibilidad y versatilidad de las plantillas al permitir trabajar con diferentes combinaciones de tipos de datos en una sola definición de plantilla.
+
+#include <iostream>
+using namespace std;
+
+template<class T, class U>
+struct valores{
+    T v1;
+    U v2;
+};
+
+int main(){
+    valores<int, double> v1(5, 3.14);
+    valores<string, int> v2("Hola", 10);
+    cout << "Valores enteros y de punto flotante: " << v1.v1 << ", " << v1.v2 << endl; // Imprime los valores enteros y de punto flotante
+    cout << "Valores de cadena y enteros: " << v2.v1 << ", " << v2.v2 << endl; // Imprime los valores de cadena y enteros
+    return 0;
+}
+//clases: Estructuras de datos utilizadas para almacenar variables y metodos de contexto.
+//constructor con asignación: Asignar a las variables internas  el valor recibido por parametro.
+
+class persona{
+private:
+    string nombre;
+    int edad;
+public:
+    persona(string n, int e):
+    nombre(n), edad(e){} // Constructor con asignación utilizando lista de inicialización
+    void mostrarInfo(){
+        cout << "Nombre: " << nombre << endl; // Imprime el nombre de la persona
+        cout << "Edad: " << edad << endl; // Imprime la edad de la persona
+    }
+};
+
+//contexto de clase : Todas las variables y funciomes tienen un contexto, si este no es explicito, si este no es explicito pertenecen al contexto general del sistema.
+//El operador de dos puntos dobles(::) define que un metodo pertenece a un contexto especia.
+
+class persona{
+    private:
+    string nombre;
+    int edad;
+    public:
+    persona(string n, int e): nombre(n), edad(e){} // Constructor con asignación utilizando lista de inicialización
+    void mostrarInfo(); // Declaración de la función miembro mostrarInfo
+};
+void persona::mostrarInfo(){ // Definición de la función miembro mostrarInfo utilizando el operador de resolución de ámbito (::)
+    cout << "Nombre: " << nombre << endl; // Imprime el nombre de la persona
+    cout << "Edad: " << edad << endl; // Imprime la edad de la persona
+}
+
+
+
