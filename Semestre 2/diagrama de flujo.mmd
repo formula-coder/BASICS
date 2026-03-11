@@ -1,0 +1,46 @@
+classDiagram
+direction TB
+
+class libro {
+  <<struct>>
+  +int id
+  +char[50] titulo
+  +int stock
+}
+
+class BibliotecaArchivo {
+  <<utility>>
+  +crearArchivo() void
+  +mostrarlibros() void
+  +modificarstock(id_libro:int, cantidad:int) void
+}
+
+BibliotecaArchivo ..> libro : lee/escribe
+
+class ListaDinamica~T~ {
+  -T* datos
+  -int capacidad
+  -int cantidad
+  -redimensionar() void
+  +ListaDinamica(capInicial:int=2)
+  +agregar(valor:T) void
+  +mostrar() void
+  +~ListaDinamica()
+}
+
+class Nodo~T~ {
+  <<struct>>
+  +T dato
+  +Nodo~T~* siguiente
+}
+
+class ListaEnlazada~T~ {
+  -Nodo~T~* cabeza
+  +ListaEnlazada()
+  +insertar(valor:T) void
+  +imprimir() void
+  +~ListaEnlazada()
+}
+
+ListaEnlazada~T~ *-- "0..1" Nodo~T~ : cabeza
+Nodo~T~ o-- "0..1" Nodo~T~ : siguiente
