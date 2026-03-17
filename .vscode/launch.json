@@ -2,6 +2,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "DiagramaClasesJava",
+            "request": "launch",
+            "mainClass": "DiagramaClasesJava",
+            "projectName": "BASICS_7a49afe1"
+        },
+        {
             "name": "Juego Mazmorra (consola externa)",
             "type": "cppdbg",
             "request": "launch",
