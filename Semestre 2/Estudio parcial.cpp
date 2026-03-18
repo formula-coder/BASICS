@@ -124,3 +124,31 @@ for(int i=0; i<n; i++){
     getline(cin, nombre);
     cout<<"Su nombre es: " << *pnombre << endl;
 }
+//templates
+
+#include <iostream>
+using namespace std;
+
+template <typename int>
+
+int sumar(int a, int b){
+    return a + b;
+}
+
+int main(){
+    cout<<add(5, 10)<<endl; // Llamamos a la función sumar con dos enteros
+    cout<<add(3.5, 2.5)<<endl; // Llamamos a la función sumar con dos números de punto flotante
+    return 0;
+}
+
+#include <iostream>
+using namespace std;
+ 
+template <class T, class U>
+
+struct Valores{
+    Valores <int, double> v1{5,3.0};
+    Valores<double, int>{5.5, 3};
+    return 0; 
+}
+
