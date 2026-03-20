@@ -415,19 +415,30 @@ int main(){
 using namespace std;
 int main(){
     int arr[5]= {1,0,4,2,3};
-    for (int i=0; i <n-1;i++){
-        int imin =i;
-        for (int j=i+1; j<n;j++){
-            if(arr[j]<arr[imin]){
-                imin =j;
-            }
-            if(imin !=i){
-                int aux = arr[imin];
-                arr[imin] = arr[i];
-                arr[i] = aux;
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    for (int i = 0; i < n - 1; i++){
+        int* pMin = arr + i;
+
+        for (int j = i + 1; j < n; j++){
+            if (*(arr + j) < *pMin){
+                pMin = arr + j;
             }
         }
+
+        if (pMin != (arr + i)){
+            int aux = *(arr + i);
+            *(arr + i) = *pMin;
+            *pMin = aux;
+        }
     }
+
+    cout << "Arreglo ordenado: ";
+    for (int i = 0; i < n; i++){
+        cout << *(arr + i) << " ";
+    }
+    cout << endl;
+
     return 0;
 }
 
