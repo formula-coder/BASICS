@@ -4,10 +4,10 @@
 using namespace std;
 
 constexpr char VACIO = '.';
-constexpr char PERSONAJE = 'P';
+constexpr char PERSONAJE = '@';
 constexpr char ENEMIGO = 'E';
-constexpr char COFRE = 'C';
-constexpr char SALIDA = 'S';
+constexpr char COFRE = '?';
+constexpr char SALIDA = '#';
 constexpr char COFRE_ABIERTO = 'O';
 constexpr char ENEMIGO_MUERTO = 'X';
 

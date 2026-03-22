@@ -38,22 +38,19 @@ int main() {
             cout << "=== NUEVA PARTIDA ===" << endl;
             cout << "Dimension del tablero: ";
             cin >> dimension;
-            cin.ignore();
             
             cout << "Numero de cofres: ";
             cin >> cofres;
-            cin.ignore();
             
             cout << "Numero de Goblins: ";
             cin >> goblins;
-            cin.ignore();
             
             cout << "Numero de Arqueros: ";
             cin >> arqueros;
-            cin.ignore();
             
             cout << "Numero de Jefes (0 o 1): ";
             cin >> jefe;
+            
             cin.ignore();
             
             juego.iniciar(dimension, cofres, goblins, arqueros, jefe);

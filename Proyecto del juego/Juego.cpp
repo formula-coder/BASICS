@@ -210,7 +210,27 @@ void Juego::moverJugador(string direccion) {
     Celda celdaDestino = tablero->getCelda(nuevoX, nuevoY);
     
     // Limpiar posición actual
+    // Restaurar lo que había en la celda antes de movernos
+Celda celdaActual = tablero->getCelda(jugador->posX, jugador->posY);
+
+if (celdaActual.tieneCofre) {
+    if (celdaActual.cofreAbierto)
+        tablero->setCelda(jugador->posX, jugador->posY, COFRE_ABIERTO);
+    else
+        tablero->setCelda(jugador->posX, jugador->posY, COFRE);
+}
+else if (celdaActual.tieneEnemigo) {
+    tablero->setCelda(jugador->posX, jugador->posY, ENEMIGO);
+}
+else if (celdaActual.esSalida) {
+    tablero->setCelda(jugador->posX, jugador->posY, SALIDA);
+}
+else if (celdaActual.simbolo == ENEMIGO_MUERTO) { // 👈 IMPORTANTE
+    tablero->setCelda(jugador->posX, jugador->posY, ENEMIGO_MUERTO);
+}
+else {
     tablero->setCelda(jugador->posX, jugador->posY, VACIO);
+}
     
     // Mover jugador
     jugador->posX = nuevoX;
@@ -306,9 +326,9 @@ void Juego::ataqueArqueros() {
             int dy = abs(enemigos[i]->posY - jugador->posY);
             
             // Si está en casilla adyacente (distancia 1 en cualquier dirección)
-            if ((dx == 1 && dy == 0) || (dx == 0 && dy == 1)) {
+            if (dx + dy == 1){
                 cout << "¡Un arquero te dispara desde [" << enemigos[i]->posX << "," << enemigos[i]->posY << "]!" << endl;
-                jugador->recibirDanio(15); // Daño del arquero
+                jugador->recibirDanio(10); // Daño del arquero
             }
         }
     }
@@ -449,12 +469,15 @@ void Juego::procesarComando(string comando) {
     else if (comando.find("Move") == 0 || comando.find("move") == 0) {
         string direccion = comando.substr(comando.find(" ") + 1);
         moverJugador(direccion);
+        actualizarTurno();
     }
     else if (comando == "Seek" || comando == "seek") {
         explorar();
+        actualizarTurno();
     }
     else if (comando == "Attack" || comando == "attack") {
         atacar();
+        actualizarTurno();
     }
     else if (comando == "Save" || comando == "save") {
         guardarEstado();
