@@ -2,10 +2,11 @@
 
 #include <iostream>
 #include <string>
+#include <cstring>
 using namespace std;
 
 struct Personaje {
-    string nombre;
+   char nombre[50];
     int PV; // Puntos de Vida
     int PH; // Puntos de Habilidad
     int oro;
@@ -13,7 +14,7 @@ struct Personaje {
     int posY;
 
        Personaje() {
-        nombre = "Heroe";
+        strcpy(nombre, "Heroe");
         PV = 100;
         PH = 20;
         oro = 0;

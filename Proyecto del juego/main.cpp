@@ -5,10 +5,27 @@
 
 using namespace std;
 
-int main() {
+int main(int argc, char* argv[]) {
     Juego juego;
     string comando;
     bool juegoIniciado = false;
+   
+if (argc > 1) {
+    string comandoInicial = argv[1];
+
+    if (comandoInicial == "start") {
+        cout << "Iniciando partida desde consola 🚀" << endl;
+
+        juego.iniciar(10, 5, 3, 2, 1); // valores por defecto
+        juegoIniciado = true;
+    }
+    else if (comandoInicial == "load") {
+        cout << "Cargando partida desde consola 💾" << endl;
+
+        juego.cargarEstado();
+        juegoIniciado = true;
+    }
+}
     
     cout << "=== JUEGO DE LA MAZMORRA ===" << endl;
     cout << "Comandos disponibles:" << endl;

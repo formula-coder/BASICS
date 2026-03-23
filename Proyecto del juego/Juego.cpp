@@ -44,7 +44,7 @@ void Juego::iniciar(int dimension, int numCofres, int numGoblins, int numArquero
     
     cout << "=== INGRESA EL NOMBRE DE TU PERSONAJE ===" << endl;
     cout << "Nombre: ";
-    getline(cin, jugador->nombre);
+    cin.getline(jugador->nombre, 50);
     
     // Reiniciar personaje
     jugador->PV = 100;
