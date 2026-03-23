@@ -56,9 +56,12 @@ void Juego::iniciar(int dimension, int numCofres, int numGoblins, int numArquero
     generarEnemigos(numGoblins, numArqueros, numJefe);
     generarCofres(numCofres);
     
-    cout << "\nBienvenido, " << jugador->nombre << " 👾" << endl;
+    cout << "\n=== JUEGO INICIADO ===" << endl;
+    cout << "Personaje: " << jugador->nombre << endl;
+    cout << "PV: " << jugador->PV << " | PH: " << jugador->PH << " | Oro: " << jugador->oro << endl;
+    cout << "Tablero de " << dimension << "x" << dimension << " creado." << endl;
+
     mostrarTablero();
-   
 
 }
 
