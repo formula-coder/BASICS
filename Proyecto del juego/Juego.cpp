@@ -29,7 +29,7 @@ Juego::~Juego() {
 
 void Juego::iniciar(int dimension, int numCofres, int numGoblins, int numArqueros, int numJefe) {
   
-    if (tablero != nullptr) {
+   if (tablero != nullptr) {
         delete tablero;
     }
     tablero = new Tablero(dimension);
@@ -56,12 +56,9 @@ void Juego::iniciar(int dimension, int numCofres, int numGoblins, int numArquero
     generarEnemigos(numGoblins, numArqueros, numJefe);
     generarCofres(numCofres);
     
-    cout << "\n=== JUEGO INICIADO ===" << endl;
-    cout << "Personaje: " << jugador->nombre << endl;
-    cout << "PV: " << jugador->PV << " | PH: " << jugador->PH << " | Oro: " << jugador->oro << endl;
-    cout << "Tablero de " << dimension << "x" << dimension << " creado." << endl;
-
+    cout << "\nBienvenido, " << jugador->nombre << " 👾" << endl;
     mostrarTablero();
+   
 
 }
 
@@ -461,33 +458,61 @@ void Juego::procesarComando(string comando) {
         cout << "El juego ha terminado. Usa 'Start' para comenzar una nueva partida." << endl;
         return;
     }
-    
-    if (comando == "Board" || comando == "board") {
+
+    // 📍 Tablero
+    if (comando == "Board" || comando == "board" || comando == "b") {
         mostrarTablero();
     }
-    else if (comando == "Stats" || comando == "stats") {
+
+    // 📊 Stats
+    else if (comando == "Stats" || comando == "stats" || comando == "i") {
         mostrarStats();
     }
-    else if (comando.find("Move") == 0 || comando.find("move") == 0) {
+
+    // 🎮 Movimiento (WASD)
+    else if (comando == "w" || comando == "s" || comando == "a" || comando == "d") {
+        if (comando == "w") moverJugador("up");
+        else if (comando == "s") moverJugador("down");
+        else if (comando == "a") moverJugador("left");
+        else moverJugador("right");
+
+        actualizarTurno();
+        mostrarTablero();
+    }
+
+    // 🎮 Movimiento largo (por si acaso)
+    else if (comando.rfind("Move ", 0) == 0 || comando.rfind("move ", 0) == 0) {
         string direccion = comando.substr(comando.find(" ") + 1);
         moverJugador(direccion);
         actualizarTurno();
-        mostrarTablero(); // Mostrar tablero después de moverse
+        mostrarTablero();
     }
-    else if (comando == "Seek" || comando == "seek") {
+
+    // 🎁 Cofre
+    else if (comando == "Seek" || comando == "seek" || comando == "e") {
         explorar();
         actualizarTurno();
+        mostrarTablero();
     }
-    else if (comando == "Attack" || comando == "attack") {
+
+    // ⚔️ Ataque
+    else if (comando == "Attack" || comando == "attack" || comando == "f") {
         atacar();
         actualizarTurno();
+        mostrarTablero();
     }
+
+    // 💾 Guardar
     else if (comando == "Save" || comando == "save") {
         guardarEstado();
     }
+
+    // 📂 Cargar
     else if (comando == "Load" || comando == "load") {
         cargarEstado();
+        mostrarTablero(); // 👈 mejora
     }
+
     else {
         cout << "Comando no reconocido" << endl;
     }
