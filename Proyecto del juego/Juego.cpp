@@ -28,13 +28,13 @@ Juego::~Juego() {
 }
 
 void Juego::iniciar(int dimension, int numCofres, int numGoblins, int numArqueros, int numJefe) {
-    // Crear tablero
+  
     if (tablero != nullptr) {
         delete tablero;
     }
     tablero = new Tablero(dimension);
     
-    // Limpiar enemigos anteriores
+   
     if (enemigos != nullptr) {
         for (int i = 0; i < totalEnemigos; i++) {
             delete enemigos[i];
@@ -42,11 +42,10 @@ void Juego::iniciar(int dimension, int numCofres, int numGoblins, int numArquero
         delete[] enemigos;
     }
     
-    cout << "=== INGRESA EL NOMBRE DE TU PERSONAJE ===" << endl;
-    cout << "Nombre: ";
+    cout << "Ingresa el nombre de tu personaje: ";
     cin.getline(jugador->nombre, 50);
     
-    // Reiniciar personaje
+   
     jugador->PV = 100;
     jugador->PH = 20;
     jugador->oro = 0;
@@ -61,6 +60,9 @@ void Juego::iniciar(int dimension, int numCofres, int numGoblins, int numArquero
     cout << "Personaje: " << jugador->nombre << endl;
     cout << "PV: " << jugador->PV << " | PH: " << jugador->PH << " | Oro: " << jugador->oro << endl;
     cout << "Tablero de " << dimension << "x" << dimension << " creado." << endl;
+
+    mostrarTablero();
+
 }
 
 void Juego::generarSalida() {
@@ -470,6 +472,7 @@ void Juego::procesarComando(string comando) {
         string direccion = comando.substr(comando.find(" ") + 1);
         moverJugador(direccion);
         actualizarTurno();
+        mostrarTablero(); // Mostrar tablero después de moverse
     }
     else if (comando == "Seek" || comando == "seek") {
         explorar();

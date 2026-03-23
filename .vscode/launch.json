@@ -2,6 +2,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Juego Mazmorra (consola externa)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/Proyecto del juego/juego.exe",
+            "args": ["start"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/Proyecto del juego",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
+            "preLaunchTask": "Build juego completo"
+        },
+        {
             "name": "C++: Archivo activo (consola externa)",
             "type": "cppdbg",
             "request": "launch",
