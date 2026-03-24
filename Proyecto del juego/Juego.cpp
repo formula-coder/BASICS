@@ -224,6 +224,7 @@ if (celdaActual.tieneCofre) {
 else if (celdaActual.tieneEnemigo) {
     tablero->setCelda(jugador->posX, jugador->posY, ENEMIGO);
 }
+
 else if (celdaActual.esSalida) {
     tablero->setCelda(jugador->posX, jugador->posY, SALIDA);
 }
@@ -238,16 +239,33 @@ else {
     jugador->posX = nuevoX;
     jugador->posY = nuevoY;
     tablero->setCelda(jugador->posX, jugador->posY, PERSONAJE);
+    tablero->revelarCelda(nuevoX, nuevoY); // 👈 REVELA enemigos al entrar a la celda
     
     cout << "Te has movido a [" << nuevoX << "," << nuevoY << "]" << endl;
-    
+
     // Verificar si hay enemigo en la nueva posición
-    if (celdaDestino.tieneEnemigo && celdaDestino.tipoEnemigo == 1) { // Goblin ataca inmediatamente
-        cout << "¡Un Goblin te ataca!" << endl;
-        jugador->recibirDanio(10); // Daño del goblin
+if (celdaDestino.tieneEnemigo) {
+
+    if (celdaDestino.tipoEnemigo == 1) {
+        cout << "¡Te encontraste con un Goblin!" << endl;
+        jugador->recibirDanio(10);
+        tablero->setCelda(nuevoX, nuevoY, 'G'); // 👈 REVELA
     }
-    
-    verificarVictoria();
+    else if (celdaDestino.tipoEnemigo == 2) {
+        cout << "¡Te encontraste con un Arquero!" << endl;
+        jugador->recibirDanio(10);
+        tablero->setCelda(nuevoX, nuevoY, 'A'); // 👈 REVELA
+    }
+    else if (celdaDestino.tipoEnemigo == 3) {
+        cout << "¡CUIDADO! ¡Es el JEFE!" << endl;
+        jugador->recibirDanio(20);
+        tablero->setCelda(nuevoX, nuevoY, 'J'); // 👈 REVELA
+    }
+}
+
+if (jugador->PV <= 0) {
+    finJuego(false);
+}
 }
 
 void Juego::explorar() {
@@ -278,7 +296,10 @@ void Juego::explorar() {
     }
     else { // 20% trampa
         cout << "¡Es una trampa! El cofre te ataca" << endl;
-        jugador->recibirDanio(30);
+        int danio = jugador->PV * 0.20; // 20% de la vida actual
+            if (danio < 1) danio = 1; // evitar 0
+        jugador->recibirDanio(danio); // Daño fijo de 20 puntos
+        cout << "La trampa te hizo " << danio << " de daño (" << "20% de tu vida)" << endl;
     }
     
     tablero->abrirCofre(jugador->posX, jugador->posY);
@@ -462,17 +483,17 @@ void Juego::procesarComando(string comando) {
         return;
     }
 
-    // 📍 Tablero
+    //  Tablero
     if (comando == "Board" || comando == "board" || comando == "b") {
         mostrarTablero();
     }
 
-    // 📊 Stats
+    //  Stats
     else if (comando == "Stats" || comando == "stats" || comando == "i") {
         mostrarStats();
     }
 
-    // 🎮 Movimiento (WASD)
+    //  Movimiento (WASD)
     else if (comando == "w" || comando == "s" || comando == "a" || comando == "d") {
         if (comando == "w") moverJugador("up");
         else if (comando == "s") moverJugador("down");
@@ -483,7 +504,7 @@ void Juego::procesarComando(string comando) {
         mostrarTablero();
     }
 
-    // 🎮 Movimiento largo (por si acaso)
+    //  Movimiento largo (por si acaso)
     else if (comando.rfind("Move ", 0) == 0 || comando.rfind("move ", 0) == 0) {
         string direccion = comando.substr(comando.find(" ") + 1);
         moverJugador(direccion);
@@ -491,29 +512,29 @@ void Juego::procesarComando(string comando) {
         mostrarTablero();
     }
 
-    // 🎁 Cofre
+    //  Cofre
     else if (comando == "Seek" || comando == "seek" || comando == "e") {
         explorar();
         actualizarTurno();
         mostrarTablero();
     }
 
-    // ⚔️ Ataque
+    //  Ataque
     else if (comando == "Attack" || comando == "attack" || comando == "f") {
         atacar();
         actualizarTurno();
         mostrarTablero();
     }
 
-    // 💾 Guardar
+    //  Guardar
     else if (comando == "Save" || comando == "save") {
         guardarEstado();
     }
 
-    // 📂 Cargar
+    //  Cargar
     else if (comando == "Load" || comando == "load") {
         cargarEstado();
-        mostrarTablero(); // 👈 mejora
+        mostrarTablero(); 
     }
 
     else {

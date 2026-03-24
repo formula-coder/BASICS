@@ -10,6 +10,8 @@ constexpr char COFRE = '?';
 constexpr char SALIDA = '#';
 constexpr char COFRE_ABIERTO = 'O';
 constexpr char ENEMIGO_MUERTO = 'X';
+constexpr char JEFE = 'J';
+
 
 struct Celda {
     char simbolo;
@@ -20,6 +22,8 @@ struct Celda {
     int enemigoPV;
     int enemigoPH;
     bool cofreAbierto;
+    bool descubierto; // Para revelar enemigos al entrar a la celda
+    bool visible; // Para mostrar enemigos al atacar desde lejos (arqueros)
 
         Celda() {
         simbolo = VACIO;
@@ -30,6 +34,7 @@ struct Celda {
         enemigoPV = 0;
         enemigoPH = 0;
         cofreAbierto = false;
+        descubierto = false;
     }
 };
 
@@ -52,4 +57,5 @@ public:
     bool posicionValida(int x, int y);
     void abrirCofre(int x, int y);
     void eliminarEnemigo(int x, int y);
+    void revelarCelda(int x, int y);
 };

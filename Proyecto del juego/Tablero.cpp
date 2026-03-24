@@ -37,6 +37,7 @@ void Tablero::setEnemigo(int x, int y, int tipo, int pv, int ph) {
         celdas[x][y].tipoEnemigo = tipo;
         celdas[x][y].enemigoPV = pv;
         celdas[x][y].enemigoPH = ph;
+        celdas[x][y].visible = false;
         celdas[x][y].simbolo = ENEMIGO;
     }
 }
@@ -57,19 +58,18 @@ void Tablero::setSalida(int x, int y) {
 }
 
 void Tablero::mostrar() {
-    cout << "  ";
+for (int i = 0; i < dimension; i++) {
+    cout << setw(2) << i << " ";
     for (int j = 0; j < dimension; j++) {
-        cout << setw(2) << j;
+
+        if (celdas[i][j].tieneEnemigo && !celdas[i][j].visible)
+            cout << ENEMIGO << " "; // 👈 oculto (E)
+        else
+            cout << celdas[i][j].simbolo << " "; // 👈 real
+
     }
     cout << endl;
-    
-    for (int i = 0; i < dimension; i++) {
-        cout << setw(2) << i << " ";
-        for (int j = 0; j < dimension; j++) {
-            cout << celdas[i][j].simbolo << " ";
-        }
-        cout << endl;
-    }
+}
 }
 
 bool Tablero::posicionValida(int x, int y) {
@@ -88,5 +88,20 @@ void Tablero::eliminarEnemigo(int x, int y) {
         celdas[x][y].tieneEnemigo = false;
         celdas[x][y].tipoEnemigo = 0;
         celdas[x][y].simbolo = ENEMIGO_MUERTO;
+    }
+}
+
+void Tablero::revelarCelda(int x, int y) {
+    if (posicionValida(x, y)) {
+        celdas[x][y].visible = true;
+
+        if (celdas[x][y].tieneEnemigo) {
+            if (celdas[x][y].tipoEnemigo == 1)
+                celdas[x][y].simbolo = 'G';
+            else if (celdas[x][y].tipoEnemigo == 2)
+                celdas[x][y].simbolo = 'A';
+            else if (celdas[x][y].tipoEnemigo == 3)
+                celdas[x][y].simbolo = 'J';
+        }
     }
 }
