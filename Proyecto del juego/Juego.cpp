@@ -49,7 +49,9 @@ void Juego::iniciar(int dimension, int numCofres, int numGoblins, int numArquero
     jugador->PV = 100;
     jugador->PH = 20;
     jugador->oro = 0;
-    
+
+     juegoActivo = true;
+
     // Generar elementos del juego
     generarSalida();
     colocarJugador();
@@ -403,6 +405,7 @@ void Juego::moverJefe() {
                 tablero->getCelda(nuevoX, nuevoY).simbolo == VACIO) {
                 
                 // Limpiar posición anterior
+                tablero->eliminarEnemigo(jefe->posX, jefe->posY);
                 tablero->setCelda(jefe->posX, jefe->posY, VACIO);
                 
                 // Mover jefe
@@ -513,10 +516,25 @@ void Juego::procesarComando(string comando) {
     }
 
     //  Cofre
+ //  Cofre o Salir de la Mazmorra (Botón de acción 'e')
     else if (comando == "Seek" || comando == "seek" || comando == "e") {
-        explorar();
-        actualizarTurno();
-        mostrarTablero();
+        
+        // 1. Primero verificamos si el jugador está parado en la salida
+        if (verificarVictoria()) {
+            // Si gana, verificarVictoria() ya llama a finJuego(true) automáticamente.
+            // No hacemos nada más.
+        } 
+        else {
+            // 2. Si no está en la salida, entonces intenta abrir un cofre
+            explorar();
+            actualizarTurno();
+            
+            // Solo mostramos el tablero si el juego sigue activo 
+            // (por si acaso te mató una trampa del cofre o un arquero)
+            if (juegoActivo) {
+                mostrarTablero();
+            }
+        }
     }
 
     //  Ataque
