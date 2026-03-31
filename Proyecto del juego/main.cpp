@@ -2,7 +2,7 @@
 #include <string>
 #include <sstream>
 #include <cstdlib> // Necesario para system("cls")
-#include "juego2.h"
+#include "Juego.h"
 
 using namespace std;
 

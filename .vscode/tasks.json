@@ -31,9 +31,6 @@
             "args": [
                 "-std=c++17",
                 "Proyecto del juego/main.cpp",
-                "Proyecto del juego/Juego.cpp",
-                "Proyecto del juego/Tablero.cpp",
-                "Proyecto del juego/Archivos.cpp",
                 "-o",
                 "Proyecto del juego/juego.exe"
             ],
