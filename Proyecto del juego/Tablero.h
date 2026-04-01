@@ -99,19 +99,26 @@ public:
         }
     }
 
-    void mostrar() {
+void mostrar() {
+        cout << "   "; 
+        for (int j = 0; j < dimension; j++) {
+            cout << setw(3) << j; 
+        }
+        cout << "\n";
         for (int i = 0; i < dimension; i++) {
-            cout << setw(2) << i << " ";
+            cout << setw(2) << i << " "; 
             for (int j = 0; j < dimension; j++) {
-                if (celdas[i][j].tieneEnemigo && !celdas[i][j].visible)
-                    cout << ENEMIGO << " "; 
-                else
-                    cout << celdas[i][j].simbolo << " "; 
+                char aImprimir;
+                if (celdas[i][j].tieneEnemigo && !celdas[i][j].visible) {
+                    aImprimir = ENEMIGO;
+                } else {
+                    aImprimir = celdas[i][j].simbolo;
+                }
+                cout << setw(3) << aImprimir; 
             }
-            cout << endl;
+            cout << "\n";
         }
     }
-
     int getDimension() { return dimension; }
 
     bool posicionValida(int x, int y) {
