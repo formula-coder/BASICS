@@ -5,3 +5,4 @@ i: 100 puntos
 o: 100 puntos
 o: 100 puntos
 o: 120 puntos
+p: 100 puntos

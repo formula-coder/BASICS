@@ -458,7 +458,7 @@ private:
         }
     }
 
-    void moverJefe() {
+void moverJefe() {
         Enemigo* jefe = nullptr;
         for (int i = 0; i < totalEnemigos; i++) {
             if (enemigos[i] != nullptr && enemigos[i]->vivo && enemigos[i]->tipo == 3) {
@@ -496,17 +496,31 @@ private:
                 if (jefe->posY < salidaY) nuevoY++;
                 else if (jefe->posY > salidaY) nuevoY--;
                 
-                if (tablero->posicionValida(nuevoX, nuevoY) && 
-                    tablero->getCelda(nuevoX, nuevoY).simbolo == VACIO) {
+                if (tablero->posicionValida(nuevoX, nuevoY)) {
                     
-                    tablero->eliminarEnemigo(jefe->posX, jefe->posY);
-                    tablero->setCelda(jefe->posX, jefe->posY, VACIO);
+                    bool esJugador = (nuevoX == jugador->posX && nuevoY == jugador->posY);
+                    bool esSalida = tablero->getCelda(nuevoX, nuevoY).esSalida;
                     
-                    jefe->posX = nuevoX;
-                    jefe->posY = nuevoY;
-                    tablero->setEnemigo(nuevoX, nuevoY, 3, jefe->PV, jefe->PH);
-                    
-                    cout << "El Jefe se ha movido mas cerca de la salida..." << endl;
+                    if (esJugador) {
+                        // Si choca contigo, te ataca pero NO ocupa tu casilla
+                        cout << "¡El Jefe te ha alcanzado y te ataca de frente!" << endl;
+                        jugador->recibirDanio(20); 
+                    } 
+                    else if (esSalida) {
+                        // Si choca con la salida, no la pisa, se queda custodiándola
+                        cout << "El Jefe ha llegado a la salida y la está custodiando..." << endl;
+                    } 
+                    else {
+                        // Si no eres tú ni la salida, arrasa con lo que haya en la casilla
+                        tablero->eliminarEnemigo(jefe->posX, jefe->posY);
+                        tablero->setCelda(jefe->posX, jefe->posY, VACIO);
+                        
+                        jefe->posX = nuevoX;
+                        jefe->posY = nuevoY;
+                        tablero->setEnemigo(nuevoX, nuevoY, 3, jefe->PV, jefe->PH);
+                        
+                        cout << "El Jefe avanza implacablemente..." << endl;
+                    }
                 }
             }
         }
