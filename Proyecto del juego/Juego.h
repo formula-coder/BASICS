@@ -80,16 +80,16 @@ public:
     void mostrarTablero() {
         cout << "\n=== TABLERO ACTUAL ===" << endl;
         tablero->mostrar();
-        cout << "Posición del jugador: [" << jugador->posX << "," << jugador->posY << "]" << endl;
+        cout << "Posicion del jugador: [" << jugador->posX << "," << jugador->posY << "]" << endl;
     }
 
     void mostrarStats() {
-        cout << "\n=== ESTADÍSTICAS DEL PERSONAJE ===" << endl;
+        cout << "\n=== ESTADISTICAS DEL PERSONAJE ===" << endl;
         cout << "Nombre: " << jugador->nombre << endl;
         cout << "Puntos de Vida (PV): " << jugador->PV << endl;
         cout << "Puntos de Habilidad (PH): " << jugador->PH << endl;
         cout << "Oro: " << jugador->oro << endl;
-        cout << "Posición: [" << jugador->posX << "," << jugador->posY << "]" << endl;
+        cout << "Posicion: [" << jugador->posX << "," << jugador->posY << "]" << endl;
     }
 
     void moverJugador(string direccion) {
@@ -101,7 +101,7 @@ public:
         else if (direccion == "left") nuevoY--;
         else if (direccion == "right") nuevoY++;
         else {
-            cout << "Dirección no válida" << endl;
+            cout << "Direccion no valida" << endl;
             return;
         }
         
@@ -141,17 +141,17 @@ public:
 
         if (celdaDestino.tieneEnemigo) {
             if (celdaDestino.tipoEnemigo == 1) {
-                cout << "¡Te encontraste con un Goblin!" << endl;
+                cout << "Te encontraste con un Goblin!" << endl;
                 jugador->recibirDanio(10);
                 tablero->setCelda(nuevoX, nuevoY, 'G'); 
             }
             else if (celdaDestino.tipoEnemigo == 2) {
-                cout << "¡Te encontraste con un Arquero!" << endl;
+                cout << "Te encontraste con un Arquero!" << endl;
                 jugador->recibirDanio(10);
                 tablero->setCelda(nuevoX, nuevoY, 'A'); 
             }
             else if (celdaDestino.tipoEnemigo == 3) {
-                cout << "¡CUIDADO! ¡Es el JEFE!" << endl;
+                cout << "CUIDADO! Es el JEFE!" << endl;
                 jugador->recibirDanio(20);
                 tablero->setCelda(nuevoX, nuevoY, 'J'); 
             }
@@ -174,24 +174,24 @@ public:
             return;
         }
         
-        cout << "¡Has encontrado un cofre!" << endl;
+        cout << "Has encontrado un cofre!" << endl;
         int probabilidad = rand() % 100;
         
         if (probabilidad < 50) { 
             int oro = 10;
             jugador->agregarOro(oro);
-            cout << "¡Has encontrado " << oro << " piezas de oro!" << endl;
+            cout << "Has encontrado " << oro << " piezas de oro!" << endl;
         }
         else if (probabilidad < 80) { 
             jugador->curar(50);
-            cout << "¡Has encontrado una poción de vida! +50 PV" << endl;
+            cout << "Has encontrado una pocion de vida! +50 PV" << endl;
         }
         else { 
-            cout << "¡Es una trampa! El cofre te ataca" << endl;
+            cout << "Es una trampa! El cofre te ataca" << endl;
             int danio = jugador->PV * 0.20; 
             if (danio < 1) danio = 1; 
             jugador->recibirDanio(danio); 
-            cout << "La trampa te hizo " << danio << " de daño (" << "20% de tu vida)" << endl;
+            cout << "La trampa te hizo " << danio << " de dano (" << "20% de tu vida)" << endl;
         }
         
         tablero->abrirCofre(jugador->posX, jugador->posY);
@@ -215,7 +215,7 @@ public:
         }
         
         if (enemigoActual == nullptr) {
-            cout << "Error: No se encontró el enemigo" << endl;
+            cout << "Error: No se encontro el enemigo" << endl;
             return;
         }
         
@@ -227,7 +227,7 @@ public:
         if (!enemigoActual->vivo) {
             jugador->aumentarHabilidad(enemigoActual->getRecompensaPH());
             tablero->eliminarEnemigo(jugador->posX, jugador->posY);
-            cout << "¡Has derrotado al " << enemigoActual->getTipoString() << "!" << endl;
+            cout << "Has derrotado al " << enemigoActual->getTipoString() << "!" << endl;
         }
     }
 
@@ -244,7 +244,7 @@ public:
         juegoActivo = false;
         cout << "\n=== FIN DEL JUEGO ===" << endl;
         if (ganado) {
-            cout << "¡Felicidades! Has escapado de la mazmorra." << endl;
+            cout << "Felicidades! Has escapado de la mazmorra." << endl;
         } else {
             cout << "Game Over. Has sido derrotado." << endl;
         }
@@ -269,7 +269,7 @@ public:
 
     void cargarEstado() {
         if (cargarPartida(jugador, tablero, enemigos, totalEnemigos)) {
-            cout << "Partida cargada. ¡Bienvenido de vuelta!" << endl;
+            cout << "Partida cargada. Bienvenido de vuelta!" << endl;
         }
     }
 
@@ -451,7 +451,7 @@ private:
                 int dy = abs(enemigos[i]->posY - jugador->posY);
                 
                 if (dx + dy == 1){
-                    cout << "¡Un arquero te dispara desde [" << enemigos[i]->posX << "," << enemigos[i]->posY << "]!" << endl;
+                    cout << "Un arquero te dispara desde [" << enemigos[i]->posX << "," << enemigos[i]->posY << "]!" << endl;
                     jugador->recibirDanio(10); 
                 }
             }
@@ -506,7 +506,7 @@ private:
                     jefe->posY = nuevoY;
                     tablero->setEnemigo(nuevoX, nuevoY, 3, jefe->PV, jefe->PH);
                     
-                    cout << "El Jefe se ha movido más cerca de la salida..." << endl;
+                    cout << "El Jefe se ha movido mas cerca de la salida..." << endl;
                 }
             }
         }

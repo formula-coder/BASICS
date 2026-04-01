@@ -38,9 +38,9 @@ struct Enemigo {
         if (PV <= 0) {
             PV = 0;
             vivo = false;
-            cout << "¡Has derrotado al enemigo!" << endl;
+            cout << "Has derrotado al enemigo!" << endl;
         } else {
-            cout << "Enemigo recibe " << danio << " de daño. PV restantes: " << PV << endl;
+            cout << "Enemigo recibe " << danio << " de dano. PV restantes: " << PV << endl;
         }
     }
     

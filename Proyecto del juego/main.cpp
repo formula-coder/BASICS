@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
         getline(cin, comando);
         
         if (comando == "Exit" || comando == "exit") {
-            cout << "¡Hasta luego!" << endl;
+            cout << "Hasta luego!" << endl;
             break;
         }
         

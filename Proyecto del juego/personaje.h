@@ -24,19 +24,19 @@ struct Personaje {
         void recibirDanio(int daño) {
         PV -= daño;
         if (PV < 0) PV = 0;
-        cout << "¡Has recibido " << daño << " puntos de daño!" << endl;
+        cout << "Has recibido " << daño << " puntos de dano!" << endl;
     }
       void curar(int cantidad) {
         PV += cantidad;
-        cout << "¡Has recuperado " << cantidad << " PV!" << endl;
+        cout << "Has recuperado " << cantidad << " PV!" << endl;
     }
         void aumentarHabilidad(int cantidad) {
         PH += cantidad;
-        cout << "¡PH aumentado en " << cantidad << " puntos!" << endl;
+        cout << "PH aumentado en " << cantidad << " puntos!" << endl;
     }
     
     void agregarOro(int cantidad) {
         oro += cantidad;
-        cout << "¡Has encontrado " << cantidad << " piezas de oro!" << endl;
+        cout << "Has encontrado " << cantidad << " piezas de oro!" << endl;
     }
 };
