@@ -508,7 +508,7 @@ void moverJefe() {
                     } 
                     else if (esSalida) {
                         // Si choca con la salida, no la pisa, se queda custodiándola
-                        cout << "El Jefe ha llegado a la salida y la está custodiando..." << endl;
+                        cout << "El Jefe ha llegado a la salida y la esta custodiando..." << endl;
                     } 
                     else {
                         // Si no eres tú ni la salida, arrasa con lo que haya en la casilla
