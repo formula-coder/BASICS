@@ -6,3 +6,5 @@ o: 100 puntos
 o: 100 puntos
 o: 120 puntos
 p: 100 puntos
+u: 100 puntos
+u: 100 puntos
