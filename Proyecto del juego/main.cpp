@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
         }
     }
     
-    if (comandoInicialPendiente == "inicio") {
+    if (comandoInicialPendiente == "start") {
         juego.iniciar(10, 5, 3, 2, 1); // valores por defecto
         juegoIniciado = true;
     }
