@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include <cstdlib> // Necesario para system("cls")
+#include <cstdlib> 
 #include "Juego.h"
 
 using namespace std;
@@ -12,7 +12,6 @@ int main(int argc, char* argv[]) {
     string comandoInicialPendiente;
     bool juegoIniciado = false;
 
-    // (Opcional) Limpia la consola al arrancar el programa
     system("cls");
 
     cout << "[argc/argv] Programa ejecutado desde consola con " << argc - 1
@@ -39,7 +38,7 @@ int main(int argc, char* argv[]) {
     }
     
     if (comandoInicialPendiente == "inicio") {
-        juego.iniciar(10, 5, 3, 2, 1); // valores por defecto
+        juego.iniciar(10, 5, 3, 2, 1); 
         juegoIniciado = true;
     }
     else if (comandoInicialPendiente == "load") {
@@ -72,7 +71,7 @@ int main(int argc, char* argv[]) {
         if (comando == "Start" || comando == "start") {
             int dimension = -1, cofres = -1, goblins = -1, arqueros = -1, jefe = -1;
             
-            system("cls"); // Limpia la pantalla para la nueva partida
+            system("cls"); 
             cout << "=== NUEVA PARTIDA ===" << endl;
             
             // 1. Validar Dimensión (entre 5 y 30)
