@@ -68,6 +68,11 @@ public:
         colocarJugador();
         generarEnemigos(numGoblins, numArqueros, numJefe);
         generarCofres(numCofres);
+
+        string codigoMapa = tablero->comprimirTableroInicial();
+    cout << "\n=== CODIGO DEL MAPA GENERADO ===" << endl;
+    cout << "Codigo: " << codigoMapa << endl;
+    cout << "==================================" << endl;
         
         cout << "\n=== JUEGO INICIADO ===" << endl;
         cout << "Personaje: " << jugador->nombre << endl;

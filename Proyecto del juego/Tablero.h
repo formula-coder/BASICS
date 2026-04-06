@@ -59,6 +59,65 @@ public:
         }
         delete[] celdas;
     }
+    string comprimirTableroInicial() {
+    string resultado = "";  //cadena vacia en la que se va a ir concatenando
+    int contadorVacios = 0;  //lleva la cuenta de los espacios vacíos consecutivos
+    
+    for (int i = 0; i < dimension; i++) {  //reorre cada fila del tablero
+        for (int j = 0; j < dimension; j++) { // recorre cada columna de la fila actual
+            Celda celda = celdas[i][j];   //contiene la informacion de la celda actual
+            char simbolo = celda.simbolo; //el simbolo 
+            
+            // Verificar si es espacio vacío
+            if (simbolo == VACIO) {
+                contadorVacios++;
+                
+                // Si llegamos a 26, escribimos Z y reiniciamos
+                if (contadorVacios == 26) {
+                    resultado += 'Z';
+                    contadorVacios = 0;
+                }
+            } 
+            else {
+                // Antes de poner otro elemento, escribimos los vacíos pendientes
+                if (contadorVacios > 0) {
+                    resultado += (char)('A' + contadorVacios - 1);
+                    contadorVacios = 0;
+                }
+                
+                // Escribir el elemento especial
+                if (celda.esSalida) {
+                    resultado += 'S';
+                }
+                else if (simbolo == PERSONAJE) {
+                    resultado += 'P';
+                }
+                else if (celda.tieneCofre) {
+                    resultado += 'C';
+                }
+                else if (celda.tieneEnemigo) {
+                    
+                    switch(celda.tipoEnemigo) {
+                        case 1: resultado += 'G'; break;  // Goblin
+                        case 2: resultado += 'A'; break;  // Arquero
+                        case 3: resultado += 'J'; break;  // Jefe
+                        default: resultado += 'E'; break;
+                    }
+                }
+                else {
+                    resultado += simbolo;
+                }
+            }
+        }
+    }
+    
+    // Al final del tablero, si quedaron vacíos sin escribir
+    if (contadorVacios > 0) {
+        resultado += (char)('A' + contadorVacios - 1);
+    }
+    
+    return resultado;
+}
     
     void setCelda(int x, int y, char sim) {
         if (posicionValida(x, y)) {
