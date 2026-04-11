@@ -1,0 +1,108 @@
+classDiagram
+direction TB
+
+class Main {
+  - Sistema sistema
+  - Scanner scanner
+  + main(args: String[]) void
+  + mostrarMenu() void
+  + cargarDatosEjemplo() void
+  + agregarAlumno() void
+  + agregarActividad() void
+  + agregarNota() void
+  + editarNota() void
+}
+
+class Sistema {
+  - ArrayList~Alumno~ alumnos
+  - ArrayList~Profesor~ profesores
+  - ArrayList~Clase~ clases
+  - ArrayList~Actividad~ actividades
+  - ArrayList~Nota~ notas
+  + Sistema()
+  + agregarAlumno(alumno: Alumno) void
+  + agregarProfesor(profesor: Profesor) void
+  + agregarClase(clase: Clase) void
+  + agregarActividad(actividad: Actividad) void
+  + agregarNota(nota: Nota) void
+  + imprimirListadoNotas() void
+  + mostrarPromediosPorEstudiante() void
+  + listarAlumnos() void
+  + listarActividades() void
+  + listarNotasPorAlumno() void
+  + editarNota(indiceAlumno: int, indiceActividadEnAlumno: int, nuevaNota: double) boolean
+  + getCantidadAlumnos() int
+  + getCantidadActividades() int
+  + getAlumno(indice: int) Alumno
+  + getActividad(indice: int) Actividad
+}
+
+class Alumno {
+  - String nombre
+  - String id
+  - ArrayList~Nota~ notas
+  + Alumno(nombre: String, id: String)
+  + getNombre() String
+  + getId() String
+  + getNotas() ArrayList~Nota~
+  + agregarNota(nota: Nota) void
+  + calcularPromedio() double
+}
+
+class Nota {
+  - Alumno alumno
+  - Actividad actividad
+  - double valor
+  + Nota(alumno: Alumno, actividad: Actividad, valor: double)
+  + getAlumno() Alumno
+  + getActividad() Actividad
+  + getValor() double
+  + setValor(valor: double) void
+}
+
+class Actividad {
+  - String nombre
+  - String fecha
+  + Actividad(nombre: String, fecha: String)
+  + getNombre() String
+  + getFecha() String
+}
+
+class Profesor {
+  - String nombre
+  - String especialidad
+  + Profesor(nombre: String, especialidad: String)
+  + getNombre() String
+  + getEspecialidad() String
+}
+
+class Clase {
+  - String nombre
+  - String codigo
+  - Profesor profesor
+  - ArrayList~Alumno~ alumnos
+  - ArrayList~Actividad~ actividades
+  + Clase(nombre: String, codigo: String, profesor: Profesor)
+  + getNombre() String
+  + getCodigo() String
+  + getProfesor() Profesor
+  + getAlumnos() ArrayList~Alumno~
+  + getActividades() ArrayList~Actividad~
+  + agregarAlumno(alumno: Alumno) void
+  + agregarActividad(actividad: Actividad) void
+}
+
+Main --> Sistema : usa
+Sistema "1" o-- "*" Alumno : gestiona
+Sistema "1" o-- "*" Profesor : gestiona
+Sistema "1" o-- "*" Clase : gestiona
+Sistema "1" o-- "*" Actividad : gestiona
+Sistema "1" o-- "*" Nota : registra
+
+Alumno "1" o-- "*" Nota : tiene
+Nota "*" --> "1" Alumno : pertenece a
+Nota "*" --> "1" Actividad : evalúa
+
+Clase "*" --> "1" Profesor : asignado
+Clase "1" o-- "*" Alumno : incluye
+Clase "1" o-- "*" Actividad : contiene
