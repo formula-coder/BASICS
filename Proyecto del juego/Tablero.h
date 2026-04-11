@@ -59,7 +59,8 @@ public:
         }
         delete[] celdas;
     }
-    string comprimirTableroInicial() {
+    string comprimirTableroInicial() {//funcion para convertir el tablero a una cadena de texto comprimida
+        //función nueva que pidio el profe --------------------------------------
     string resultado = "";  //cadena vacia en la que se va a ir concatenando
     int contadorVacios = 0;  //lleva la cuenta de los espacios vacíos consecutivos
     
