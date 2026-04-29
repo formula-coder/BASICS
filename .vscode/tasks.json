@@ -38,6 +38,19 @@
                 "kind": "build",
                 "isDefault": false
             }
+        },
+        {
+            "label": "Run Java (consola externa)",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "start cmd /k \"cd /d ${fileDirname} && javac ${file} && java -cp ${fileDirname} ${fileBasenameNoExtension}\""
+            ],
+            "group": {
+                "kind": "run",
+                "isDefault": false
+            }
         }
     ],
     "version": "2.0.0"

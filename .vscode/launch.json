@@ -2,11 +2,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "Basesjava",
+            "request": "launch",
+            "mainClass": "Basesjava",
+            "projectName": "BASICS_7a49afe1"
+        },
+        {
             "name": "Juego Mazmorra (consola externa)",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/Proyecto del juego/juego.exe",
-            "args": ["start"],
+            "args": [
+                "start"
+            ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/Proyecto del juego",
             "environment": [],
