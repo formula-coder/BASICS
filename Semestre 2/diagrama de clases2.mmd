@@ -1,0 +1,69 @@
+classDiagram
+direction TB
+
+class SistemaBancario {
+  - Scanner scanner
+  - Banco banco
+  + main(String[] args) void
+  - mostrarMenu() void
+  - hacerTransaccion() void
+  - agregarNuevoCliente() void
+  - cargarDatosEjemplo() void
+  - leerEntero(String mensaje) int
+  - leerDouble(String mensaje) double
+}
+
+class Banco {
+  - List~Cliente~ clientes
+  + agregarCliente(String nombre, TipoCliente tipoCliente, TipoCuenta tipoCuenta, double saldoInicial, boolean esCuentaNomina) void
+  + realizarTransaccion(int indiceOrigen, int indiceDestino, double monto) void
+  + mostrarListaClientes() void
+  + clientesVacios() boolean
+}
+
+class Cliente {
+  - String nombre
+  - TipoCliente tipoCliente
+  - Cuenta cuenta
+  - boolean esCuentaNomina
+  + Cliente(String nombre, TipoCliente tipoCliente, TipoCuenta tipoCuenta, double saldoInicial, boolean esCuentaNomina)
+  + getNombre() String
+  + getTipoCliente() TipoCliente
+  + getCuenta() Cuenta
+  + isEsCuentaNomina() boolean
+  + calcularCostoTransaccion() double
+  + generarIntereses() void
+  + toString() String
+}
+
+class Cuenta {
+  - String numeroCuenta
+  - double saldo
+  - TipoCuenta tipoCuenta
+  - static int contadorCuentas
+  + Cuenta(TipoCuenta tipoCuenta, double saldoInicial)
+  + getNumeroCuenta() String
+  + getSaldo() double
+  + getTipoCuenta() TipoCuenta
+  + depositar(double monto) void
+  + retirar(double monto) boolean
+  + setSaldo(double saldo) void
+}
+
+class TipoCliente {
+  <<enumeration>>
+  NATURAL
+  EMPRESARIAL
+}
+
+class TipoCuenta {
+  <<enumeration>>
+  AHORROS
+  CORRIENTE
+}
+
+SistemaBancario --> Banco : usa
+Banco "1" o-- "*" Cliente : gestiona
+Cliente "1" *-- "1" Cuenta : posee
+Cliente --> TipoCliente : tipo
+Cuenta --> TipoCuenta : tipo
