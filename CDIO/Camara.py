@@ -1,39 +1,55 @@
-import cv2
-import speech_recognition as sr
+try:
+    import cv2
+    camera_available = True
+except Exception:
+    camera_available = False
 import threading
 from time import sleep
 
-reconocedor = sr.Recognizer()
-texto_detectado = "Esperando que hables..."
-detener = threading.Event()
+# Intentar importar SpeechRecognition/PyAudio; si faltan, continuar sin voz
+audio_available = True
+try:
+    import speech_recognition as sr
+    reconocedor = sr.Recognizer()
+    texto_detectado = "Esperando que hables..."
+    detener = threading.Event()
 
-def escuchar_voz():
-    global texto_detectado
-    try:
-        with sr.Microphone() as source:
-            reconocedor.adjust_for_ambient_noise(source, duration=1)
-            while not detener.is_set():
-                try:
-                    audio = reconocedor.listen(source, timeout=1, phrase_time_limit=4)
-                    texto = reconocedor.recognize_google(audio, language='es-ES')
-                    texto_detectado = f"Dices: {texto}"
-                except sr.WaitTimeoutError:
-                    continue
-                except sr.UnknownValueError:
-                    texto_detectado = "No entendí lo que dijiste"
-                except sr.RequestError:
-                    texto_detectado = "Error con el servicio de voz"
-                except OSError:
-                    texto_detectado = "No se pudo usar el micrófono"
-                sleep(0.05)
-    except OSError:
-        texto_detectado = "No se detectó micrófono"
+    def escuchar_voz():
+        global texto_detectado
+        try:
+            with sr.Microphone() as source:
+                reconocedor.adjust_for_ambient_noise(source, duration=1)
+                while not detener.is_set():
+                    try:
+                        audio = reconocedor.listen(source, timeout=1, phrase_time_limit=4)
+                        texto = reconocedor.recognize_google(audio, language='es-ES')
+                        texto_detectado = f"Dices: {texto}"
+                    except sr.WaitTimeoutError:
+                        continue
+                    except sr.UnknownValueError:
+                        texto_detectado = "No entendí lo que dijiste"
+                    except sr.RequestError:
+                        texto_detectado = "Error con el servicio de voz"
+                    except OSError:
+                        texto_detectado = "No se pudo usar el micrófono"
+                    sleep(0.05)
+        except OSError:
+            texto_detectado = "No se detectó micrófono"
 
-# Iniciar el hilo de voz en segundo plano
-hilo_voz = threading.Thread(target=escuchar_voz, daemon=True)
-hilo_voz.start()
+    # Iniciar el hilo de voz en segundo plano
+    hilo_voz = threading.Thread(target=escuchar_voz, daemon=True)
+    hilo_voz.start()
+except Exception:
+    audio_available = False
+    texto_detectado = "(Voz no disponible)"
+    detener = threading.Event()
 
 # Configuración de la cámara
+if not camera_available:
+    print("cv2 (OpenCV) no está instalado. Instala 'opencv-python' y vuelve a intentar.")
+    detener.set()
+    raise SystemExit("cv2 no disponible")
+
 cap = cv2.VideoCapture(0)
 
 if not cap.isOpened():
