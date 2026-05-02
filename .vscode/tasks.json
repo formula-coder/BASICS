@@ -51,6 +51,18 @@
                 "kind": "run",
                 "isDefault": false
             }
+        },
+        {
+            "label": "Run Camara.py (.venv)",
+            "type": "shell",
+            "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+            "args": [
+                "${workspaceFolder}\\CDIO\\Camara.py"
+            ],
+            "group": {
+                "kind": "run",
+                "isDefault": false
+            }
         }
     ],
     "version": "2.0.0"

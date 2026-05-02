@@ -1,5 +1,6 @@
 {
     "C_Cpp.errorSquiggles": "disabled",
+    "python.defaultInterpreterPath": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
     "files.associations": {
         "iostream": "cpp",
         "ostream": "cpp",
