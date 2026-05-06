@@ -3,3 +3,7 @@ public class Basesjava{
         System.out.println("Hola Mundo");
     }
 }
+
+//tipos de datos: Enteros byte short int long
+//decimales float double
+//otros char boolean String
