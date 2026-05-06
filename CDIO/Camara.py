@@ -131,8 +131,9 @@ try:
                     except OSError:
                         texto_detectado = "SIN MICROFONO"
                     sleep(0.05)
-        except OSError:
+        except Exception:
             texto_detectado = "MICROFONO NO DETECTADO"
+            return
 
     hilo_voz = threading.Thread(target=escuchar_voz, daemon=True)
     hilo_voz.start()
@@ -147,6 +148,7 @@ face_cascade = cv2.CascadeClassifier(
 )
 
 # Configuración de la cámara
+cap = None
 try:
     cap = cv2.VideoCapture(0)
     if not cap.isOpened():
@@ -202,6 +204,6 @@ try:
 
 finally:
     detener.set()
-    cap.release()
-    cv2.destroyAllWindows()
+    if cap is not None:
+        cap.release()
     cv2.destroyAllWindows()
