@@ -2,6 +2,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "Basesjava",
+            "request": "launch",
+            "mainClass": "Basesjava",
+            "projectName": "BASICS_70af18fd"
+        },
+        {
             "name": "Python: Camara.py",
             "type": "python",
             "request": "launch",
