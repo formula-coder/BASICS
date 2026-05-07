@@ -1,0 +1,59 @@
+---
+title: Figuras geometricas - Diagrama de clases
+---
+classDiagram
+direction TB
+
+class Figura {
+	<<abstract>>
+	+calcularArea() double
+	+calcularPerimetro() double
+}
+
+class Cuadrado {
+	-lado: double
+	+Cuadrado(lado: double)
+	+calcularArea() double
+	+calcularPerimetro() double
+}
+
+class Rectangulo {
+	-base: double
+	-altura: double
+	+Rectangulo(base: double, altura: double)
+	+calcularArea() double
+	+calcularPerimetro() double
+}
+
+class Circulo {
+	-radio: double
+	+Circulo(radio: double)
+	+calcularArea() double
+	+calcularPerimetro() double
+}
+
+class Triangulo {
+	-base: double
+	-altura: double
+	+Triangulo(base: double, altura: double)
+	+calcularArea() double
+	+calcularPerimetro() double
+}
+
+class Main {
+	+main(args: String[]) void
+}
+
+Figura <|-- Cuadrado
+Figura <|-- Rectangulo
+Figura <|-- Circulo
+Figura <|-- Triangulo
+
+Main ..> Figura : usa
+Main ..> Cuadrado : crea
+Main ..> Rectangulo : crea
+Main ..> Circulo : crea
+Main ..> Triangulo : crea
+
+note for Figura "Clase base abstracta\nDefine las operaciones comunes"
+note for Main "Muestra un menu y calcula\narea y perimetro segun la figura"
