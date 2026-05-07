@@ -3,6 +3,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "basesjavaejercicios",
+            "request": "launch",
+            "mainClass": "basesjavaejercicios",
+            "projectName": "BASICS_70af18fd"
+        },
+        {
+            "type": "java",
             "name": "Main",
             "request": "launch",
             "mainClass": "Main",
