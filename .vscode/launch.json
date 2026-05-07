@@ -6,6 +6,13 @@
             "name": "basesjavaejercicios",
             "request": "launch",
             "mainClass": "basesjavaejercicios",
+            "projectName": "BASICS_7a49afe1"
+        },
+        {
+            "type": "java",
+            "name": "basesjavaejercicios",
+            "request": "launch",
+            "mainClass": "basesjavaejercicios",
             "projectName": "BASICS_70af18fd"
         },
         {
@@ -74,6 +81,16 @@
             "request": "launch",
             "mainClass": "DiagramaClasesJava",
             "projectName": "BASICS_7a49afe1"
+        },
+        {
+            "type": "java",
+            "name": "Launch Current Java File (Workspace JDK)",
+            "request": "launch",
+            "mainClass": "${fileBasenameNoExtension}",
+            "cwd": "${fileDirname}",
+            "console": "integratedTerminal",
+            "projectName": "${workspaceFolderBasename}",
+            "preLaunchTask": "Build Java (javac)"
         }
     ]
 }
