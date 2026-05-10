@@ -1,36 +1,65 @@
 import java.util.Scanner;
 
-public class basesjavaejercicio{
-    public static void main(String args[]){
-        Scanner entrada = new Scanner (System.in);
-        String nombre = "";
-        int clave =0, antiguedad =0;
-        system.out.println("%%%%%%%%%%%%%%%%%%%%%%");
-        system.out.println("Bienvenido al sistema de registro de empleados");
-        system.out.println("%%%%%%%%%%%%%%%%%%%%%%");
-        system.out.println("");
-        system.out.println("");
+public class basesjavaejercicios {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int num_uno = 0;
+        int num_dos = 0;
+        int resultado = 0;
+        int parametro = 0;
+        
+        System.out.println("Ingrese el numero de la operacion que desea realizar: 1. Suma, 2. Resta, 3. Multiplicacion, 4. Division"); 
+        parametro = scanner.nextInt();
+        
+        switch(parametro){
+            case 1:
+                System.out.println("Realizando la suma de dos numeros");
+                System.out.println("ingrese el primer numero");
+                num_uno = scanner.nextInt();
+                System.out.println("ingrese el segundo numero");
+                num_dos = scanner.nextInt();
+                resultado = num_uno + num_dos;
+                System.out.println("El resultado de la suma es: " + resultado);
+                break;
 
-        system.out.println("cual es el nombre del trabajor?:");
-        nombre = entrada. nextline();
-        System.out.println("");
+            case 2:
+                System.out.println("Realizando la resta de dos numeros");
+                System.out.println("ingrese el primer numero");
+                num_uno = scanner.nextInt();
+                System.out.println("ingrese el segundo numero");
+                num_dos = scanner.nextInt();
+                resultado = num_uno - num_dos;
+        
+        
+                System.out.println("El resultado de la resta es: " + resultado);
+                break;
 
-        system.out.println("cuanto tiempo de servicio tiene el trabajador");
-        antiguedad = entrada.nextInt;
-        System.out.println("");
-
-        system.out.println("Ingrese la clave");
-        clave = entrada.nextInt;
-        System.out.println("");
-
-if(clave==1){
-    System.out.println("El trabajador tiene 10 días de vacaciones.");
-}else if (clave ==2){
-    System.out.println("El trabajador tiene 20 días de vacaciones.");
-}else if(clave==3){    
-    System.out.println("El trabajador tiene 30 días de vacaciones.");
-} else{
-    System.out.println("clave no valida");
+            case 3:
+                System.out.println("Realizando la multiplicacion de dos numeros");
+                System.out.println("ingrese el primer numero");
+                num_uno = scanner.nextInt();
+                System.out.println("ingrese el segundo numero");
+                num_dos = scanner.nextInt();
+                resultado = num_uno * num_dos;
+                System.out.println("El resultado de la multiplicacion es: " + resultado);
+                break;
+            
+            case 4:
+                System.out.println("Realizando la division de dos numeros");
+                System.out.println("ingrese el primer numero");
+                num_uno = scanner.nextInt();
+                System.out.println("ingrese el segundo numero");
+                num_dos = scanner.nextInt();
+                if(num_dos != 0){
+                    resultado = num_uno / num_dos;
+                    System.out.println("El resultado de la division es: " + resultado);
+                } else {
+                    System.out.println("Error: No se puede dividir por cero");
+                }
+                break;
+            
+            default:
+                System.out.println("Opcion no valida");
         }
     }
 }
