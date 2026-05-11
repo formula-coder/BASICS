@@ -3,6 +3,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "BaseBv",
+            "request": "launch",
+            "mainClass": "BaseBv",
+            "projectName": "BASICS_7a49afe1"
+        },
+        {
+            "type": "java",
             "name": "Basesjavaejercicios",
             "request": "launch",
             "mainClass": "Basesjavaejercicios",
