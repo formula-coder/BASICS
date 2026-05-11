@@ -369,6 +369,148 @@ public static void main(String[] args) {
 // - @Override: anotación que indica que sobrescribimos un método
 // - Polimorfismo: capacidad del mismo método de comportarse diferente
 
+// ============================================================
+// ABSTRACCIÓN (Explicación detallada)
+// ============================================================
+//
+// ¿QUÉ ES?
+// Mostrar SOLO lo esencial de un objeto/clase, ocultando 
+// los detalles complejos de CÓMO lo hace internamente.
+//
+// ANALOGÍA:
+// Un auto: Sabes que existe acelerar(), frenar(), girar()
+// NO necesitas saber cómo funciona el motor por dentro.
+// Eso es abstracción: expones interfaz simple, ocultas complejidad.
+//
+// ============================================================
+// EN JAVA: ABSTRACT CLASS
+// ============================================================
+// Una clase abstract (abstracta) es una PLANTILLA que define
+// qué métodos DEBEN tener las clases hijas, pero no los implementa.
+//
+// Palabras clave:
+// - abstract class: clase que NO puede instanciarse directamente
+// - abstract method: método sin implementación (solo firma)
+//
+// ============================================================
+// EJEMPLO: Clase abstracta VEHICULO
+// ============================================================
+/*
+abstract class Vehiculo {
+    // Métodos abstract: las clases hijas DEBEN implementarlos
+    abstract void arrancar();
+    abstract void detener();
+    abstract void acelerar();
+    
+    // Métodos concretos: todas las clases hijas los heredan igual
+    public void hacerSonido() {
+        System.out.println("Biiip!");
+    }
+}
+*/
+
+// CLASES HIJAS: Implementan métodos abstract
+/*
+class Auto extends Vehiculo {
+    @Override
+    void arrancar() {
+        System.out.println("Auto: Prendiendo motor...");
+    }
+    
+    @Override
+    void detener() {
+        System.out.println("Auto: Frenando...");
+    }
+    
+    @Override
+    void acelerar() {
+        System.out.println("Auto: Acelerando a 100 km/h");
+    }
+}
+
+class Bicicleta extends Vehiculo {
+    @Override
+    void arrancar() {
+        System.out.println("Bicicleta: Empezando a pedalear...");
+    }
+    
+    @Override
+    void detener() {
+        System.out.println("Bicicleta: Frenando con zapatas...");
+    }
+    
+    @Override
+    void acelerar() {
+        System.out.println("Bicicleta: Acelerando a 30 km/h");
+    }
+}
+*/
+
+// ============================================================
+// CÓMO USAR LA ABSTRACCIÓN
+// ============================================================
+/*
+public static void main(String[] args) {
+    // NO puedes hacer esto (es abstract):
+    // Vehiculo v = new Vehiculo();  // ERROR!
+    
+    // Pero SÍ puedes usar referencias abstract:
+    Vehiculo auto = new Auto();
+    Vehiculo bici = new Bicicleta();
+    
+    // Llamas los métodos definidos en la clase abstract
+    auto.arrancar();     // Auto: Prendiendo motor...
+    auto.acelerar();     // Auto: Acelerando a 100 km/h
+    auto.hacerSonido();  // Biiip!
+    auto.detener();      // Auto: Frenando...
+    
+    bici.arrancar();     // Bicicleta: Empezando a pedalear...
+    bici.acelerar();     // Bicicleta: Acelerando a 30 km/h
+    bici.hacerSonido();  // Biiip!
+    bici.detener();      // Bicicleta: Frenando con zapatas...
+}
+*/
+
+// ============================================================
+// DIFERENCIA: ABSTRACT CLASS vs INTERFACE
+// ============================================================
+//
+// ABSTRACT CLASS:
+// - Puede tener métodos abstract (sin implementación)
+// - Puede tener métodos concretos (con implementación)
+// - Puede tener atributos (variables)
+// - Una clase solo puede extender UNA abstract class
+// - Usa: extends
+//
+// INTERFACE:
+// - TODOS los métodos son abstract (sin implementación)
+// - NO puede tener atributos (solo constantes)
+// - Una clase puede implementar VARIAS interfaces
+// - Usa: implements
+//
+// ============================================================
+// PARA TUS ARCHIVOS:
+// ============================================================
+// BaseBv es una clase abstract que define:
+// - public abstract void Operaciones(); (metodo sin implementacion)
+// - public void ASK() (metodo concreto)
+// - public void Show() (metodo concreto)
+//
+// Basesjavaejercicios (y Resta, Multiplicacion, Division)
+// SON clases que IMPLEMENTAN el método abstract Operaciones()
+// 
+// La clase abstract fuerza que TODAS las hijas tengan Operaciones()
+// Eso es ABSTRACCIÓN: defines interfaz, cada hija lo hace diferente
+
+// ============================================================
+// BENEFICIOS DE ABSTRACCIÓN:
+// ============================================================
+// 1. Fuerza consistencia: todas las hijas deben tener ciertos métodos
+// 2. Oculta complejidad: quien usa la clase NO necesita saber detalles
+// 3. Define contrato: establece qué debe tener cada clase hija
+// 4. Facilita mantenimiento: cambios internos sin afectar usuarios
+// 5. Código más limpio y organizado
+
 // Abstracción
 // abstract class Figura {
 //     public abstract double area();
