@@ -370,9 +370,9 @@ public static void main(String[] args) {
 // - Polimorfismo: capacidad del mismo método de comportarse diferente
 
 // Abstracción
-abstract class Figura {
-    public abstract double area();
-}
+// abstract class Figura {
+//     public abstract double area();
+// }
 */
 
 /* ============================================================
