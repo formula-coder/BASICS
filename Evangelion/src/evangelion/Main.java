@@ -1,3 +1,5 @@
+package evangelion;
+    
 import ui.GameUI;
 import javax.swing.*;
 

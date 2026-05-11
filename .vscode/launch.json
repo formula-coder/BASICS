@@ -3,6 +3,14 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Evangelion Main",
+            "request": "launch",
+            "mainClass": "evangelion.Main",
+            "projectName": "BASICS_7a49afe1",
+            "cwd": "${workspaceFolder}/Evangelion"
+        },
+        {
+            "type": "java",
             "name": "BaseBv",
             "request": "launch",
             "mainClass": "BaseBv",
@@ -31,10 +39,11 @@
         },
         {
             "type": "java",
-            "name": "Main",
+            "name": "Figuras Main",
             "request": "launch",
             "mainClass": "Main",
-            "projectName": "BASICS_70af18fd"
+            "projectName": "BASICS_70af18fd",
+            "cwd": "${workspaceFolder}/Semestre 2 Java"
         },
         {
             "type": "java",

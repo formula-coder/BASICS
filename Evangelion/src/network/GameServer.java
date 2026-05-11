@@ -11,7 +11,9 @@ public class GameServer {
 
     public void start(int port) throws IOException {
         serverSocket = new ServerSocket(port);
+        System.out.println("Servidor escuchando en puerto " + port);
         socket = serverSocket.accept();
+        System.out.println("Cliente conectado desde: " + socket.getInetAddress());
         out = new PrintWriter(socket.getOutputStream(), true);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }

@@ -66,20 +66,44 @@ public class GameUI extends JFrame {
             isServer = serverButton.isSelected();
             int port = Integer.parseInt(portField.getText());
 
-            try {
-                if (isServer) {
-                    server = new GameServer();
-                    server.start(port);
-                    JOptionPane.showMessageDialog(dialog, "Esperando conexión...");
-                } else {
+            // Deshabilitar el botón para evitar clicks múltiples
+            connectButton.setEnabled(false);
+
+            if (isServer) {
+                // Para SERVER: mostrar mensaje antes de intentar conectar
+                JOptionPane.showMessageDialog(dialog, "Abriendo servidor en puerto " + port + "...\nEsperando conexión del cliente...");
+
+                // Usar un hilo separado para no bloquear la UI
+                new Thread(() -> {
+                    try {
+                        server = new GameServer();
+                        server.start(port);
+
+                        // Conectar exitoso
+                        SwingUtilities.invokeLater(() -> {
+                            JOptionPane.showMessageDialog(dialog, "¡Cliente conectado exitosamente!");
+                            dialog.dispose();
+                            showRobotAssembly();
+                        });
+                    } catch (IOException ex) {
+                        SwingUtilities.invokeLater(() -> {
+                            JOptionPane.showMessageDialog(dialog, "Error en servidor: " + ex.getMessage());
+                            connectButton.setEnabled(true);
+                        });
+                    }
+                }).start();
+            } else {
+                // Para CLIENT
+                try {
                     client = new GameClient();
                     client.connect(ipField.getText(), port);
-                    JOptionPane.showMessageDialog(dialog, "Conectado!");
+                    JOptionPane.showMessageDialog(dialog, "¡Conectado al servidor!");
+                    dialog.dispose();
+                    showRobotAssembly();
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(dialog, "Error de conexión: " + ex.getMessage());
+                    connectButton.setEnabled(true);
                 }
-                dialog.dispose();
-                showRobotAssembly();
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(dialog, "Error de conexión: " + ex.getMessage());
             }
         });
 
