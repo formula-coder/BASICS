@@ -43,6 +43,43 @@ do{
 */
 
 /* ============================================================
+   SENTENCIA SWITCH
+   ============================================================ */
+/*
+// Uso: elegir entre varias opciones según el valor de una variable.
+// Sintaxis básica:
+switch(valor) {
+    case 1:
+        // acción para caso 1
+        break; // evita "caer" al siguiente case
+    case 2:
+        // acción para caso 2
+        break;
+    default:
+        // acción por defecto si ningún case coincide
+}
+
+// Ejemplo práctico:
+int opcion = 2;
+switch(opcion) {
+    case 1:
+        System.out.println("Elegiste 1");
+        break;
+    case 2:
+        System.out.println("Elegiste 2");
+        break;
+    default:
+        System.out.println("Opción no válida");
+}
+
+// Notas:
+// - Desde Java 7 puedes usar strings en switch: switch("hola"){...}
+// - Si omites "break" se ejecutan las instrucciones del siguiente case (fall-through).
+// - Desde Java 14 existe la forma más moderna con "switch expression" (->, yield),
+//   pero la forma clásica es la mostrada arriba y sirve para la mayoría de ejercicios.
+*/
+
+/* ============================================================
    VARIABLES Y TIPOS
    ============================================================ */
 /*
@@ -169,18 +206,43 @@ System.out.println(hoy);
 /* ============================================================
    LOS 4 PILARES DE LA POO
    ============================================================ */
-// 1. Encapsulamiento: proteger los datos con private y acceder con métodos.
+// 1. Encapsulamiento:
+//    - Proteger el estado interno de un objeto (atributos private).
+//    - Permitir cambios SOLO por metodos que apliquen reglas.
+//    - Evitar estados invalidos (por ejemplo, saldo negativo sin control).
+//    Idea clave: no es "poner getters/setters a todo", sino exponer
+//    comportamientos con sentido (depositar, retirar, transferir, etc.).
 // 2. Herencia: una clase hija reutiliza atributos y métodos de una clase padre.
 // 3. Polimorfismo: un mismo método puede comportarse distinto según el objeto.
 // 4. Abstracción: mostrar lo esencial y ocultar detalles internos.
 
 /*
-// Encapsulamiento
+// Encapsulamiento (ejemplo completo)
 class Cuenta {
     private double saldo;
 
+    public Cuenta(double saldoInicial) {
+        if (saldoInicial < 0) {
+            throw new IllegalArgumentException("El saldo inicial no puede ser negativo");
+        }
+        this.saldo = saldoInicial;
+    }
+
     public void depositar(double cantidad) {
+        if (cantidad <= 0) {
+            throw new IllegalArgumentException("La cantidad a depositar debe ser mayor a 0");
+        }
         saldo += cantidad;
+    }
+
+    public void retirar(double cantidad) {
+        if (cantidad <= 0) {
+            throw new IllegalArgumentException("La cantidad a retirar debe ser mayor a 0");
+        }
+        if (cantidad > saldo) {
+            throw new IllegalArgumentException("Fondos insuficientes");
+        }
+        saldo -= cantidad;
     }
 
     public double getSaldo() {
@@ -188,19 +250,124 @@ class Cuenta {
     }
 }
 
-// Herencia y polimorfismo
+// Por que esto SI es encapsulamiento:
+// - Nadie puede hacer: cuenta.saldo = -1000 (saldo es private).
+// - Las reglas viven dentro de la clase, no repartidas por todo el programa.
+// - El objeto siempre se mantiene en un estado valido.
+
+// Error comun:
+// Hacer setSaldo(double s) publico sin validacion rompe el encapsulamiento,
+// porque cualquier parte del codigo podria dejar la cuenta en estado invalido.
+
+// ============================================================
+// HERENCIA Y POLIMORFISMO (explicación detallada)
+// ============================================================
+//
+// HERENCIA: Una clase hija hereda atributos y métodos de una clase padre.
+// Sintaxis: class Hijo extends Padre { ... }
+// Palabras clave: extends, super, @Override
+//
+// POLIMORFISMO: "Muchas formas". Mismo método, diferentes comportamientos
+// según el objeto que lo llama.
+//
+// ============================================================
+// EJEMPLO PASO A PASO:
+// ============================================================
+
+// 1. CLASE PADRE - Define el comportamiento general
+/*
 class Animal {
+    protected String nombre;  // protected = accesible en clases hijas
+    
+    public Animal(String nombre) {
+        this.nombre = nombre;
+    }
+    
+    // Método que será SOBRESCRITO (reemplazado) en clases hijas
     public void sonido() {
-        System.out.println("Sonido de animal");
+        System.out.println("Sonido genérico de animal");
     }
 }
+*/
 
+// 2. CLASE HIJA 1 - Hereda de Animal y SOBRESCRIBE sonido()
+/*
 class Perro extends Animal {
+    public Perro(String nombre) {
+        super(nombre);  // super() llama al constructor de la clase padre
+    }
+    
+    // @Override avisa al compilador que estamos reemplazando un método
     @Override
     public void sonido() {
-        System.out.println("Guau");
+        System.out.println(nombre + " dice: Guau guau!");
     }
 }
+*/
+
+// 3. CLASE HIJA 2 - También hereda de Animal y sobrescribe sonido()
+/*
+class Gato extends Animal {
+    public Gato(String nombre) {
+        super(nombre);
+    }
+    
+    @Override
+    public void sonido() {
+        System.out.println(nombre + " dice: Miau miau!");
+    }
+}
+*/
+
+// ============================================================
+// CÓMO FUNCIONA EL POLIMORFISMO EN ACCIÓN
+// ============================================================
+/*
+public static void main(String[] args) {
+    // AQUÍ OCURRE EL POLIMORFISMO:
+    // Declaramos referencias de tipo "Animal" (clase padre)
+    // pero asignamos objetos de tipos "Perro" y "Gato" (clases hijas)
+    
+    Animal animal1 = new Perro("Rex");
+    Animal animal2 = new Gato("Misi");
+    Animal animal3 = new Animal("Genérico");
+    
+    // Cuando llamamos sonido(), Java elige CUÁL implementación ejecutar
+    // según el tipo REAL del objeto, NO según el tipo de la referencia
+    
+    animal1.sonido();  // Imprime: Rex dice: Guau guau!
+    animal2.sonido();  // Imprime: Misi dice: Miau miau!
+    animal3.sonido();  // Imprime: Sonido genérico de animal
+}
+*/
+
+// ============================================================
+// POR QUÉ ES POLIMORFISMO:
+// ============================================================
+// - Usamos REFERENCIAS del tipo padre (Animal)
+// - Pero almacenamos OBJETOS de tipos hijos (Perro, Gato)
+// - Mismo método sonido() = COMPORTAMIENTOS DIFERENTES
+// - El método correcto se elige EN TIEMPO DE EJECUCIÓN
+//   (no en tiempo de compilación)
+//
+// Beneficio: Puedes escribir código genérico que funciona con 
+// cualquier clase hija sin cambiar nada.
+
+// ============================================================
+// EN TUS ARCHIVOS DE EJERCICIO:
+// ============================================================
+// BaseBv.java = Clase padre
+// Basesjavaejercicios.java extends BaseBv = Clase hija
+// Si sobrescribis un método en Basesjavaejercicios con @Override,
+// ese método nuevo reemplaza al de BaseBv.
+
+// ============================================================
+// TÉRMINOS IMPORTANTES:
+// ============================================================
+// - extends: establece herencia (clase hija)
+// - super: referencia a la clase padre
+// - @Override: anotación que indica que sobrescribimos un método
+// - Polimorfismo: capacidad del mismo método de comportarse diferente
 
 // Abstracción
 abstract class Figura {
