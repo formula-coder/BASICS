@@ -3,6 +3,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Bv1",
+            "request": "launch",
+            "mainClass": "Bv1",
+            "projectName": "BASICS_70af18fd"
+        },
+        {
+            "type": "java",
             "name": "Evangelion Main",
             "request": "launch",
             "mainClass": "evangelion.Main",
