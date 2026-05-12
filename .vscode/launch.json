@@ -48,6 +48,21 @@
             "cwd": "${fileDirname}",
             "console": "integratedTerminal",
             "preLaunchTask": "Build Java (javac)"
+        },
+        {
+            "type": "java",
+            "name": "Debug Evangelion",
+            "request": "launch",
+            "mainClass": "evangelion.Main",
+            "cwd": "${workspaceFolder}/Evangelion",
+            "console": "integratedTerminal",
+            "preLaunchTask": "Build Evangelion (javac)",
+            "classPaths": [
+                "${workspaceFolder}/Evangelion/out/production/Evangelion"
+            ],
+            "sourcePaths": [
+                "${workspaceFolder}/Evangelion/src"
+            ]
         }
     ]
 }
