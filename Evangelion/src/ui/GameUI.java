@@ -63,8 +63,20 @@ public class GameUI extends JFrame {
 
         JButton connectButton = new JButton("Conectar");
         connectButton.addActionListener(e -> {
+            if (!serverButton.isSelected() && !clientButton.isSelected()) {
+                JOptionPane.showMessageDialog(dialog, "Selecciona un rol: crear partida o unirte a una partida.");
+                return;
+            }
+
             isServer = serverButton.isSelected();
-            int port = Integer.parseInt(portField.getText());
+
+            int port;
+            try {
+                port = Integer.parseInt(portField.getText().trim());
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(dialog, "El puerto debe ser un número válido.");
+                return;
+            }
 
             // Deshabilitar el botón para evitar clicks múltiples
             connectButton.setEnabled(false);
@@ -96,12 +108,14 @@ public class GameUI extends JFrame {
                 // Para CLIENT
                 try {
                     client = new GameClient();
-                    client.connect(ipField.getText(), port);
+                    client.connect(ipField.getText().trim(), port);
                     JOptionPane.showMessageDialog(dialog, "¡Conectado al servidor!");
                     dialog.dispose();
                     showRobotAssembly();
                 } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(dialog, "Error de conexión: " + ex.getMessage());
+                    JOptionPane.showMessageDialog(dialog, "No se pudo conectar a " + ipField.getText().trim() + ":" + port +
+                            "\nAsegúrate de haber abierto primero la partida en modo Server en esa IP y puerto.\n" +
+                            "Detalle técnico: " + ex.getMessage());
                     connectButton.setEnabled(true);
                 }
             }
