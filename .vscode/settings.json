@@ -16,6 +16,9 @@
         }
     ],
     "java.debug.settings.enableRunDebugCodeLens": false,
+    "[java]": {
+        "editor.codeLens": false
+    },
     "terminal.integrated.env.windows": {
         "JAVA_HOME": "C:\\Program Files\\Eclipse Adoptium\\jdk-25.0.3.9-hotspot",
         "Path": "C:\\Program Files\\Eclipse Adoptium\\jdk-25.0.3.9-hotspot\\bin;${env:Path}"
