@@ -5,8 +5,10 @@ import game.*;
 import network.*;
 import persistence.*;
 import javax.swing.*;
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.List;
 
@@ -20,6 +22,8 @@ public class GameUI extends JFrame {
     private JButton dodgeButton;
     private JButton healButton;
     private JButton chargeButton;
+    private JLabel playerCharacterLabel;
+    private JLabel opponentCharacterLabel;
 
     private CombatSystem combatSystem;
     private GameClient client;
@@ -28,7 +32,6 @@ public class GameUI extends JFrame {
     private List<String> strategyList;
     private int strategyIndex;
     private boolean useStrategyFile;
-    private Timer autoMoveTimer;
 
     public GameUI() {
         setTitle("Mecha Duel");
@@ -224,14 +227,10 @@ public class GameUI extends JFrame {
         combatSystem = new CombatSystem(player, opponent);
         setupUI();
 
-        // Verificar archivo de estrategia
+        // Verificar archivo de estrategia solo para cargarlo, pero no activar combate automático por defecto.
         try {
             strategyList = CombatLogPersistence.loadStrategy("estrategia.txt");
             useStrategyFile = !strategyList.isEmpty();
-            if (useStrategyFile) {
-                strategyIndex = 0;
-                startAutoCombat();
-            }
         } catch (IOException e) {
             useStrategyFile = false;
         }
@@ -246,11 +245,19 @@ public class GameUI extends JFrame {
 
         combatLogArea = new JTextArea();
         combatLogArea.setEditable(false);
+        combatLogArea.setOpaque(false);
+        combatLogArea.setForeground(Color.WHITE);
+        combatLogArea.setFont(new Font("Consolas", Font.PLAIN, 14));
         JScrollPane scrollPane = new JScrollPane(combatLogArea);
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
 
         turnLabel = new JLabel("Turno: Esperando...");
+        turnLabel.setForeground(Color.WHITE);
+        turnLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         JPanel buttonPanel = new JPanel(new GridLayout(1, 5));
+        buttonPanel.setOpaque(false);
         attackButton = new JButton("ATTACK");
         specialButton = new JButton("SPECIAL");
         dodgeButton = new JButton("DODGE");
@@ -269,34 +276,24 @@ public class GameUI extends JFrame {
         buttonPanel.add(healButton);
         buttonPanel.add(chargeButton);
 
-        add(topPanel, BorderLayout.NORTH);
-        add(scrollPane, BorderLayout.CENTER);
-        add(turnLabel, BorderLayout.SOUTH);
+        JPanel overlayPanel = new JPanel(new BorderLayout());
+        overlayPanel.setOpaque(false);
+        overlayPanel.add(topPanel, BorderLayout.NORTH);
+        overlayPanel.add(scrollPane, BorderLayout.CENTER);
+        overlayPanel.add(turnLabel, BorderLayout.SOUTH);
+
+        BattleFieldPanel battleFieldPanel = new BattleFieldPanel();
+        battleFieldPanel.setLayout(new BorderLayout());
+        battleFieldPanel.add(overlayPanel, BorderLayout.CENTER);
+        battleFieldPanel.add(createCharacterStrip(), BorderLayout.SOUTH);
+
+        add(battleFieldPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.EAST);
 
         setVisible(true);
 
-        if (!useStrategyFile) {
-            enableButtons(true);
-        }
-
+        enableButtons(true);
         startCombatLoop();
-    }
-
-    private void startAutoCombat() {
-        enableButtons(false);
-        autoMoveTimer = new Timer(1000, e -> {
-            if (!combatSystem.isGameOver() && strategyIndex < strategyList.size()) {
-                String moveStr = strategyList.get(strategyIndex % strategyList.size());
-                Move move = Move.fromString(moveStr);
-                performMove(move);
-                strategyIndex++;
-            } else if (combatSystem.isGameOver()) {
-                autoMoveTimer.stop();
-                endGame();
-            }
-        });
-        autoMoveTimer.start();
     }
 
     private void startCombatLoop() {
@@ -307,9 +304,7 @@ public class GameUI extends JFrame {
                     final model.Robot currentTurn = nextTurn;
                     SwingUtilities.invokeLater(() -> {
                         turnLabel.setText("Turno de: " + currentTurn.getName());
-                        if (useStrategyFile) {
-                            // Ya manejado por el timer
-                        } else if (currentTurn == combatSystem.getOpponent()) {
+                        if (currentTurn == combatSystem.getOpponent()) {
                             simulateOpponentMove();
                         }
                     });
@@ -362,6 +357,12 @@ public class GameUI extends JFrame {
         opponentStatsLabel.setText("Rival: " + combatSystem.getOpponent().getStats().toString());
         combatLogArea.append(combatSystem.getCombatLog().get(combatSystem.getCombatLog().size() - 1) + "\n");
         combatLogArea.setCaretPosition(combatLogArea.getDocument().getLength());
+        if (playerCharacterLabel != null) {
+            playerCharacterLabel.setText(combatSystem.getPlayer().getName());
+        }
+        if (opponentCharacterLabel != null) {
+            opponentCharacterLabel.setText(combatSystem.getOpponent().getName());
+        }
     }
 
     private void endGame() {
@@ -390,10 +391,6 @@ public class GameUI extends JFrame {
             }
         }
 
-        if (autoMoveTimer != null) {
-            autoMoveTimer.stop();
-        }
-
         System.exit(0);
     }
 
@@ -403,5 +400,80 @@ public class GameUI extends JFrame {
         dodgeButton.setEnabled(enable);
         healButton.setEnabled(enable);
         chargeButton.setEnabled(enable);
+    }
+
+    private JPanel createCharacterStrip() {
+        JPanel strip = new JPanel(new GridLayout(1, 2, 24, 0));
+        strip.setOpaque(false);
+        strip.setBorder(BorderFactory.createEmptyBorder(12, 24, 20, 24));
+
+        playerCharacterLabel = createCharacterLabel("Jugador");
+        opponentCharacterLabel = createCharacterLabel("Rival");
+
+        strip.add(playerCharacterLabel);
+        strip.add(opponentCharacterLabel);
+        return strip;
+    }
+
+    private JLabel createCharacterLabel(String text) {
+        JLabel label = new JLabel(text, SwingConstants.CENTER);
+        label.setForeground(Color.WHITE);
+        label.setFont(new Font("SansSerif", Font.BOLD, 20));
+        label.setPreferredSize(new Dimension(200, 120));
+        label.setOpaque(true);
+        label.setBackground(new Color(0, 0, 0, 120));
+        label.setBorder(BorderFactory.createLineBorder(new Color(255, 255, 255, 140), 2));
+        return label;
+    }
+
+    private BufferedImage loadBackgroundImage() {
+        File[] candidates = {
+                new File("Evangelion/assets/battle-background.png"),
+                new File("Evangelion/assets/battle-background.jpg"),
+                new File("Evangelion/assets/background.png"),
+                new File("Evangelion/assets/background.jpg")
+        };
+
+        for (File candidate : candidates) {
+            if (candidate.exists()) {
+                try {
+                    return ImageIO.read(candidate);
+                } catch (IOException ignored) {
+                }
+            }
+        }
+        return null;
+    }
+
+    private class BattleFieldPanel extends JPanel {
+        private final BufferedImage backgroundImage = loadBackgroundImage();
+
+        BattleFieldPanel() {
+            setOpaque(true);
+            setBackground(new Color(20, 20, 28));
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            if (backgroundImage != null) {
+                g2.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), null);
+            } else {
+                GradientPaint gradient = new GradientPaint(0, 0, new Color(30, 34, 48), 0, getHeight(), new Color(82, 112, 75));
+                g2.setPaint(gradient);
+                g2.fillRect(0, 0, getWidth(), getHeight());
+
+                g2.setColor(new Color(255, 255, 255, 35));
+                for (int i = 0; i < 8; i++) {
+                    int x = 40 + i * 90;
+                    g2.fillRoundRect(x, 25 + (i % 2) * 12, 60, 30, 20, 20);
+                }
+            }
+
+            g2.dispose();
+        }
     }
 }
