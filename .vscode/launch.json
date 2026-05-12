@@ -2,64 +2,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "java",
-            "name": "Bv1",
-            "request": "launch",
-            "mainClass": "Bv1",
-            "projectName": "BASICS_70af18fd"
-        },
-        {
-            "type": "java",
-            "name": "Evangelion Main",
-            "request": "launch",
-            "mainClass": "evangelion.Main",
-            "projectName": "BASICS_7a49afe1",
-            "cwd": "${workspaceFolder}/Evangelion"
-        },
-        {
-            "type": "java",
-            "name": "BaseBv",
-            "request": "launch",
-            "mainClass": "BaseBv",
-            "projectName": "BASICS_7a49afe1"
-        },
-        {
-            "type": "java",
-            "name": "Basesjavaejercicios",
-            "request": "launch",
-            "mainClass": "Basesjavaejercicios",
-            "projectName": "BASICS_7a49afe1"
-        },
-        {
-            "type": "java",
-            "name": "basesjavaejercicios",
-            "request": "launch",
-            "mainClass": "basesjavaejercicios",
-            "projectName": "BASICS_7a49afe1"
-        },
-        {
-            "type": "java",
-            "name": "basesjavaejercicios",
-            "request": "launch",
-            "mainClass": "basesjavaejercicios",
-            "projectName": "BASICS_70af18fd"
-        },
-        {
-            "type": "java",
-            "name": "Figuras Main",
-            "request": "launch",
-            "mainClass": "Main",
-            "projectName": "BASICS_70af18fd",
-            "cwd": "${workspaceFolder}/Semestre 2 Java"
-        },
-        {
-            "type": "java",
-            "name": "suma",
-            "request": "launch",
-            "mainClass": "suma",
-            "projectName": "BASICS_7a49afe1"
-        },
-        {
             "name": "Python: Camara.py",
             "type": "python",
             "request": "launch",
@@ -67,13 +9,6 @@
             "console": "integratedTerminal",
             "justMyCode": true,
             "python": "${workspaceFolder}/.venv/Scripts/python.exe"
-        },
-        {
-            "type": "java",
-            "name": "Basesjava",
-            "request": "launch",
-            "mainClass": "Basesjava",
-            "projectName": "BASICS_7a49afe1"
         },
         {
             "name": "Juego Mazmorra (consola externa)",
@@ -107,19 +42,11 @@
         },
         {
             "type": "java",
-            "name": "DiagramaClasesJava",
-            "request": "launch",
-            "mainClass": "DiagramaClasesJava",
-            "projectName": "BASICS_7a49afe1"
-        },
-        {
-            "type": "java",
             "name": "Launch Current Java File (Workspace JDK)",
             "request": "launch",
             "mainClass": "${fileBasenameNoExtension}",
             "cwd": "${fileDirname}",
             "console": "integratedTerminal",
-            "projectName": "${workspaceFolderBasename}",
             "preLaunchTask": "Build Java (javac)"
         }
     ]
