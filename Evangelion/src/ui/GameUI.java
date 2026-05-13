@@ -319,8 +319,17 @@ public class GameUI extends JFrame {
         battleFieldPanel.add(consolePanel, BorderLayout.CENTER);
         battleFieldPanel.add(createCharacterStrip(), BorderLayout.SOUTH);
 
+        JPanel actionBarShell = new JPanel(new BorderLayout());
+        actionBarShell.setOpaque(true);
+        actionBarShell.setBackground(PANEL_BG);
+        actionBarShell.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(PANEL_BORDER, 1),
+            BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        ));
+        actionBarShell.add(buttonPanel, BorderLayout.CENTER);
+
         root.add(battleFieldPanel, BorderLayout.CENTER);
-        root.add(buttonPanel, BorderLayout.SOUTH);
+        root.add(actionBarShell, BorderLayout.SOUTH);
 
         setContentPane(root);
 
@@ -477,7 +486,7 @@ public class GameUI extends JFrame {
     private JPanel createActionBar() {
         JPanel panel = new JPanel(new GridLayout(1, 5, 10, 0));
         panel.setOpaque(false);
-        panel.setBorder(BorderFactory.createEmptyBorder(8, 0, 0, 0));
+        panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         return panel;
     }
 
@@ -486,9 +495,13 @@ public class GameUI extends JFrame {
         button.setFont(new Font("SansSerif", Font.BOLD, 14));
         button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
+        button.setUI(new javax.swing.plaf.basic.BasicButtonUI());
+        button.setContentAreaFilled(true);
+        button.setBorderPainted(false);
         button.setBorder(BorderFactory.createEmptyBorder(14, 18, 14, 18));
-        button.setBackground(baseColor.darker());
+        button.setBackground(baseColor.darker().darker());
         button.setOpaque(true);
+        button.setRolloverEnabled(true);
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         button.addMouseListener(new MouseAdapter() {
             @Override
@@ -500,7 +513,7 @@ public class GameUI extends JFrame {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                button.setBackground(baseColor.darker());
+                button.setBackground(baseColor.darker().darker());
             }
         });
         return button;
