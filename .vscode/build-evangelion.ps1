@@ -1,6 +1,6 @@
 $workspaceFolder = Split-Path $PSScriptRoot -Parent
 $src = Join-Path $workspaceFolder 'Evangelion\src'
-$out = Join-Path $workspaceFolder 'Evangelion\out\production\Evangelion'
+$out = Join-Path $workspaceFolder 'Evangelion\out'
 New-Item -ItemType Directory -Force -Path $out | Out-Null
 $files = Get-ChildItem $src -Recurse -Filter *.java | ForEach-Object { $_.FullName }
 if (-not $files) {

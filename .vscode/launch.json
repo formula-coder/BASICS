@@ -58,7 +58,7 @@
             "console": "integratedTerminal",
             "preLaunchTask": "Build Evangelion (javac)",
             "classPaths": [
-                "${workspaceFolder}/Evangelion/out/production/Evangelion"
+                "${workspaceFolder}/Evangelion/out"
             ],
             "sourcePaths": [
                 "${workspaceFolder}/Evangelion/src"
