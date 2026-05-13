@@ -1,5 +1,7 @@
 # Build outputs
 *.exe
+*.class
+out/
 
 # Python virtual environment
 .venv/
