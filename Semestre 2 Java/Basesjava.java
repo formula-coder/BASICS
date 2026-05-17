@@ -584,6 +584,50 @@ public static void main(String[] args) {
     bici.hacerSonido();  // Biiip!
     bici.detener();      // Bicicleta: Frenando con zapatas...
 }
+
+................................................................................................................................................................................................................................
+import java.util.Scanner;
+
+public class Bv1{
+
+    public static void main(String[]args){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Digite o valor do lado do quadrado: ");
+        double lado = sc.nextDouble();
+        Bv3 cuadrado = new Bv3(0, 0, lado);
+        System.out.println("A area do quadrado e: " + cuadrado.area());
+    }
+}
+
+
+public abstract class Bv2{
+
+protected double x,y;
+protected double lado;
+
+
+protected Bv2(double x, double y, double lado){
+    this.x = x;
+    this.y = y;
+    this.lado = lado;
+}
+
+public abstract double area();
+    
+}
+public class Bv3 extends Bv2{
+
+    
+  public Bv3(double x, double y, double lado) {
+        super(x, y, lado);
+    }
+
+    @Override
+    public double area() {
+      double answer = lado*lado;
+      return answer;
+    }
+}...............................................................................................................................................................................................................................................................................
 */
 
 // ============================================================
