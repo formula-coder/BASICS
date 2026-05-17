@@ -1,19 +1,24 @@
-import java.util.Scanner;
+public class Bv2 implements Bv1, Bv4 {
 
-public class Bv2{
-    public static void main(String[] args){
-        Scanner sc = new Scanner(System.in);
+    private double radio;
+    public Bv2(){
 
-        System.out.println("Lavadora");
-        System.out.println("Ingrese la cantidad de kg de ropa a lavar");
-        int kg = sc.nextInt();
-
-        System.out.println("Ingrese el tipo de ropa a lavar");
-        System.out.println("1. Ropa blanca");
-        System.out.println("2. Ropa de color");
-        int tiporopa = sc.nextInt();
-
-        Bv1 lavadora = new Bv1(kg, tiporopa);
-        lavadora.ciclofinalizado();
     }
+    public Bv2(double radio){
+        this.radio=radio;
+    }
+
+    @Override
+    public double calcularArea(){
+        double pi=3.1416;
+        double resultado = pi*radio*radio;
+        return resultado;
+    }
+
+    @Override
+    public double dibujar(){
+        System.out.println("Dibujando un círculo...");
+        return 0;
+    }
+
 }

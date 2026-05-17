@@ -249,7 +249,74 @@ class Cuenta {
         return saldo;
     }
 }
+ ........................................................................................................
+public class Bv1 {
+    
+    private int kg=0, llenadocompleto=0 , tiporopa=0, lavadocompleto=0, secadocompleto=0, planchadocompleto=0, dobladocompleto=0, guardadocompleto=0;
 
+    public Bv1(int kg, int tiporopa){
+        this.kg = kg;
+        this.tiporopa = tiporopa;
+    }
+private void llenado(){
+    if(kg<=12){
+        llenadocompleto = 1;
+        System.out.println("Llenando...");
+        System.out.println("Llenado completo");
+
+    }else{
+        System.out.println("La lavadora no soporta esa cantidad de ropa");
+    }
+}
+ private void lavado(){
+    llenado();
+    if (llenadocompleto ==1){
+        if(tiporopa==1){
+            System.out.println("Ropa blanca/Lavado suave");
+            System.out.println("Lavando...");
+            lavadocompleto=1;
+        
+        }else if(tiporopa==2){
+            System.out.println("Ropa de color/Lavado normal");
+            System.out.println("Lavando...");
+            lavadocompleto=1;
+        }
+    }
+ }
+
+ private void secado(){
+    lavado();
+    if(lavadocompleto==1){
+        System.out.println("Secando...");
+        secadocompleto=1;
+    }
+ }
+ public void ciclofinalizado(){
+    secado();
+    if(secadocompleto==1){
+        System.out.println("Ciclo finalizado");
+    }
+ }
+}
+import java.util.Scanner;
+
+public class Bv2{
+    public static void main(String[] args){
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Lavadora");
+        System.out.println("Ingrese la cantidad de kg de ropa a lavar");
+        int kg = sc.nextInt();
+
+        System.out.println("Ingrese el tipo de ropa a lavar");
+        System.out.println("1. Ropa blanca");
+        System.out.println("2. Ropa de color");
+        int tiporopa = sc.nextInt();
+
+        Bv1 lavadora = new Bv1(kg, tiporopa);
+        lavadora.ciclofinalizado();
+    }
+}.......................................................................................................
 // Por que esto SI es encapsulamiento:
 // - Nadie puede hacer: cuenta.saldo = -1000 (saldo es private).
 // - Las reglas viven dentro de la clase, no repartidas por todo el programa.
@@ -339,6 +406,54 @@ public static void main(String[] args) {
     animal2.sonido();  // Imprime: Misi dice: Miau miau!
     animal3.sonido();  // Imprime: Sonido genérico de animal
 }
+...................................................................................................................................................................................
+public class Bv4 {
+    public static void main (String[] args){
+
+        Bv1 carro = new Bv2(); // Instanciar Bv2
+        carro.Pedirdatos();
+        carro.calcular();
+        Bv1 moto = new Bv3(); // Instanciar Bv3
+        moto.Pedirdatos();
+        moto.calcular();
+    }
+}
+    public class Bv3 extends Bv1{
+
+    @Override
+    public void calcular(){
+        resultado = valor1 * valor2;
+        System.out.println("El resultado de la multiplicacion es: " + resultado);
+    }
+}
+    public class  Bv2 extends Bv1{
+
+    @Override
+    public void calcular(){
+        resultado = valor1 + valor2;
+        System.out.println("El resultado de la suma es: " + resultado);
+    }
+}
+    import java.util.Scanner;
+
+public abstract class Bv1{
+    protected int valor1, valor2,resultado;
+    Scanner sc = new Scanner(System.in);
+
+    public void Pedirdatos(){
+        System.out.println("calculadora Bv");
+        System.out.println("Ingrese el primer valor");
+        valor1 = sc.nextInt();
+        System.out.println("Ingrese el segundo valor");
+        valor2 = sc.nextInt();
+    }
+
+    public abstract void calcular();    
+    public void mostrarresultado(){
+        System.out.println("El resultado es: " + resultado);
+    }
+}
+..............................................................................................................................................................
 */
 
 // ============================================================
@@ -487,7 +602,78 @@ public static void main(String[] args) {
 // - NO puede tener atributos (solo constantes)
 // - Una clase puede implementar VARIAS interfaces
 // - Usa: implements
-//
+/*
+//import java.util.Scanner;
+
+public abstract class Bv1{
+    protected int valor1, valor2,resultado;
+    Scanner sc = new Scanner(System.in);
+
+    public void Pedirdatos(){
+        System.out.println("calculadora Bv");
+        System.out.println("Ingrese el primer valor");
+        valor1 = sc.nextInt();
+        System.out.println("Ingrese el segundo valor");
+        valor2 = sc.nextInt();
+    }
+
+    public abstract void calcular();    
+    public void mostrarresultado(){
+        System.out.println("El resultado es: " + resultado);
+    }
+}
+public interface Bv1{
+
+    public double calcularArea();
+}
+public class Bv2 implements Bv1, Bv4 {
+
+    private double radio;
+    public Bv2(){
+
+    }
+    public Bv2(double radio){
+        this.radio=radio;
+    }
+
+    @Override
+    public double calcularArea(){
+        double pi=3.1416;
+        double resultado = pi*radio*radio;
+        return resultado;
+    }
+
+    @Override
+    public double dibujar(){
+        System.out.println("Dibujando un círculo...");
+        return 0;
+    }
+
+}
+public class Bv3 implements Bv1, Bv4 {
+ 
+    protected double lado;
+    public Bv3(){
+}
+public Bv3(double lado){
+    this.lado=lado;
+}
+@Override
+public double calcularArea(){
+    double resultado = lado*lado;
+    return resultado;
+}
+
+@Override
+public double dibujar(){
+    System.out.println("Dibujando un cuadrado...");
+    return 0;
+}
+}
+public interface Bv4{
+    public double dibujar();
+}
+*/
 // ============================================================
 // PARA TUS ARCHIVOS:
 // ============================================================
