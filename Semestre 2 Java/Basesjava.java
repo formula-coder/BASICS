@@ -769,6 +769,78 @@ try{
 }
 ............................................................................................................................................................................................................................................
  */
+
+/* ..............................................................................................................................................................................................................................................................................................................
+import java.io.Serializable;
+
+public class Bv1 implements Bv2, Serializable {
+
+    protected String name;
+    protected int age;
+
+    public Bv1(String name, int age){
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public void displayinfo(){
+        System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+     
+    }
+}
+
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.util.Scanner;
+
+public interface Bv2 {
+    public void displayinfo();
+
+    public static void main(String[]args){
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese el nombre: ");
+        String name = scanner.nextLine();
+        System.out.print("Ingrese la edad: ");
+        int age = scanner.nextInt();
+        Bv1 holi=new Bv1(name, age);
+        holi.displayinfo();
+
+        java.io.File archivo = new java.io.File("hola.dat");
+    try{
+        FileOutputStream fos = new FileOutputStream(archivo);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
+        oos.writeObject(holi);
+        oos.close();
+        fos.close();
+    } catch(Exception e){
+        System.out.println("Error al crear el archivo: " + e.getMessage());
+    }
+}
+}
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+
+public class Bv3{
+    public static void main(String[] args){
+        File archivo = new File("Hola.dat");
+        try{
+                FileInputStream fis = new FileInputStream(archivo);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                while(fis.available() > 0){
+                    Bv1 hola = (Bv1) ois.readObject();
+                    hola.displayinfo();
+                }
+        }catch(Exception e){
+            System.out.println("Error al crear el archivo: " + e.getMessage());
+                e.printStackTrace();
+        }
+    }
+}..............................................................................................................................................................................................................................................................
+ */
 //
 // Basesjavaejercicios (y Resta, Multiplicacion, Division)
 // SON clases que IMPLEMENTAN el método abstract Operaciones()
