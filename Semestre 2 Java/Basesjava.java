@@ -725,6 +725,50 @@ public interface Bv4{
 // - public abstract void Operaciones(); (metodo sin implementacion)
 // - public void ASK() (metodo concreto)
 // - public void Show() (metodo concreto)
+
+
+
+/*
+............................................................................................................................................................................
+
+import java.util.Scanner;
+public class Bv2{
+    public static void main(String[] args){
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese el contenido del archivo: ");
+        String contenido = scanner.nextLine();
+        Bv1.escribirArchivo("archivo.txt", contenido);
+    }
+}
+import java.io.*;
+
+public class Bv1{
+
+    public static void crearArchivo(String nombreArchivo){
+        File archivo = new File(nombreArchivo);
+try{
+        PrintWriter pw =  new PrintWriter(archivo);
+   pw.close();
+   System.out.println("Archivo creado exitosamente");
+}catch(FileNotFoundException ex){
+    ex.printStackTrace(System.out);
+    }
+}
+ public static void escribirArchivo(String nombreArchivo, String contenido){
+    File archivo = new File(nombreArchivo);
+
+    try{
+        PrintWriter pw = new PrintWriter(archivo);
+        pw.println(contenido);
+        pw.close();
+        System.out.println("Archivo creado exitosamente");
+    }catch(FileNotFoundException ex){
+        ex.printStackTrace(System.out);
+    }
+}
+}
+............................................................................................................................................................................................................................................
+ */
 //
 // Basesjavaejercicios (y Resta, Multiplicacion, Division)
 // SON clases que IMPLEMENTAN el método abstract Operaciones()
