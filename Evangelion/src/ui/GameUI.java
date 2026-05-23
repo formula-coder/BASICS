@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameUI extends JFrame {
@@ -44,9 +45,13 @@ public class GameUI extends JFrame {
     private GameServer server;
     private boolean isServer;
     private List<String> strategyList;
-    private int strategyIndex;
+    private int strategyIndex = 0;
     private boolean useStrategyFile;
     private int turnCounter = 0;
+    
+    private boolean isMyTurn = false;
+    private boolean combatActive = true;
+    private boolean gameEnded = false;
 
     public GameUI() {
         setTitle("Mecha Duel");
@@ -145,6 +150,33 @@ public class GameUI extends JFrame {
         dialog.setLayout(new BorderLayout());
         dialog.getContentPane().setBackground(Color.WHITE);
 
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(Color.WHITE);
+        
+        JPanel optionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        optionPanel.setBackground(Color.WHITE);
+        optionPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 0, 20));
+        
+        JRadioButton newRobotRadio = new JRadioButton("Nuevo Robot", true);
+        JRadioButton loadRobotRadio = new JRadioButton("Cargar Robot Guardado");
+        ButtonGroup optionGroup = new ButtonGroup();
+        optionGroup.add(newRobotRadio);
+        optionGroup.add(loadRobotRadio);
+        
+        optionPanel.add(newRobotRadio);
+        optionPanel.add(loadRobotRadio);
+        
+        JPanel loadPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        loadPanel.setBackground(Color.WHITE);
+        loadPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        loadPanel.setVisible(false);
+        
+        JLabel selectLabel = new JLabel("Seleccionar robot guardado:");
+        JComboBox<String> savedRobotsCombo = new JComboBox<>();
+        savedRobotsCombo.setPreferredSize(new Dimension(250, 30));
+        loadPanel.add(selectLabel);
+        loadPanel.add(savedRobotsCombo);
+        
         JPanel inputPanel = new JPanel(new GridLayout(0, 2, 10, 12));
         inputPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         inputPanel.setBackground(Color.WHITE);
@@ -154,7 +186,7 @@ public class GameUI extends JFrame {
         JTextField defField = new JTextField("25");
         JTextField spdField = new JTextField("25");
         JTextField nrgField = new JTextField("25");
-
+        
         inputPanel.add(createStyledLabel("Nombre del Robot:"));
         inputPanel.add(nameField);
         inputPanel.add(createStyledLabel("Ataque (ATK) [0-100]:"));
@@ -165,7 +197,66 @@ public class GameUI extends JFrame {
         inputPanel.add(spdField);
         inputPanel.add(createStyledLabel("Energía (NRG) [0-100]:"));
         inputPanel.add(nrgField);
-
+        
+        List<String> robotNames = new ArrayList<>();
+        try {
+            List<model.Robot> robots = RobotPersistence.loadAllRobots();
+            for (model.Robot r : robots) {
+                robotNames.add(r.getName());
+            }
+        } catch (Exception e) {
+            robotNames = new ArrayList<>();
+        }
+        
+        final List<String> finalRobotNames = new ArrayList<>(robotNames);
+        final JComboBox<String> finalCombo = savedRobotsCombo;
+        final JTextField finalNameField = nameField;
+        final JTextField finalAtkField = atkField;
+        final JTextField finalDefField = defField;
+        final JTextField finalSpdField = spdField;
+        final JTextField finalNrgField = nrgField;
+        
+        savedRobotsCombo.removeAllItems();
+        if (finalRobotNames.isEmpty()) {
+            savedRobotsCombo.addItem("(No hay robots guardados)");
+            savedRobotsCombo.setEnabled(false);
+        } else {
+            savedRobotsCombo.setEnabled(true);
+            for (String name : finalRobotNames) {
+                savedRobotsCombo.addItem(name);
+            }
+            savedRobotsCombo.setSelectedIndex(0);
+            cargarRobotSeleccionado((String) savedRobotsCombo.getSelectedItem(), 
+                finalNameField, finalAtkField, finalDefField, finalSpdField, finalNrgField);
+        }
+        
+        savedRobotsCombo.addActionListener(e -> {
+            String selected = (String) finalCombo.getSelectedItem();
+            if (selected != null && !selected.isEmpty() && !selected.equals("(No hay robots guardados)")) {
+                cargarRobotSeleccionado(selected, finalNameField, finalAtkField, 
+                    finalDefField, finalSpdField, finalNrgField);
+            }
+        });
+        
+        newRobotRadio.addActionListener(e -> {
+            loadPanel.setVisible(false);
+            finalNameField.setText("");
+            finalAtkField.setText("25");
+            finalDefField.setText("25");
+            finalSpdField.setText("25");
+            finalNrgField.setText("25");
+            dialog.pack();
+        });
+        
+        loadRobotRadio.addActionListener(e -> {
+            loadPanel.setVisible(true);
+            if (!finalRobotNames.isEmpty()) {
+                cargarRobotSeleccionado((String) finalCombo.getSelectedItem(), 
+                    finalNameField, finalAtkField, finalDefField, finalSpdField, finalNrgField);
+            }
+            dialog.pack();
+        });
+        
         JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20));
         bottomPanel.setBackground(Color.WHITE);
@@ -191,10 +282,10 @@ public class GameUI extends JFrame {
 
         Runnable updateSum = () -> {
             try {
-                int atk = Integer.parseInt(atkField.getText().trim());
-                int def = Integer.parseInt(defField.getText().trim());
-                int spd = Integer.parseInt(spdField.getText().trim());
-                int nrg = Integer.parseInt(nrgField.getText().trim());
+                int atk = Integer.parseInt(finalAtkField.getText().trim());
+                int def = Integer.parseInt(finalDefField.getText().trim());
+                int spd = Integer.parseInt(finalSpdField.getText().trim());
+                int nrg = Integer.parseInt(finalNrgField.getText().trim());
                 int sum = atk + def + spd + nrg;
                 sumValueLabel.setText("Suma actual: " + sum);
                 if (sum == 100) {
@@ -212,35 +303,47 @@ public class GameUI extends JFrame {
             }
         };
 
-        atkField.addKeyListener(new KeyAdapter() {
+        finalAtkField.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) { updateSum.run(); }
         });
-        defField.addKeyListener(new KeyAdapter() {
+        finalDefField.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) { updateSum.run(); }
         });
-        spdField.addKeyListener(new KeyAdapter() {
+        finalSpdField.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) { updateSum.run(); }
         });
-        nrgField.addKeyListener(new KeyAdapter() {
+        finalNrgField.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) { updateSum.run(); }
         });
 
         bottomPanel.add(totalLabel, BorderLayout.NORTH);
         bottomPanel.add(sumPanel, BorderLayout.CENTER);
         bottomPanel.add(assembleButton, BorderLayout.SOUTH);
-
+        
+        JPanel northPanel = new JPanel(new BorderLayout());
+        northPanel.add(optionPanel, BorderLayout.NORTH);
+        northPanel.add(loadPanel, BorderLayout.CENTER);
+        
+        mainPanel.add(northPanel, BorderLayout.NORTH);
+        mainPanel.add(inputPanel, BorderLayout.CENTER);
+        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
+        
+        dialog.add(mainPanel, BorderLayout.CENTER);
+        
         assembleButton.addActionListener(e -> {
-            if (nameField.getText().trim().isEmpty()) {
+            String robotName = finalNameField.getText().trim();
+            
+            if (robotName.isEmpty()) {
                 JOptionPane.showMessageDialog(dialog, "❌ Ingrese un nombre para el robot!");
                 return;
             }
 
             int atk, def, spd, nrg;
             try {
-                atk = Integer.parseInt(atkField.getText().trim());
-                def = Integer.parseInt(defField.getText().trim());
-                spd = Integer.parseInt(spdField.getText().trim());
-                nrg = Integer.parseInt(nrgField.getText().trim());
+                atk = Integer.parseInt(finalAtkField.getText().trim());
+                def = Integer.parseInt(finalDefField.getText().trim());
+                spd = Integer.parseInt(finalSpdField.getText().trim());
+                nrg = Integer.parseInt(finalNrgField.getText().trim());
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(dialog, "❌ Todos los valores deben ser números enteros!");
                 return;
@@ -258,10 +361,10 @@ public class GameUI extends JFrame {
             }
 
             Stats stats = new Stats(atk, def, spd, nrg);
-            model.Robot robot = new model.Robot(nameField.getText().trim(), stats);
+            model.Robot robot = new model.Robot(robotName, stats);
 
             try {
-                String statsStr = String.format("%d,%d,%d,%d,%s", atk, def, spd, nrg, nameField.getText().trim());
+                String statsStr = String.format("%d,%d,%d,%d,%s", atk, def, spd, nrg, robotName);
                 if (isServer) {
                     server.sendRobotStats(statsStr);
                     String opponentStats = server.receiveRobotStats();
@@ -276,12 +379,29 @@ public class GameUI extends JFrame {
                 JOptionPane.showMessageDialog(dialog, "Error enviando estadísticas: " + ex.getMessage());
             }
         });
-
-        dialog.add(inputPanel, BorderLayout.CENTER);
-        dialog.add(bottomPanel, BorderLayout.SOUTH);
+        
+        updateSum.run();
+        
         dialog.pack();
+        dialog.setMinimumSize(new Dimension(500, 400));
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
+    }
+
+    private void cargarRobotSeleccionado(String robotName, JTextField nameField, JTextField atkField, 
+                                          JTextField defField, JTextField spdField, JTextField nrgField) {
+        try {
+            model.Robot loadedRobot = RobotPersistence.loadRobot(robotName);
+            if (loadedRobot != null) {
+                nameField.setText(loadedRobot.getName());
+                atkField.setText(String.valueOf(loadedRobot.getStats().getAtk()));
+                defField.setText(String.valueOf(loadedRobot.getStats().getDef()));
+                spdField.setText(String.valueOf(loadedRobot.getStats().getSpd()));
+                nrgField.setText(String.valueOf(loadedRobot.getStats().getNrg()));
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error al cargar el robot: " + ex.getMessage());
+        }
     }
 
     private JLabel createStyledLabel(String text) {
@@ -289,16 +409,6 @@ public class GameUI extends JFrame {
         label.setFont(new Font("SansSerif", Font.BOLD, 13));
         label.setForeground(Color.BLACK);
         return label;
-    }
-
-    private void updateTotal(JSlider atk, JSlider def, JSlider spd, JSlider nrg, JLabel total) {
-        int sum = atk.getValue() + def.getValue() + spd.getValue() + nrg.getValue();
-        total.setText("Total: " + sum + " (debe ser 100)");
-        if (sum != 100) {
-            total.setForeground(Color.RED);
-        } else {
-            total.setForeground(Color.GREEN);
-        }
     }
 
     private void parseAndStartGame(model.Robot player, String opponentStatsStr) {
@@ -318,8 +428,16 @@ public class GameUI extends JFrame {
         try {
             strategyList = CombatLogPersistence.loadStrategy("estrategia.txt");
             useStrategyFile = !strategyList.isEmpty();
+            strategyIndex = 0;
+            if (useStrategyFile) {
+                turnDetailArea.append("📄 Archivo de estrategia cargado con " + strategyList.size() + " movimientos.\n");
+                turnDetailArea.append("🔄 El archivo se repetirá en bucle hasta que termine el combate.\n");
+            } else {
+                turnDetailArea.append("⚠️ No se encontró archivo estrategia.txt. Usa los botones para jugar.\n");
+            }
         } catch (IOException e) {
             useStrategyFile = false;
+            turnDetailArea.append("⚠️ Error cargando estrategia.txt. Usa los botones para jugar.\n");
         }
     }
 
@@ -354,12 +472,12 @@ public class GameUI extends JFrame {
         turnDetailArea.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
         JScrollPane turnDetailScroll = new JScrollPane(turnDetailArea);
         turnDetailScroll.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(ACCENT, 1),
-                " DETALLE DE TURNOS",
-                TitledBorder.LEFT,
-                TitledBorder.TOP,
-                new Font("SansSerif", Font.BOLD, 12),
-                ACCENT
+            BorderFactory.createLineBorder(ACCENT, 1),
+            " DETALLE DE TURNOS",
+            TitledBorder.LEFT,
+            TitledBorder.TOP,
+            new Font("SansSerif", Font.BOLD, 12),
+            ACCENT
         ));
         turnDetailScroll.setPreferredSize(new Dimension(400, 250));
 
@@ -437,160 +555,338 @@ public class GameUI extends JFrame {
 
         setVisible(true);
 
-        enableButtons(true);
         startCombatLoop();
     }
 
     private void startCombatLoop() {
-        Thread combatThread = new Thread(() -> {
-            while (!combatSystem.isGameOver()) {
-                model.Robot nextTurn = combatSystem.getTurnManager().getNextTurn();
-                if (nextTurn != null) {
-                    final model.Robot currentTurn = nextTurn;
-                    SwingUtilities.invokeLater(() -> {
-                        turnLabel.setText("Turno de: " + currentTurn.getName());
-                        if (currentTurn == combatSystem.getOpponent()) {
-                            simulateOpponentMove();
-                        }
-                    });
-                }
-
+        model.Robot player = combatSystem.getPlayer();
+        model.Robot opponent = combatSystem.getOpponent();
+        
+        boolean playerStarts = player.getStats().getSpd() >= opponent.getStats().getSpd();
+        isMyTurn = playerStarts;
+        
+        turnDetailArea.append("\n");
+        turnDetailArea.append("╔════════════════════════════════════════════════════════════════════════════════╗\n");
+        turnDetailArea.append("║                              INICIO DEL COMBATE                              ║\n");
+        turnDetailArea.append("╠════════════════════════════════════════════════════════════════════════════════╣\n");
+        if (playerStarts) {
+            turnDetailArea.append("║  🎯 " + player.getName() + " comienza primero (Velocidad: " + player.getStats().getSpd() + 
+                                  " > " + opponent.getStats().getSpd() + ")" + 
+                                  " ".repeat(Math.max(0, 40)) + "║\n");
+        } else {
+            turnDetailArea.append("║  🎯 " + opponent.getName() + " comienza primero (Velocidad: " + opponent.getStats().getSpd() + 
+                                  " > " + player.getStats().getSpd() + ")" + 
+                                  " ".repeat(Math.max(0, 40)) + "║\n");
+        }
+        turnDetailArea.append("╚════════════════════════════════════════════════════════════════════════════════╝\n\n");
+        
+        startOpponentListener();
+        
+        if (isMyTurn) {
+            turnLabel.setText("Tu turno! (" + player.getName() + ")");
+            enableButtons(true);
+            
+            if (useStrategyFile) {
+                turnDetailArea.append("🎮 Modo automático: Ejecutando estrategia...\n");
+                Timer startTimer = new Timer(1000, e -> {
+                    if (isMyTurn && !combatSystem.isGameOver() && !gameEnded) {
+                        executeNextStrategyMove();
+                    }
+                });
+                startTimer.setRepeats(false);
+                startTimer.start();
+            } else {
+                turnDetailArea.append("🎮 Modo manual: Haz clic en un botón para comenzar.\n");
+            }
+        } else {
+            turnLabel.setText("Turno de " + opponent.getName());
+            enableButtons(false);
+            turnDetailArea.append("⏳ Esperando que " + opponent.getName() + " realice su primer movimiento...\n");
+        }
+    }
+    
+    private void executeNextStrategyMove() {
+        if (!useStrategyFile || combatSystem.isGameOver() || gameEnded) {
+            return;
+        }
+        
+        if (!isMyTurn) {
+            return;
+        }
+        
+        if (strategyIndex >= strategyList.size()) {
+            strategyIndex = 0;
+            turnDetailArea.append("\n🔄 CICLO COMPLETO - Reiniciando estrategia desde el principio 🔄\n\n");
+        }
+        
+        if (strategyIndex >= strategyList.size()) {
+            return;
+        }
+        
+        final int currentIndex = strategyIndex;
+        String moveStr = strategyList.get(currentIndex);
+        Move move = Move.fromString(moveStr);
+        
+        turnDetailArea.append("📜 [Estrategia] Movimiento: " + moveStr + " (línea " + (currentIndex + 1) + ")\n");
+        
+        strategyIndex++;
+        
+        Timer timer = new Timer(800, e -> {
+            if (isMyTurn && !combatSystem.isGameOver() && !gameEnded) {
+                performMove(move);
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
+    }
+    
+    private void startOpponentListener() {
+        Thread listenerThread = new Thread(() -> {
+            while (combatActive && !combatSystem.isGameOver() && !gameEnded) {
                 try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
+                    String receivedData = isServer ? server.receiveMove() : client.receiveMove();
+                    
+                    if (receivedData != null && !receivedData.isEmpty()) {
+                        if (receivedData.equals("GAME_OVER")) {
+                            SwingUtilities.invokeLater(() -> {
+                                if (!gameEnded) {
+                                    endGame();
+                                }
+                            });
+                            break;
+                        }
+                        
+                        // Formato: MOVEMENT:RESULT:DAMAGE:HEAL:NRG_CHANGE:TARGET_HP:ACTOR_HP
+                        String[] parts = receivedData.split(":");
+                        String moveStr = parts[0];
+                        String result = parts.length > 1 ? parts[1] : "";
+                        int damage = parts.length > 2 ? Integer.parseInt(parts[2]) : 0;
+                        int heal = parts.length > 3 ? Integer.parseInt(parts[3]) : 0;
+                        int nrgChange = parts.length > 4 ? Integer.parseInt(parts[4]) : 0;
+                        int targetHp = parts.length > 5 ? Integer.parseInt(parts[5]) : 0;
+                        int actorHp = parts.length > 6 ? Integer.parseInt(parts[6]) : 0;
+                        
+                        Move opponentMove = Move.fromString(moveStr);
+                        model.Robot opponent = combatSystem.getOpponent();
+                        model.Robot player = combatSystem.getPlayer();
+                        
+                        SwingUtilities.invokeLater(() -> {
+                            if (combatSystem.isGameOver() || gameEnded) return;
+                            
+                            turnCounter++;
+                            
+                            StringBuilder sb = new StringBuilder();
+                            sb.append("\n");
+                            sb.append("================================================================================\n");
+                            sb.append("                               TURNO ").append(turnCounter).append("\n");
+                            sb.append("================================================================================\n");
+                            sb.append(" ").append(opponent.getName()).append(" realiza su movimiento...\n");
+                            turnDetailArea.append(sb.toString());
+                            
+                            String moveIcon = getMoveIcon(opponentMove);
+                            String moveName = getMoveName(opponentMove);
+                            
+                            turnDetailArea.append(" " + moveIcon + " " + opponent.getName() + " usa " + moveName + "\n");
+                            
+                            // APLICAR LOS EFECTOS REALES (los que ya calculó el atacante)
+                            if (opponentMove == Move.ATTACK || opponentMove == Move.SPECIAL) {
+                                if (result.equals("DODGE")) {
+                                    turnDetailArea.append("   └─ ¡" + player.getName() + " esquivó el ataque! (Sin daño)\n");
+                                } else if (result.equals("FAIL")) {
+                                    turnDetailArea.append("   └─ Falló: Energía insuficiente\n");
+                                } else {
+                                    turnDetailArea.append("   └─ Causó " + damage + " de daño a " + player.getName() + "\n");
+                                    player.getStats().setHp(targetHp);
+                                    turnDetailArea.append("   └─ ❤️ " + player.getName() + " HP: " + (targetHp + damage) + " → " + targetHp + "\n");
+                                }
+                                // Aplicar cambio de energía
+                                if (nrgChange != 0) {
+                                    opponent.getStats().setNrg(opponent.getStats().getNrg() + nrgChange);
+                                    if (opponent.getStats().getNrg() < 0) opponent.getStats().setNrg(0);
+                                    if (opponent.getStats().getNrg() > 100) opponent.getStats().setNrg(100);
+                                }
+                            } else if (opponentMove == Move.HEAL) {
+                                turnDetailArea.append("   └─ Recuperó " + heal + " HP\n");
+                                opponent.getStats().setHp(targetHp);
+                                turnDetailArea.append("   └─ ❤️ " + opponent.getName() + " HP: " + (targetHp - heal) + " → " + targetHp + "\n");
+                            } else if (opponentMove == Move.CHARGE) {
+                                int oldNrg = opponent.getStats().getNrg();
+                                opponent.getStats().setNrg(oldNrg + nrgChange);
+                                if (opponent.getStats().getNrg() > 100) opponent.getStats().setNrg(100);
+                                turnDetailArea.append("   └─ Cargó " + nrgChange + " de energía\n");
+                                turnDetailArea.append("   └─ ⚡ " + opponent.getName() + " NRG: " + oldNrg + " → " + opponent.getStats().getNrg() + "\n");
+                            } else if (opponentMove == Move.DODGE) {
+                                double prob = opponent.getDodgeCount() >= 2 ? 75 : 50;
+                                turnDetailArea.append("   └─ Preparado para esquivar (Prob: " + (int)prob + "%)\n");
+                                opponent.incrementDodgeCount();
+                            }
+                            
+                            turnDetailArea.append("--------------------------------------------------------------------------------\n");
+                            
+                            updateStatsDisplay();
+                            
+                            if (player.getStats().getHp() <= 0 || opponent.getStats().getHp() <= 0) {
+                                combatSystem.getPlayer().getStats().setHp(player.getStats().getHp());
+                                combatSystem.getOpponent().getStats().setHp(opponent.getStats().getHp());
+                                sendGameOver();
+                                endGame();
+                                return;
+                            }
+                            
+                            isMyTurn = true;
+                            turnLabel.setText("Tu turno! (" + player.getName() + ")");
+                            enableButtons(true);
+                            
+                            if (useStrategyFile && !gameEnded) {
+                                turnDetailArea.append("🎮 Ejecutando siguiente movimiento de la estrategia...\n");
+                                Timer timer = new Timer(500, e -> {
+                                    if (isMyTurn && !combatSystem.isGameOver() && !gameEnded) {
+                                        executeNextStrategyMove();
+                                    }
+                                });
+                                timer.setRepeats(false);
+                                timer.start();
+                            } else if (!useStrategyFile && !gameEnded) {
+                                turnDetailArea.append("🎮 Tu turno - Haz clic en un botón.\n");
+                            }
+                        });
+                    }
+                } catch (IOException e) {
+                    if (combatActive && !combatSystem.isGameOver() && !gameEnded) {
+                        SwingUtilities.invokeLater(() -> {
+                            JOptionPane.showMessageDialog(null, "Error de comunicación: " + e.getMessage());
+                            endGame();
+                        });
+                    }
+                    break;
+                } catch (Exception e) {
                     break;
                 }
             }
         });
-        combatThread.start();
+        listenerThread.setDaemon(true);
+        listenerThread.start();
     }
-
-    private void logTurnDetail(String message) {
-        turnDetailArea.append(message + "\n");
-        turnDetailArea.setCaretPosition(turnDetailArea.getDocument().getLength());
+    
+    private void sendGameOver() {
+        try {
+            if (isServer) {
+                server.sendMove("GAME_OVER");
+            } else {
+                client.sendMove("GAME_OVER");
+            }
+        } catch (IOException e) {
+            // Ignorar
+        }
     }
-
-    private void simulateOpponentMove() {
-        Move[] moves = {Move.ATTACK, Move.ATTACK, Move.ATTACK, Move.SPECIAL, Move.HEAL};
-        Move randomMove = moves[(int)(Math.random() * moves.length)];
-        performMove(randomMove);
-    }
-
+    
     private void performMove(Move move) {
-        if (combatSystem.isGameOver()) {
+        if (combatSystem.isGameOver() || gameEnded) {
             endGame();
             return;
         }
-
-        turnCounter++;
-
-        // Determinar quién tiene mayor velocidad para el log
+        
+        if (!isMyTurn) {
+            turnDetailArea.append("⚠️ No es tu turno! Espera al oponente.\n");
+            return;
+        }
+        
         model.Robot player = combatSystem.getPlayer();
         model.Robot opponent = combatSystem.getOpponent();
-        boolean playerStarts = player.getStats().getSpd() >= opponent.getStats().getSpd();
-        model.Robot first = playerStarts ? player : opponent;
-        model.Robot second = playerStarts ? opponent : player;
-
-        // Log de inicio de turno
+        
+        turnCounter++;
+        
         StringBuilder sb = new StringBuilder();
         sb.append("\n");
         sb.append("================================================================================\n");
         sb.append("                               TURNO ").append(turnCounter).append("\n");
         sb.append("================================================================================\n");
-        sb.append(" Inicia: ").append(first.getName()).append(" (Velocidad: ").append(first.getStats().getSpd());
-        sb.append(") > ").append(second.getName()).append(" (Velocidad: ").append(second.getStats().getSpd()).append(")\n");
-        sb.append("--------------------------------------------------------------------------------\n");
         turnDetailArea.append(sb.toString());
-
-        // Guardar estado antes del movimiento del jugador
+        
+        // Guardar estado ANTES del movimiento
         int playerHpBefore = player.getStats().getHp();
         int opponentHpBefore = opponent.getStats().getHp();
         int playerNrgBefore = player.getStats().getNrg();
         int opponentNrgBefore = opponent.getStats().getNrg();
-
+        
+        // EJECUTAR movimiento (SOLO AQUÍ se calcula el daño)
         String result = combatSystem.executeMove(player, opponent, move);
-
-        // Guardar estado después del movimiento
+        
+        // Estado DESPUÉS del movimiento
         int playerHpAfter = player.getStats().getHp();
         int opponentHpAfter = opponent.getStats().getHp();
         int playerNrgAfter = player.getStats().getNrg();
         int opponentNrgAfter = opponent.getStats().getNrg();
-
-        double playerDamage = playerHpBefore - playerHpAfter;
-        double opponentDamage = opponentHpBefore - opponentHpAfter;
-
-        // Mostrar detalle del movimiento
+        
+        // Calcular cambios
+        int damage = opponentHpBefore - opponentHpAfter;
+        int heal = playerHpAfter - playerHpBefore;
+        int nrgChange = 0;
+        int targetHp = 0;
+        int actorHp = 0;
+        
         String moveIcon = getMoveIcon(move);
         String moveName = getMoveName(move);
-        String moveDetail = "";
-
+        
+        turnDetailArea.append(" " + moveIcon + " " + player.getName() + " usa " + moveName + "\n");
+        
+        // Preparar datos para enviar al oponente
+        String moveData = move.name() + ":" + result + ":";
+        
         if (move == Move.ATTACK || move == Move.SPECIAL) {
-            boolean dodged = result.equals("DODGE");
-            if (dodged) {
-                moveDetail = " " + opponent.getName() + " esquivó el ataque! (Sin daño)";
+            if (result.equals("DODGE")) {
+                turnDetailArea.append("   └─ ¡" + opponent.getName() + " esquivó el ataque! (Sin daño)\n");
+                moveData += "0:0:0:" + opponentHpAfter + ":" + playerHpAfter;
+            } else if (result.equals("FAIL")) {
+                turnDetailArea.append("   └─ Falló: Energía insuficiente\n");
+                moveData += "0:0:0:" + opponentHpAfter + ":" + playerHpAfter;
             } else {
-                moveDetail = String.format(" Causó %.2f de daño a %s | %s HP: %d",
-                        opponentDamage, opponent.getName(), opponent.getName(), opponentHpAfter);
+                turnDetailArea.append("   └─ Causó " + damage + " de daño a " + opponent.getName() + "\n");
+                turnDetailArea.append("   └─ ❤️ " + opponent.getName() + " HP: " + opponentHpBefore + " → " + opponentHpAfter + "\n");
+                nrgChange = playerNrgAfter - playerNrgBefore;
+                moveData += damage + ":0:" + nrgChange + ":" + opponentHpAfter + ":" + playerHpAfter;
             }
         } else if (move == Move.HEAL) {
-            moveDetail = String.format(" Recuperó 10 HP | %s HP: %d", player.getName(), playerHpAfter);
+            turnDetailArea.append("   └─ Recuperó " + heal + " HP\n");
+            turnDetailArea.append("   └─ ❤️ " + player.getName() + " HP: " + playerHpBefore + " → " + playerHpAfter + "\n");
+            moveData += "0:" + heal + ":0:" + playerHpAfter + ":" + opponentHpAfter;
         } else if (move == Move.CHARGE) {
-            moveDetail = String.format(" Cargó energía | %s NRG: %d", player.getName(), playerNrgAfter);
+            nrgChange = playerNrgAfter - playerNrgBefore;
+            turnDetailArea.append("   └─ Cargó " + nrgChange + " de energía\n");
+            turnDetailArea.append("   └─ ⚡ " + player.getName() + " NRG: " + playerNrgBefore + " → " + playerNrgAfter + "\n");
+            moveData += "0:0:" + nrgChange + ":" + opponentHpAfter + ":" + playerHpAfter;
         } else if (move == Move.DODGE) {
             double prob = player.getDodgeCount() >= 2 ? 75 : 50;
-            moveDetail = String.format(" Postura de esquive (%.0f%% de probabilidad)", prob);
+            turnDetailArea.append("   └─ Preparado para esquivar (Prob: " + (int)prob + "%)\n");
+            moveData += "0:0:0:" + opponentHpAfter + ":" + playerHpAfter;
         }
-
-        turnDetailArea.append(" " + moveIcon + " " + player.getName() + " usa " + moveName + moveDetail + "\n");
+        
         turnDetailArea.append("--------------------------------------------------------------------------------\n");
-
-        // Simular movimiento del oponente
-        Move opponentMove = simulateOpponentMoveLogic();
-        String opponentResult = combatSystem.executeMove(opponent, player, opponentMove);
-
-        // Estado después del movimiento del oponente
-        int playerHpFinal = player.getStats().getHp();
-        int opponentHpFinal = opponent.getStats().getHp();
-        int playerNrgFinal = player.getStats().getNrg();
-        int opponentNrgFinal = opponent.getStats().getNrg();
-
-        double playerDamageFromOpponent = playerHpAfter - playerHpFinal;
-        double opponentDamageFromOpponent = opponentHpAfter - opponentHpFinal;
-
-        String oppMoveIcon = getMoveIcon(opponentMove);
-        String oppMoveName = getMoveName(opponentMove);
-        String oppMoveDetail = "";
-
-        if (opponentMove == Move.ATTACK || opponentMove == Move.SPECIAL) {
-            boolean dodged = opponentResult.equals("DODGE");
-            if (dodged) {
-                oppMoveDetail = " " + player.getName() + " esquivó el ataque! (Sin daño)";
-            } else {
-                oppMoveDetail = String.format(" Causó %.2f de daño a %s | %s HP: %d",
-                        playerDamageFromOpponent, player.getName(), player.getName(), playerHpFinal);
-            }
-        } else if (opponentMove == Move.HEAL) {
-            oppMoveDetail = String.format(" Recuperó 10 HP | %s HP: %d", opponent.getName(), opponentHpFinal);
-        } else if (opponentMove == Move.CHARGE) {
-            oppMoveDetail = String.format(" Cargó energía | %s NRG: %d", opponent.getName(), opponentNrgFinal);
-        } else if (opponentMove == Move.DODGE) {
-            double prob = opponent.getDodgeCount() >= 2 ? 75 : 50;
-            oppMoveDetail = String.format(" Postura de esquive (%.0f%% de probabilidad)", prob);
-        }
-
-        turnDetailArea.append(" " + oppMoveIcon + " " + opponent.getName() + " usa " + oppMoveName + oppMoveDetail + "\n");
-        turnDetailArea.append("================================================================================\n\n");
-
+        
         updateStatsDisplay();
-
-        if (combatSystem.isGameOver()) {
-            endGame();
+        
+        // Enviar datos COMPLETOS al oponente
+        try {
+            if (isServer) {
+                server.sendMove(moveData);
+            } else {
+                client.sendMove(moveData);
+            }
+        } catch (IOException e) {
+            turnDetailArea.append("❌ Error enviando movimiento: " + e.getMessage() + "\n");
         }
-    }
-
-    private Move simulateOpponentMoveLogic() {
-        Move[] moves = {Move.ATTACK, Move.ATTACK, Move.ATTACK, Move.SPECIAL, Move.HEAL};
-        return moves[(int)(Math.random() * moves.length)];
+        
+        // Verificar si el juego terminó
+        if (combatSystem.isGameOver()) {
+            sendGameOver();
+            endGame();
+            return;
+        }
+        
+        // Cambiar turno
+        isMyTurn = false;
+        turnLabel.setText("Turno de " + opponent.getName());
+        enableButtons(false);
     }
 
     private String getMoveIcon(Move move) {
@@ -616,37 +912,57 @@ public class GameUI extends JFrame {
     }
 
     private void updateStatsDisplay() {
-        playerStatsLabel.setText("Jugador: " + combatSystem.getPlayer().getStats().toString());
-        opponentStatsLabel.setText("Rival: " + combatSystem.getOpponent().getStats().toString());
-        combatLogArea.append(combatSystem.getCombatLog().get(combatSystem.getCombatLog().size() - 1) + "\n");
-        combatLogArea.setCaretPosition(combatLogArea.getDocument().getLength());
+        model.Robot player = combatSystem.getPlayer();
+        model.Robot opponent = combatSystem.getOpponent();
+        
+        if (playerStatsLabel != null) {
+            playerStatsLabel.setText("Jugador: " + player.getStats().toString());
+        }
+        if (opponentStatsLabel != null) {
+            opponentStatsLabel.setText("Rival: " + opponent.getStats().toString());
+        }
+        if (combatLogArea != null && !combatSystem.getCombatLog().isEmpty()) {
+            combatLogArea.append(combatSystem.getCombatLog().get(combatSystem.getCombatLog().size() - 1) + "\n");
+            combatLogArea.setCaretPosition(combatLogArea.getDocument().getLength());
+        }
         if (playerStatusCard != null) {
-            playerStatusCard.updateFromRobot(combatSystem.getPlayer());
+            playerStatusCard.updateFromRobot(player);
         }
         if (opponentStatusCard != null) {
-            opponentStatusCard.updateFromRobot(combatSystem.getOpponent());
+            opponentStatusCard.updateFromRobot(opponent);
         }
         if (playerCharacterLabel != null) {
-            playerCharacterLabel.setText(combatSystem.getPlayer().getName());
+            playerCharacterLabel.setText(player.getName());
         }
         if (opponentCharacterLabel != null) {
-            opponentCharacterLabel.setText(combatSystem.getOpponent().getName());
+            opponentCharacterLabel.setText(opponent.getName());
         }
     }
 
     private void endGame() {
+        if (gameEnded) return;
+        gameEnded = true;
+        combatActive = false;
+        
+        model.Robot player = combatSystem.getPlayer();
+        model.Robot opponent = combatSystem.getOpponent();
+        
+        // Asegurar que ambos tengan los mismos HP finales
+        player.getStats().setHp(player.getStats().getHp());
+        opponent.getStats().setHp(opponent.getStats().getHp());
+        
         model.Robot winner = combatSystem.getWinner();
-
+        
         StringBuilder finalMsg = new StringBuilder();
         finalMsg.append("\n");
         finalMsg.append("================================================================================\n");
-        finalMsg.append("                              FIN DEL JUEGO\n");
+        finalMsg.append("                              🏆 FIN DEL JUEGO 🏆\n");
         finalMsg.append("================================================================================\n");
         finalMsg.append("                    GANADOR: ").append(winner.getName()).append("\n");
         finalMsg.append("================================================================================\n\n");
         turnDetailArea.append(finalMsg.toString());
-
-        JOptionPane.showMessageDialog(this, "¡Fin del juego! Ganador: " + winner.getName());
+        
+        JOptionPane.showMessageDialog(this, "¡Fin del juego!\nGanador: " + winner.getName());
 
         int option = JOptionPane.showConfirmDialog(this, "¿Guardar configuración del robot?", "Guardar Robot", JOptionPane.YES_NO_OPTION);
         if (option == JOptionPane.YES_OPTION) {
@@ -672,11 +988,11 @@ public class GameUI extends JFrame {
     }
 
     private void enableButtons(boolean enable) {
-        attackButton.setEnabled(enable);
-        specialButton.setEnabled(enable);
-        dodgeButton.setEnabled(enable);
-        healButton.setEnabled(enable);
-        chargeButton.setEnabled(enable);
+        if (attackButton != null) attackButton.setEnabled(enable);
+        if (specialButton != null) specialButton.setEnabled(enable);
+        if (dodgeButton != null) dodgeButton.setEnabled(enable);
+        if (healButton != null) healButton.setEnabled(enable);
+        if (chargeButton != null) chargeButton.setEnabled(enable);
     }
 
     private JPanel createHudHeader() {

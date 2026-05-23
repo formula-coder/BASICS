@@ -38,23 +38,39 @@ public class RobotPersistence {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_NAME))) {
             return (List<Robot>) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            // Si hay error, retornar lista vacía
             System.err.println("Error cargando robots: " + e.getMessage());
             return new ArrayList<>();
         }
     }
 
     public static Robot loadRobot(String name) {
-        try {
-            List<Robot> robots = loadAllRobots();
-            for (Robot robot : robots) {
-                if (robot.getName().equals(name)) {
-                    return robot;
-                }
+        List<Robot> robots = loadAllRobots();
+        for (Robot robot : robots) {
+            if (robot.getName().equals(name)) {
+                return robot;
             }
-        } catch (Exception e) {
-            System.err.println("Error cargando robot específico: " + e.getMessage());
         }
         return null;
+    }
+
+    public static boolean deleteRobot(String name) throws IOException {
+        List<Robot> robots = loadAllRobots();
+        boolean removed = robots.removeIf(robot -> robot.getName().equals(name));
+
+        if (removed) {
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
+                oos.writeObject(robots);
+            }
+        }
+        return removed;
+    }
+
+    public static List<String> getAllRobotNames() {
+        List<Robot> robots = loadAllRobots();
+        List<String> names = new ArrayList<>();
+        for (Robot robot : robots) {
+            names.add(robot.getName());
+        }
+        return names;
     }
 }
