@@ -96,4 +96,4 @@ Para preguntas o sugerencias, no dudes en abrir un issue en el repositorio.
 
 ---
 
-**Última actualización**: Junio 2026
+**Última actualización**: Junio 2026.
