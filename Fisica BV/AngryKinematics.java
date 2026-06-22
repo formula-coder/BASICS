@@ -10,6 +10,8 @@ public class AngryKinematics extends JFrame {
     private Timer timer;
     private boolean isFlying = false;
     private JComboBox<String> cmbModo;
+    private JCheckBox chkSeguir;
+    private JButton btnPlayPause; // Botón dinámico declarado a nivel de clase
 
     public AngryKinematics() {
         setTitle("Angry Birds - Gráficas de Magnitud vs Tiempo");
@@ -25,15 +27,18 @@ public class AngryKinematics extends JFrame {
         
         timer = new Timer(16, e -> {
             if (isFlying) {
-                time += 0.02; // Velocidad del tiempo
+                time += 0.02; 
                 simPanel.updatePhysics(time);
-                if (time > 10) stopFlight(); // Se detiene a los 10 segundos
+                if (time >= 15) {
+                    stopFlight(); 
+                    btnPlayPause.setText("INICIAR"); // Restaura el botón al terminar
+                }
             }
         });
     }
 
     private JPanel createControls() {
-        JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 15));
         p.setBackground(Color.WHITE);
         p.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
@@ -43,22 +48,67 @@ public class AngryKinematics extends JFrame {
             "Magnitud: Aceleración |a(t)|"
         });
         cmbModo.setFont(new Font("Arial", Font.BOLD, 16));
-        cmbModo.addActionListener(e -> { stopFlight(); simPanel.reset(); simPanel.updatePhysics(0); });
+        cmbModo.addActionListener(e -> { 
+            stopFlight(); 
+            time = 0; 
+            simPanel.reset(); 
+            simPanel.updatePhysics(0); 
+            if (btnPlayPause != null) btnPlayPause.setText("INICIAR");
+        });
 
-        JButton btnLaunch = new JButton("INICIAR");
-        btnLaunch.setBackground(new Color(220, 53, 38));
-        btnLaunch.setForeground(Color.WHITE);
-        btnLaunch.setFont(new Font("Arial", Font.BOLD, 16));
-        btnLaunch.addActionListener(e -> { time = 0; isFlying = true; simPanel.reset(); timer.start(); });
+        chkSeguir = new JCheckBox("Seguir Pájaro", true);
+        chkSeguir.setBackground(Color.WHITE);
+        chkSeguir.setFont(new Font("Arial", Font.BOLD, 14));
+
+        // Lógica del botón Dinámico: INICIAR -> PAUSAR -> REANUDAR
+        btnPlayPause = new JButton("INICIAR");
+        btnPlayPause.setBackground(new Color(220, 53, 38));
+        btnPlayPause.setForeground(Color.WHITE);
+        btnPlayPause.setFont(new Font("Arial", Font.BOLD, 16));
+        btnPlayPause.addActionListener(e -> { 
+            if (time >= 15) {
+                // Si el vuelo ya había terminado, reinicia desde cero
+                time = 0;
+                simPanel.reset();
+                isFlying = true;
+                timer.start();
+                btnPlayPause.setText("PAUSAR");
+            } else if (isFlying) {
+                // Si está volando, congela la simulación donde quedó
+                isFlying = false;
+                timer.stop();
+                btnPlayPause.setText("REANUDAR");
+            } else {
+                // Si está en 0 o estaba pausado, arranca/reanuda
+                isFlying = true;
+                if (time == 0) simPanel.reset();
+                timer.start();
+                btnPlayPause.setText("PAUSAR");
+            }
+        });
 
         JButton btnReset = new JButton("REINICIAR");
         btnReset.setFont(new Font("Arial", Font.BOLD, 14));
-        btnReset.addActionListener(e -> stopFlight());
+        btnReset.addActionListener(e -> { 
+            stopFlight(); 
+            time = 0; 
+            simPanel.reset(); 
+            simPanel.updatePhysics(0); 
+            btnPlayPause.setText("INICIAR"); // Restaura el botón al reiniciar
+        });
+
+        JButton btnVerTodo = new JButton("VER TODO");
+        btnVerTodo.setBackground(new Color(70, 130, 180));
+        btnVerTodo.setForeground(Color.WHITE);
+        btnVerTodo.setFont(new Font("Arial", Font.BOLD, 14));
+        btnVerTodo.addActionListener(e -> simPanel.verTodo());
 
         p.add(new JLabel("GRAFICAR: "));
         p.add(cmbModo);
-        p.add(btnLaunch);
+        p.add(chkSeguir);
+        p.add(btnPlayPause);
         p.add(btnReset);
+        p.add(btnVerTodo);
 
         return p;
     }
@@ -66,20 +116,19 @@ public class AngryKinematics extends JFrame {
     private void stopFlight() {
         isFlying = false; 
         timer.stop(); 
-        time = 0;
-        simPanel.updatePhysics(0);
     }
 
     class SimulationPanel extends JPanel {
         private double pX, pY;
         private double currentMag = 0;
         private ArrayList<Point.Double> trail = new ArrayList<>();
-        private double zoom = 1.0, offX = 80, offY = 650;
+        private double zoom = 1.0, offX = 100, offY = 680;
         private Point lastMouse;
 
         public SimulationPanel() {
             addMouseWheelListener(e -> {
                 if (e.getWheelRotation() < 0) zoom *= 1.1; else zoom /= 1.1;
+                chkSeguir.setSelected(false); 
                 repaint();
             });
 
@@ -89,43 +138,75 @@ public class AngryKinematics extends JFrame {
             
             addMouseMotionListener(new MouseMotionAdapter() {
                 public void mouseDragged(MouseEvent e) {
-                    if (SwingUtilities.isRightMouseButton(e)) {
-                        offX += (e.getX() - lastMouse.x); offY += (e.getY() - lastMouse.y);
-                        lastMouse = e.getPoint(); repaint();
+                    if (SwingUtilities.isRightMouseButton(e) || SwingUtilities.isLeftMouseButton(e)) {
+                        offX += (e.getX() - lastMouse.x); 
+                        offY += (e.getY() - lastMouse.y);
+                        lastMouse = e.getPoint(); 
+                        chkSeguir.setSelected(false); 
+                        repaint();
                     }
                 }
             });
         }
 
-        public void reset() { trail.clear(); repaint(); }
+        public void reset() { trail.clear(); zoom = 1.0; offX = 100; offY = 680; repaint(); }
+
+        public void verTodo() {
+            chkSeguir.setSelected(false); 
+            int modo = cmbModo.getSelectedIndex();
+            double tMax = 15.0;
+            double scaleX = 120.0;
+            double scaleY = 40.0;
+            
+            double maxX = tMax * scaleX;
+            double maxY = 0;
+            
+            if (modo == 0) maxY = Math.sqrt(Math.pow(tMax * tMax, 2) + Math.pow(tMax, 2)) * scaleY;
+            else if (modo == 1) maxY = Math.sqrt(Math.pow(2 * tMax, 2) + Math.pow(1, 2)) * scaleY;
+            else maxY = 2.0 * scaleY;
+
+            if (maxY < 400) maxY = 400; 
+
+            double margenX = 100.0; 
+            double margenY = 150.0;
+            
+            double zoomX = (getWidth() - margenX * 2) / maxX;
+            double zoomY = (getHeight() - margenY * 2) / maxY;
+            zoom = Math.min(zoomX, zoomY);
+            
+            double graphWidth = maxX * zoom;
+            double graphHeight = maxY * zoom;
+            
+            offX = (getWidth() - graphWidth) / 2.0; 
+            offY = getHeight() - (getHeight() - graphHeight) / 2.0;
+            
+            repaint();
+        }
 
         public void updatePhysics(double t) {
             int modo = cmbModo.getSelectedIndex();
             
-            // Cálculos basados en A=1, alpha=1, beta=1
-            // r(t) = t^2 i + t j
             double rMag = Math.sqrt(Math.pow(t * t, 2) + Math.pow(t, 2));
-            // v(t) = 2t i + 1 j
             double vMag = Math.sqrt(Math.pow(2 * t, 2) + Math.pow(1, 2));
-            // a(t) = 2 i + 0 j
             double aMag = 2.0;
 
-            // Escalas visuales para mapear Tiempo y Magnitud a los pixeles de la pantalla
-            double scaleX = 120.0; // 1 segundo = 120 pixeles en eje X
-            double scaleY = 40.0;  // 1 unidad de magnitud = 40 pixeles en eje Y
+            double scaleX = 120.0; 
+            double scaleY = 40.0;  
 
             pX = t * scaleX;
 
-            if (modo == 0) {
-                currentMag = rMag;
-            } else if (modo == 1) {
-                currentMag = vMag;
-            } else {
-                currentMag = aMag;
-            }
+            if (modo == 0) currentMag = rMag;
+            else if (modo == 1) currentMag = vMag;
+            else currentMag = aMag;
 
             pY = currentMag * scaleY;
             trail.add(new Point.Double(pX, pY));
+
+            if (chkSeguir.isSelected()) {
+                offX = getWidth() / 2.0 - pX * zoom;
+                offY = getHeight() / 2.0 + pY * zoom;
+            }
+
             repaint();
         }
 
@@ -135,59 +216,97 @@ public class AngryKinematics extends JFrame {
             Graphics2D g2d = (Graphics2D) g;
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-            // Fondo plano cartesiano
             g2d.setColor(Color.WHITE);
             g2d.fillRect(0, 0, getWidth(), getHeight());
 
             AffineTransform old = g2d.getTransform();
+            
+            // --- CAPA 1: MATEMÁTICA (Espacio Escalado) ---
             g2d.translate(offX, offY);
             g2d.scale(zoom, zoom);
 
-            drawGridAndAxes(g2d);
+            drawGridLines(g2d, zoom);
 
-            // Trayectoria
             g2d.setColor(Color.BLUE);
-            g2d.setStroke(new BasicStroke(4));
+            g2d.setStroke(new BasicStroke((float)(4.0 / zoom))); 
             for (int i = 1; i < trail.size(); i++) {
                 g2d.drawLine((int)trail.get(i-1).x, (int)-trail.get(i-1).y, (int)trail.get(i).x, (int)-trail.get(i).y);
             }
 
-            // Dibujar el Angry Bird siguiendo la gráfica
-            drawBird(g2d, (int)pX, (int)-pY);
+            // --- CAPA 2: INTERFAZ Y PERSONAJE (Espacio de Pantalla Original) ---
+            g2d.setTransform(old); 
 
-            g2d.setTransform(old);
+            drawAxesLabels(g2d);
+
+            int birdScreenX = (int)(offX + pX * zoom);
+            int birdScreenY = (int)(offY - pY * zoom);
+            drawBird(g2d, birdScreenX, birdScreenY);
+
             drawEquationHUD(g2d);
         }
 
-        private void drawGridAndAxes(Graphics2D g2d) {
-            g2d.setColor(new Color(230, 230, 230));
-            g2d.setStroke(new BasicStroke(1));
+        private void drawGridLines(Graphics2D g2d, double z) {
+            float strokeFino = (float)(1.0 / z);
+            float strokeGrueso = (float)(3.0 / z);
             
-            // Cuadrícula
-            for(int i=-1000; i<3000; i+=40) {
-                g2d.drawLine(i, -2000, i, 1000);
-                g2d.drawLine(-1000, -i, 3000, -i);
+            g2d.setColor(new Color(230, 230, 230));
+            g2d.setStroke(new BasicStroke(strokeFino));
+            
+            for(int i=-2000; i<=15000; i+=40) {
+                g2d.drawLine(i, -12000, i, 2000); 
+                g2d.drawLine(-2000, -i, 15000, -i); 
             }
 
-            // Ejes X e Y
             g2d.setColor(Color.BLACK);
-            g2d.setStroke(new BasicStroke(3));
-            g2d.drawLine(0, 0, 2000, 0); // Eje X (Tiempo)
-            g2d.drawLine(0, 0, 0, -1500); // Eje Y (Magnitud)
+            g2d.setStroke(new BasicStroke(strokeGrueso));
+            
+            int endX = 2200; 
+            int endY = -10000; 
+            g2d.drawLine((int)(-30/z), 0, endX, 0); 
+            g2d.drawLine(0, (int)(30/z), 0, endY); 
 
-            g2d.setFont(new Font("Arial", Font.BOLD, 16));
-            g2d.drawString("Tiempo (t) en segundos", 1000, 25);
-            g2d.drawString("Magnitud", -90, -800);
+            int aL = (int)(15/z);
+            int aW = (int)(8/z);
+            g2d.fillPolygon(new int[]{endX, endX, endX+aL}, new int[]{-aW, aW, 0}, 3);
+            g2d.fillPolygon(new int[]{-aW, aW, 0}, new int[]{endY, endY, endY-aL}, 3);
 
-            // Marcas en X (Tiempo)
-            for(int i=1; i<=15; i++) {
-                g2d.drawLine(i*120, -5, i*120, 5);
-                g2d.drawString(i+"s", i*120 - 10, 25);
+            int mark = (int)(6/z);
+            for(int i=1; i<=15; i++) g2d.drawLine(i*120, -mark, i*120, mark);
+            for(int i=1; i<=250; i++) {
+                if(i%5==0 || i<10) g2d.drawLine(-mark, -i*40, mark, -i*40);
+                else g2d.drawLine(-mark/2, -i*40, mark/2, -i*40);
             }
-            // Marcas en Y (Magnitud)
-            for(int i=1; i<=30; i++) {
-                g2d.drawLine(-5, -i*40, 5, -i*40);
-                g2d.drawString(String.valueOf(i), -25, -i*40 + 6);
+        }
+
+        private void drawAxesLabels(Graphics2D g2d) {
+            g2d.setColor(Color.BLACK);
+            g2d.setFont(new Font("Arial", Font.BOLD, 16));
+            
+            int originX = (int)offX;
+            int originY = (int)offY;
+            
+            g2d.drawString("0", originX - 18, originY + 22);
+            g2d.drawString("Tiempo (t) en s", (int)(offX + 2200*zoom) - 130, originY + 35);
+            g2d.drawString("Magnitud", originX - 90, (int)(offY - 10000*zoom));
+
+            for(int i=1; i<=15; i++) {
+                boolean drawX = (zoom >= 0.5) || (i % 5 == 0);
+                if (drawX) {
+                    g2d.drawString(i+"s", (int)(offX + i*120*zoom) - 10, originY + 25);
+                }
+            }
+            
+            for(int i=1; i<=250; i++) {
+                boolean drawY = false;
+                if (zoom >= 0.8 && (i % 1 == 0)) drawY = true;
+                else if (zoom >= 0.3 && (i % 5 == 0 || i < 10)) drawY = true;
+                else if (zoom >= 0.1 && (i % 10 == 0)) drawY = true;
+                else if (i % 50 == 0) drawY = true;
+
+                if(drawY) {
+                    int offset = (i < 10) ? 22 : ((i < 100) ? 32 : 42);
+                    g2d.drawString(String.valueOf(i), originX - offset, (int)(offY - i*40*zoom) + 6);
+                }
             }
         }
 
