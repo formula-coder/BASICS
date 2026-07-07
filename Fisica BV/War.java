@@ -12,8 +12,10 @@ import java.util.Random;
 public class War extends JFrame {
 
     // Componentes de la interfaz
+    private JComboBox<String> comboModo; 
     private JSlider sldV1, sldTheta1, sldTheta2, sldDistancia;
     private JLabel lblV1, lblTheta1, lblTheta2, lblDistancia;
+    private JPanel panelTheta1, panelTheta2, panelDistancia, panelFijos;
     private JTextArea txtResultados;
     private CampoGuerra panelGrafico;
     private JButton btnSimular;
@@ -21,9 +23,13 @@ public class War extends JFrame {
     private JComboBox<String> comboAtacante, comboDefensor;
 
     // Variables de la fisica
-    private double v1, theta1Deg, theta2Deg, distancia;
-    private double v2, tiempoImpacto, tiempoVuelo;
-    private boolean interceptado;
+    private double v1;
+    private double theta1Deg; 
+    private double theta2Deg;  
+    private double distancia; 
+    
+    private double v2, tiempoImpacto, tiempoVuelo, alcanceMaximo;
+    private boolean interceptado, cayoCorto; // cayoCorto es la nueva regla de IA
     private double xImpacto, yImpacto;
     private final double gravedad = 9.81;
 
@@ -47,7 +53,7 @@ public class War extends JFrame {
         UIManager.put("Label.foreground", new Color(171, 178, 191));
         UIManager.put("TitledBorder.titleColor", new Color(97, 175, 239));
 
-        setTitle("Global Tactical Simulator v5.0 (Facciones y Banderas Dinámicas)");
+        setTitle("Global Tactical Simulator v8.0 (Smart Threat Detection)");
         setSize(1200, 750); 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -58,12 +64,28 @@ public class War extends JFrame {
         JPanel panelEntrada = new JPanel();
         panelEntrada.setLayout(new BoxLayout(panelEntrada, BoxLayout.Y_AXIS));
         panelEntrada.setBorder(BorderFactory.createTitledBorder("Centro de Comando Central"));
-        panelEntrada.setPreferredSize(new Dimension(300, 0));
+        panelEntrada.setPreferredSize(new Dimension(310, 0));
 
-        // SELECTOR DE FACCIONES
+        // 1. MODO DEL SISTEMA 
+        JPanel panelModo = new JPanel(new BorderLayout());
+        panelModo.setBackground(new Color(30, 35, 40));
+        panelModo.setBorder(BorderFactory.createTitledBorder("Modo del Sistema"));
+        panelModo.setMaximumSize(new Dimension(290, 60));
+        
+        comboModo = new JComboBox<>(new String[]{"Operador (Simplificado)", "Ingeniero (Control Total)"});
+        comboModo.setBackground(new Color(40, 45, 50));
+        comboModo.setForeground(new Color(253, 224, 71)); 
+        comboModo.setFont(new Font("Consolas", Font.BOLD, 13));
+        
+        panelModo.add(comboModo, BorderLayout.CENTER);
+        panelEntrada.add(Box.createVerticalStrut(5));
+        panelEntrada.add(panelModo);
+
+        // 2. SELECTOR DE FACCIONES 
         JPanel panelFacciones = new JPanel(new GridLayout(2, 2, 5, 5));
         panelFacciones.setBackground(new Color(30, 35, 40));
         panelFacciones.setBorder(BorderFactory.createTitledBorder("Selección de Facciones"));
+        panelFacciones.setMaximumSize(new Dimension(290, 80));
         
         comboAtacante = new JComboBox<>(PAISES);
         comboAtacante.setSelectedItem("Irán");
@@ -88,12 +110,11 @@ public class War extends JFrame {
         panelFacciones.add(comboAtacante);
         panelFacciones.add(lblDefensor);
         panelFacciones.add(comboDefensor);
-        panelFacciones.setMaximumSize(new Dimension(280, 80));
 
         panelEntrada.add(Box.createVerticalStrut(10));
         panelEntrada.add(panelFacciones);
 
-        // SLIDERS DE FISICA
+        // 3. SLIDERS DE FISICA 
         lblV1 = new JLabel("150 m/s");
         lblTheta1 = new JLabel("60°");
         lblTheta2 = new JLabel("45°");
@@ -136,19 +157,87 @@ public class War extends JFrame {
         sldTheta2.addChangeListener(actualizador);
         sldDistancia.addChangeListener(actualizador);
 
-        panelEntrada.add(Box.createVerticalStrut(15));
-        panelEntrada.add(crearPanelSlider("Vel. Amenaza (m/s):", sldV1, lblV1));
-        panelEntrada.add(Box.createVerticalStrut(15));
-        panelEntrada.add(crearPanelSlider("Trayectoria Enemiga (°):", sldTheta1, lblTheta1));
-        panelEntrada.add(Box.createVerticalStrut(15));
-        panelEntrada.add(crearPanelSlider("Calibración Interceptor (°):", sldTheta2, lblTheta2));
-        panelEntrada.add(Box.createVerticalStrut(15));
-        panelEntrada.add(crearPanelSlider("Distancia Base (m):", sldDistancia, lblDistancia));
+        JPanel panelV1 = crearPanelSlider("Vel. Inicial Amenaza (v0):", sldV1, lblV1);
+        panelTheta1 = crearPanelSlider("Trayectoria Enemiga (°):", sldTheta1, lblTheta1);
+        panelTheta2 = crearPanelSlider("Calibración Interceptor (°):", sldTheta2, lblTheta2);
+        panelDistancia = crearPanelSlider("Distancia Base (m):", sldDistancia, lblDistancia);
 
-        // CONTROLES EXTRAS Y BOTON
-        JPanel panelControlesExtra = new JPanel(new GridLayout(2, 1, 5, 15));
+        panelEntrada.add(Box.createVerticalStrut(10));
+        panelEntrada.add(panelV1);
+        panelEntrada.add(Box.createVerticalStrut(5));
+        panelEntrada.add(panelTheta1);
+        panelEntrada.add(Box.createVerticalStrut(5));
+        panelEntrada.add(panelTheta2);
+        panelEntrada.add(Box.createVerticalStrut(5));
+        panelEntrada.add(panelDistancia);
+
+        // 4. PANEL DE DATOS FIJOS Y EXPLICACIÓN
+        panelFijos = new JPanel();
+        panelFijos.setLayout(new BoxLayout(panelFijos, BoxLayout.Y_AXIS));
+        panelFijos.setBackground(new Color(30, 35, 40));
+        panelFijos.setBorder(BorderFactory.createTitledBorder("Parámetros Fijos (Auto-Calibrados)"));
+        panelFijos.setMaximumSize(new Dimension(290, 200)); 
+        
+        JLabel lblDist = new JLabel("  Distancia entre bases: 1200 m");
+        lblDist.setFont(new Font("Consolas", Font.PLAIN, 12));
+        JLabel lblAng1 = new JLabel("  Ángulo de ataque: 60°");
+        lblAng1.setFont(new Font("Consolas", Font.PLAIN, 12));
+        JLabel lblAng2 = new JLabel("  Ángulo de intercepción: 45°");
+        lblAng2.setFont(new Font("Consolas", Font.PLAIN, 12));
+        
+        JTextArea txtFormula = new JTextArea();
+        txtFormula.setText(
+            " LÓGICA DE INTERCEPCIÓN:\n" +
+            " Para asegurar choque en el aire,\n" +
+            " las velocidades en el Eje Y\n" +
+            " deben igualarse (V1y = V2y).\n\n" +
+            " Magnitud (v2) = v1 * sen(θ1) / sen(θ2)\n" +
+            " Tiempo choque = Distancia / (V1x + V2x)"
+        );
+        txtFormula.setEditable(false);
+        txtFormula.setBackground(new Color(20, 25, 30));
+        txtFormula.setForeground(new Color(150, 160, 170));
+        txtFormula.setFont(new Font("Consolas", Font.ITALIC, 11));
+        txtFormula.setMargin(new Insets(5, 5, 5, 5));
+        
+        JPanel pnlFormula = new JPanel(new BorderLayout());
+        pnlFormula.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        pnlFormula.setBackground(new Color(30, 35, 40));
+        pnlFormula.add(txtFormula, BorderLayout.CENTER);
+
+        panelFijos.add(Box.createVerticalStrut(5));
+        panelFijos.add(lblDist);
+        panelFijos.add(Box.createVerticalStrut(3));
+        panelFijos.add(lblAng1);
+        panelFijos.add(Box.createVerticalStrut(3));
+        panelFijos.add(lblAng2);
+        panelFijos.add(pnlFormula); 
+        
+        panelEntrada.add(Box.createVerticalStrut(5));
+        panelEntrada.add(panelFijos);
+
+        // LOGICA PARA ALTERNAR MODOS DE VISUALIZACIÓN
+        comboModo.addActionListener(e -> {
+            boolean modoAvanzado = comboModo.getSelectedIndex() == 1;
+            panelTheta1.setVisible(modoAvanzado);
+            panelTheta2.setVisible(modoAvanzado);
+            panelDistancia.setVisible(modoAvanzado);
+            panelFijos.setVisible(!modoAvanzado);
+            
+            panelEntrada.revalidate();
+            panelEntrada.repaint();
+            actualizador.stateChanged(null); 
+        });
+
+        panelTheta1.setVisible(false);
+        panelTheta2.setVisible(false);
+        panelDistancia.setVisible(false);
+        panelFijos.setVisible(true);
+
+        // 5. CONTROLES EXTRAS Y BOTON 
+        JPanel panelControlesExtra = new JPanel(new GridLayout(2, 1, 5, 10)); 
         panelControlesExtra.setBackground(new Color(30, 35, 40));
-        panelControlesExtra.setMaximumSize(new Dimension(280, 100));
+        panelControlesExtra.setMaximumSize(new Dimension(290, 80));
         
         chkModoNoche = new JCheckBox("  Activar Entorno Nocturno", true);
         chkModoNoche.setBackground(new Color(30, 35, 40));
@@ -167,10 +256,10 @@ public class War extends JFrame {
         panelControlesExtra.add(chkModoNoche);
         panelControlesExtra.add(btnSimular);
         
-        panelEntrada.add(Box.createVerticalStrut(20));
+        panelEntrada.add(Box.createVerticalStrut(10));
         panelEntrada.add(panelControlesExtra);
 
-        // PANEL GRAFICO Y CONSOLA
+        // 6. PANEL GRAFICO Y CONSOLA 
         panelGrafico = new CampoGuerra();
         panelGrafico.setBorder(BorderFactory.createTitledBorder("Monitor Táctico Global"));
 
@@ -206,7 +295,7 @@ public class War extends JFrame {
         labelValor.setForeground(new Color(97, 175, 239));
         pValor.add(labelValor);
         p.add(pValor, BorderLayout.EAST);
-        p.setMaximumSize(new Dimension(280, 50));
+        p.setMaximumSize(new Dimension(290, 50));
         return p;
     }
 
@@ -219,9 +308,16 @@ public class War extends JFrame {
 
     private void calcularFisica() {
         v1 = sldV1.getValue();
-        theta1Deg = sldTheta1.getValue();
-        theta2Deg = sldTheta2.getValue();
-        distancia = sldDistancia.getValue();
+
+        if (comboModo.getSelectedIndex() == 1) { 
+            theta1Deg = sldTheta1.getValue();
+            theta2Deg = sldTheta2.getValue();
+            distancia = sldDistancia.getValue();
+        } else { 
+            theta1Deg = 60.0;
+            theta2Deg = 45.0;
+            distancia = 1200.0;
+        }
 
         double t1Rad = Math.toRadians(theta1Deg);
         double t2Rad = Math.toRadians(theta2Deg);
@@ -232,15 +328,26 @@ public class War extends JFrame {
         
         tiempoImpacto = distancia / (v1x + v2x);
         tiempoVuelo = (2 * v1 * Math.sin(t1Rad)) / gravedad;
+        
+        // LA NUEVA REGLA MATEMÁTICA: Calculamos donde va a caer el misil enemigo
+        alcanceMaximo = v1x * tiempoVuelo;
 
-        if (tiempoImpacto < tiempoVuelo) {
-            interceptado = true;
-            limiteT1 = tiempoImpacto;
-            xImpacto = v1x * tiempoImpacto;
-            yImpacto = (v1 * Math.sin(t1Rad) * tiempoImpacto) - (0.5 * gravedad * Math.pow(tiempoImpacto, 2));
-        } else {
+        // Si cae al menos 150 metros antes de llegar a la ciudad, es inofensivo.
+        if (alcanceMaximo < distancia - 150) {
+            cayoCorto = true;
             interceptado = false;
             limiteT1 = tiempoVuelo;
+        } else {
+            cayoCorto = false;
+            if (tiempoImpacto < tiempoVuelo) {
+                interceptado = true;
+                limiteT1 = tiempoImpacto;
+                xImpacto = v1x * tiempoImpacto;
+                yImpacto = (v1 * Math.sin(t1Rad) * tiempoImpacto) - (0.5 * gravedad * Math.pow(tiempoImpacto, 2));
+            } else {
+                interceptado = false;
+                limiteT1 = tiempoVuelo;
+            }
         }
 
         imprimirConsola();
@@ -251,13 +358,21 @@ public class War extends JFrame {
         String defensor = comboDefensor.getSelectedItem().toString();
 
         txtResultados.setText(String.format(">>> ESCENARIO DE CONFLICTO: %s [Ataca] vs %s [Defiende]\n", atacante.toUpperCase(), defensor.toUpperCase()));
-        txtResultados.append(String.format(">>> Carga interceptor requerida: %.2f m/s\n", v2));
-        txtResultados.append(String.format(">>> Tiempo de intersección balística: %.2f seg\n", tiempoImpacto));
-        if(interceptado) {
-            txtResultados.append(String.format(">>> ESTADO: [%s ASEGURADO] - Intercepción viable.\n", defensor.toUpperCase()));
+        txtResultados.append(String.format(">>> Distancia de impacto proyectada: %.2f m\n", alcanceMaximo));
+        
+        if(cayoCorto) {
+            txtResultados.setForeground(new Color(253, 224, 71)); // Amarillo
+            txtResultados.append(">>> ESTADO: [AMENAZA DESCARTADA] - El proyectil caerá en zona deshabitada.\n");
+            txtResultados.append(">>> ACCIÓN: Sistema defensivo en reposo. No se requiere intercepción.\n");
         } else {
-            txtResultados.setForeground(new Color(255, 80, 80));
-            txtResultados.append(String.format(">>> ESTADO: [ALERTA CRÍTICA] - Impacto inminente en territorio de %s.\n", defensor));
+            txtResultados.append(String.format(">>> Carga interceptor requerida (v2): %.2f m/s\n", v2));
+            if(interceptado) {
+                txtResultados.setForeground(new Color(0, 255, 100)); // Verde
+                txtResultados.append(String.format(">>> ESTADO: [%s ASEGURADO] - Intercepción viable en el aire.\n", defensor.toUpperCase()));
+            } else {
+                txtResultados.setForeground(new Color(255, 80, 80)); // Rojo
+                txtResultados.append(String.format(">>> ESTADO: [ALERTA CRÍTICA] - Impacto inminente en territorio de %s.\n", defensor));
+            }
         }
     }
 
@@ -274,7 +389,7 @@ public class War extends JFrame {
         explosionTimer = 0;
         haciendoZoomOut = false;
         particulas.clear();
-        txtResultados.setForeground(new Color(0, 255, 100)); 
+        imprimirConsola(); // Para asegurar el color correcto en la consola
         
         timerAnimacion = new Timer(16, e -> {
             if (simulacionEnCurso) {
@@ -284,7 +399,11 @@ public class War extends JFrame {
                 if (tActual >= limiteT1) {
                     tActual = limiteT1;
                     simulacionEnCurso = false;
-                    shakeIntensity = interceptado ? 15 : 30; 
+                    
+                    // Solo tiembla mucho si cae en la ciudad. Si es en el desierto no tiembla.
+                    if(cayoCorto) shakeIntensity = 0;
+                    else shakeIntensity = interceptado ? 15 : 30; 
+                    
                     targetZoom = 2.0; 
                 }
             }
@@ -376,8 +495,18 @@ public class War extends JFrame {
             double escalaX = (w - (margenX * 2)) / anchoMaximoReal;
             double escalaY = (sueloY - 50) / altoMaximoReal;
 
-            int expX = interceptado ? (margenX + (int)(xImpacto * escalaX)) : (margenX + (int)(v1 * Math.cos(Math.toRadians(theta1Deg)) * tiempoVuelo * escalaX));
-            int expY = interceptado ? (sueloY - (int)(yImpacto * escalaY)) : sueloY;
+            // Determinar a donde apunta la camara
+            int expX, expY;
+            if(cayoCorto) {
+                expX = margenX + (int)(alcanceMaximo * escalaX);
+                expY = sueloY;
+            } else if (interceptado) {
+                expX = margenX + (int)(xImpacto * escalaX);
+                expY = sueloY - (int)(yImpacto * escalaY);
+            } else {
+                expX = margenX + (int)(alcanceMaximo * escalaX);
+                expY = sueloY;
+            }
 
             if (zoomLevel > 1.0) {
                 g2.translate(expX, expY);
@@ -407,8 +536,8 @@ public class War extends JFrame {
 
             // 2. GENERAR CIUDAD
             Random rand = new Random(42); 
-            int currentX = margenX;
-            while (currentX < (w - margenX)) {
+            int currentX = margenX + 150; // La ciudad no empieza justo al lado del enemigo
+            while (currentX < (w - margenX + 50)) { // La ciudad se extiende hasta la base aliada
                 int anchoEdificio = 30 + rand.nextInt(40);
                 int altoEdificio = 40 + rand.nextInt(90);
                 
@@ -448,7 +577,7 @@ public class War extends JFrame {
             g2.setStroke(new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10, new float[]{5}, 0)); 
             g2.drawArc((w - margenX) - radioEscudo, sueloY - radioEscudo, radioEscudo * 2, radioEscudo * 2, 90, 90);
 
-            // 5. DIBUJAR VEHICULOS (COLOR DINÁMICO Y BANDERAS)
+            // 5. DIBUJAR VEHICULOS
             dibujarCamion(g2, margenX, sueloY, true, esNoche, nombreAtacante); 
             dibujarCamion(g2, w - margenX, sueloY, false, esNoche, nombreDefensor); 
 
@@ -457,7 +586,9 @@ public class War extends JFrame {
 
             // 7. TRAYECTORIAS Y FISICA
             dibujarLineaPrediccion(g2, margenX, sueloY, v1, theta1Deg, limiteT1, escalaX, escalaY, true); 
-            if(interceptado) {
+            
+            // Solo dibujamos la linea de prediccion del aliado si NO cayo corto.
+            if(!cayoCorto && interceptado) {
                 dibujarLineaPrediccion(g2, w - margenX, sueloY, v2, theta2Deg, limiteT1, escalaX, escalaY, false); 
             }
 
@@ -478,8 +609,8 @@ public class War extends JFrame {
                     dibujarMisilSprite(g2, m1X, m1Y, anguloM1, new Color(220, 38, 38));
                 }
 
-                // Misil Aliado
-                if(interceptado || simulacionEnCurso) {
+                // Misil Aliado (Solo sale si la amenaza es real)
+                if(!cayoCorto && (interceptado || simulacionEnCurso)) {
                     double r2x = distancia - (v2 * Math.cos(Math.toRadians(theta2Deg)) * tActual);
                     double r2y = (v2 * Math.sin(Math.toRadians(theta2Deg)) * tActual) - (0.5 * gravedad * Math.pow(tActual, 2));
                     int m2X = margenX + (int)(r2x * escalaX);
@@ -497,7 +628,13 @@ public class War extends JFrame {
 
                 // Explosión
                 if (!simulacionEnCurso && tActual >= limiteT1) {
-                    dibujarExplosionAnimada(g2, expX, expY, interceptado, zoomLevel);
+                    if(cayoCorto) {
+                        dibujarExplosionAnimada(g2, expX, expY, false, zoomLevel, ">> IMPACTO EN ZONA DESHABITADA", Color.ORANGE);
+                    } else if (interceptado) {
+                        dibujarExplosionAnimada(g2, expX, expY, true, zoomLevel, ">> INTERCEPCIÓN CONFIRMADA", new Color(0, 255, 100));
+                    } else {
+                        dibujarExplosionAnimada(g2, expX, expY, false, zoomLevel, "!! CIUDAD ALCANZADA !!", Color.RED);
+                    }
                 }
             }
         }
@@ -505,23 +642,22 @@ public class War extends JFrame {
         // --- COLORES TÁCTICOS POR PAÍS ---
         private Color getColorVehiculo(String pais) {
             switch(pais) {
-                case "Israel": return new Color(130, 150, 160); // Gris azulado Naval
-                case "Irán": return new Color(85, 105, 75); // Verde militar oscuro
-                case "EE.UU.": return new Color(200, 180, 140); // Arena desierto
-                case "Rusia": return new Color(75, 85, 75); // Verde muy oscuro
-                case "Ucrania": return new Color(140, 150, 110); // Verde oliva claro
-                case "Corea del N.": return new Color(60, 70, 60); // Gris carbon
-                case "Corea del S.": return new Color(150, 160, 150); // Gris tactico claro
-                case "China": return new Color(150, 100, 90); // Marron/Rojizo
-                case "Taiwán": return new Color(90, 120, 90); // Verde selva
-                case "OTAN": return new Color(60, 80, 110); // Azul marino militar
+                case "Israel": return new Color(130, 150, 160); 
+                case "Irán": return new Color(85, 105, 75); 
+                case "EE.UU.": return new Color(200, 180, 140); 
+                case "Rusia": return new Color(75, 85, 75); 
+                case "Ucrania": return new Color(140, 150, 110); 
+                case "Corea del N.": return new Color(60, 70, 60); 
+                case "Corea del S.": return new Color(150, 160, 150); 
+                case "China": return new Color(150, 100, 90); 
+                case "Taiwán": return new Color(90, 120, 90); 
+                case "OTAN": return new Color(60, 80, 110); 
                 default: return new Color(190, 160, 120); 
             }
         }
 
-        // --- SISTEMA DE DIBUJO DE BANDERAS (PIXEL ART) ---
+        // --- SISTEMA DE DIBUJO DE BANDERAS ---
         private void dibujarBandera(Graphics2D g2, int x, int y, String pais) {
-            // Fondo blanco base y borde
             g2.setColor(Color.WHITE);
             g2.fillRect(x, y, 14, 8);
             g2.setColor(Color.BLACK);
@@ -600,37 +736,31 @@ public class War extends JFrame {
         private void dibujarCamion(Graphics2D g2, int cX, int cY, boolean enemigo, boolean esNoche, String nombrePais) {
             Color colorVehiculo = getColorVehiculo(nombrePais);
             
-            // Chasis y Cabina
             g2.setColor(colorVehiculo);
             g2.fillRoundRect(cX - 20, cY - 12, 55, 10, 4, 4); 
             g2.fillRect(enemigo ? cX + 20 : cX - 20, cY - 20, 15, 12); 
             
-            // Estampar la Bandera en el chasis
             int banderaX = enemigo ? cX - 15 : cX + 15;
             dibujarBandera(g2, banderaX, cY - 11, nombrePais);
             
-            // Focos encendidos (Solo de noche)
             if(esNoche) { 
                 g2.setColor(new Color(255, 255, 150, 150));
                 if(enemigo) g2.fillPolygon(new int[]{cX+35, cX+55, cX+55}, new int[]{cY-15, cY-5, cY-25}, 3);
                 else        g2.fillPolygon(new int[]{cX-20, cX-40, cX-40}, new int[]{cY-15, cY-5, cY-25}, 3);
             }
 
-            // Llantas
             g2.setColor(Color.BLACK); 
             g2.fillOval(cX - 15, cY - 6, 10, 10);
             g2.fillOval(cX + 5, cY - 6, 10, 10);
             g2.fillOval(cX + 20, cY - 6, 10, 10);
             
-            // Lanzador / Batería
             g2.setColor(enemigo ? new Color(130, 40, 40) : new Color(80, 90, 80)); 
             if(enemigo) g2.fillPolygon(new int[]{cX-10, cX+20, cX+10, cX-20}, new int[]{cY-12, cY-35, cY-35, cY-12}, 4);
             else        g2.fillPolygon(new int[]{cX+25, cX-5, cX+5, cX+35}, new int[]{cY-12, cY-35, cY-35, cY-12}, 4);
             
-            // Texto Etiqueta
             g2.setColor(enemigo ? new Color(220, 38, 38) : new Color(59, 130, 246));
             g2.setFont(new Font("Consolas", Font.BOLD, 12));
-            String etiqueta = enemigo ? "Base Hostil ("+nombrePais+")" : "Radar Defensivo ("+nombrePais+")";
+            String etiqueta = enemigo ? "Base Hostil" : "Radar Defensivo";
             int textWidth = g2.getFontMetrics().stringWidth(etiqueta);
             g2.drawString(etiqueta, cX - (textWidth/2) + 10, cY + 20);
         }
@@ -669,7 +799,8 @@ public class War extends JFrame {
             g.dispose();
         }
 
-        private void dibujarExplosionAnimada(Graphics2D g2, int x, int y, boolean exito, double zoom) {
+        // Ahora el texto se centra bonito dependiendo del nivel de zoom
+        private void dibujarExplosionAnimada(Graphics2D g2, int x, int y, boolean exito, double zoom, String texto, Color colorTexto) {
             int radio = exito ? 60 : 100;
             g2.setColor(new Color(255, 200, 50, 150)); 
             g2.fillOval(x - radio/2, y - radio/2, radio, radio);
@@ -682,13 +813,9 @@ public class War extends JFrame {
             if (fontSize < 10) fontSize = 10;
             g2.setFont(new Font("Consolas", Font.BOLD, fontSize));
             
-            if(exito) {
-                g2.setColor(new Color(0, 255, 100));
-                g2.drawString(">> IMPACTO TÁCTICO", x + (int)(40 / zoom), y - (int)(10 / zoom));
-            } else {
-                g2.setColor(Color.RED);
-                g2.drawString("!! CIUDAD ALCANZADA !!", x - (int)(90 / zoom), y - (int)(60 / zoom));
-            }
+            g2.setColor(colorTexto);
+            int textWidth = g2.getFontMetrics().stringWidth(texto);
+            g2.drawString(texto, x - (textWidth/2), y - (int)(40 / zoom));
         }
     }
 
