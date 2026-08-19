@@ -1,0 +1,48 @@
+graph TD
+    %% Nodos principales del proceso
+    A(["Inicio: Recepción de Materias Primas"]) --> B["Mezclado (Caucho, Azufre, Negro de Humo, Químicos)"]
+    B --> C["Construcción y Ensamblaje (Llanta Verde)"]
+    C --> D{"Vulcanización (Horneado y Presión)"}
+    
+    %% División de propiedades adquiridas en la vulcanización
+    D --> E["Adquiere Propiedades Físicas"]
+    D --> F["Adquiere Propiedades Químicas"]
+    
+    %% Desglose de Propiedades Químicas
+    F --> F1["Creación de enlaces cruzados de azufre"]
+    F --> F2["Resistencia a la oxidación atmosférica"]
+    F --> F3["Resistencia al ozono (Evita agrietamiento)"]
+    F --> F4["Estabilidad térmica molecular"]
+    
+    %% Desglose de Propiedades Físicas
+    E --> E1["Alta elasticidad y memoria de forma"]
+    E --> E2["Resistencia a la abrasión y desgaste"]
+    E --> E3["Fricción y adherencia al asfalto"]
+    E --> E4["Histéresis (Absorción de impactos)"]
+    
+    %% Convergencia al control de calidad
+    F1 --> G{"Control de Calidad e Inspección Final"}
+    F2 --> G
+    F3 --> G
+    F4 --> G
+    E1 --> G
+    E2 --> G
+    E3 --> G
+    E4 --> G
+    
+    %% Decisiones finales
+    G -- "Cumple los estándares" --> H(["Fin: Neumático listo para distribución"])
+    G -- "Presenta defectos" --> I(["Rechazo: Reciclaje o Descarte"])
+
+    %% Estilos de colores (Opcional, pero se ve excelente en VS Code)
+    classDef startEnd fill:#d4edda,stroke:#28a745,stroke-width:2px,color:#155724;
+    classDef process fill:#cce5ff,stroke:#004085,stroke-width:2px,color:#004085;
+    classDef decision fill:#fff3cd,stroke:#856404,stroke-width:2px,color:#856404;
+    classDef physics fill:#e2e3e5,stroke:#383d41,stroke-width:2px,color:#383d41;
+    classDef chemistry fill:#d1ecf1,stroke:#0c5460,stroke-width:2px,color:#0c5460;
+
+    class A,H,I startEnd;
+    class B,C process;
+    class D,G decision;
+    class E,E1,E2,E3,E4 physics;
+    class F,F1,F2,F3,F4 chemistry;
