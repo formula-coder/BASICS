@@ -1,0 +1,35 @@
+graph TD
+    %% Definición de estilos basados en normas 
+    classDef operacion_down fill:#90CAF9,stroke:#0D47A1,stroke-width:2px,color:#0A0A0A;
+    classDef inspeccion fill:#FFB74D,stroke:#E65100,stroke-width:2px,color:#111111;
+    classDef iniciofin fill:#BDBDBD,stroke:#212121,stroke-width:2px,color:#111111;
+    classDef documento fill:#FFF59D,stroke:#F9A825,stroke-width:2px,color:#111111;
+
+    subgraph Downstream ["PRODUCTO TERMINADO (DOWNSTREAM)"]
+        direction TB
+        
+        Inicio2(["Inicio: Recepción de materia prima"]):::iniciofin
+        Op6((Mecanizado)):::operacion_down
+        Op7((Forja)):::operacion_down
+        Op8((Tratamiento térmico)):::operacion_down
+        Insp1["Inspección (QC)"]:::inspeccion
+        Op9((Rectificado)):::operacion_down
+        Fin2(["Fin: Despacho del producto final"]):::iniciofin
+
+        Doc2[/"Documentos y Trazabilidad:
+        - Hoja de Ruta (Traveler)
+        - Código de parte
+        - Sello de aprobación (QC)
+        - Parámetros reales registrados"/]:::documento
+
+        Inicio2 --> Op6
+        Op6 --> Op7
+        Op7 --> Op8
+        Op8 --> Insp1
+        Insp1 --> Op9
+        Op9 --> Fin2
+
+        %% Conexión de los elementos de trazabilidad
+        Doc2 -.-> Insp1
+        Doc2 -.-> Fin2
+    end
