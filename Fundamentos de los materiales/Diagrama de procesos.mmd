@@ -1,31 +1,34 @@
-graph TB
-    %% Definición de estilos
-    classDef operacion fill:#6baed6,stroke:#08519c,stroke-width:2px,color:#000
-    classDef inspeccion fill:#fdae6b,stroke:#e6550d,stroke-width:2px,color:#000
-    classDef tramite fill:#ffeda0,stroke:#e31a1c,stroke-width:2px,color:#000
-    classDef terminal fill:#d9d9d9,stroke:#666,stroke-width:2px,color:#000
+flowchart TD
+    %% Definición de estilos para mantener los colores del diagrama original
+    classDef iniciofin fill:#e0e0e0,stroke:#888,stroke-width:2px,color:#000;
+    classDef operacion fill:#5dade2,stroke:#2874a6,stroke-width:2px,color:#000,text-align:left;
+    classDef traza fill:#fcf3cf,stroke:#d4ac0d,stroke-width:2px,color:#000,text-align:left;
+    classDef inspeccion fill:#f0b27a,stroke:#d35400,stroke-width:2px,color:#000,text-align:left;
 
-    %% Nodos
-    Inicio["Inicio: Recepción de materia prima"]
-    Op1("1<br>Forja")
-    Op2("2<br>Tratamiento térmico")
-    Op3("3<br>Mecanizado")
-    Insp1["1<br>Inspección (QC)"]
-    Op4("4<br>Rectificado")
-    Doc("Ø<br>Trazabilidad:<br>- Hoja de Ruta<br>- Código de parte<br>- Sello de QC<br>- Parámetros reales")
-    Fin["Fin: Despacho del producto final"]
+    Start["Inicio: Recepción de materia prima"]:::iniciofin
 
-    %% Aplicar estilos
-    class Inicio,Fin terminal
-    class Op1,Op2,Op3,Op4 operacion
-    class Insp1 inspeccion
-    class Doc tramite
+    Op1("<b>1. Forja</b><br>• <i>Entradas:</i> Material en bruto, energía térmica extrema.<br>• <i>Variables:</i> Presión de prensa, temp. de deformación.<br>• <i>Salidas:</i> Pieza preformada volumétricamente."):::operacion
+
+    Op2("<b>2. Tratamiento térmico</b><br>• <i>Entradas:</i> Energía térmica, gases de atmósfera controlada.<br>• <i>Variables:</i> Temp. crítica, tiempo de retención, tasa de enfriamiento.<br>• <i>Salidas:</i> Pieza con microestructura alterada (mayor dureza)."):::operacion
+
+    Op3("<b>3. Mecanizado</b><br>• <i>Entradas:</i> Herramientas de corte, fluidos refrigerantes.<br>• <i>Variables:</i> Velocidad de corte, avance, RPM del husillo.<br>• <i>Salidas:</i> Pieza dimensionada, viruta metálica/scrap."):::operacion
+
+    Trz("<b>Ø Trazabilidad:</b><br>- Hoja de Ruta<br>- Código de parte<br>- Sello de QC<br>- Parámetros reales"):::traza
+
+    Insp("<b>1. Inspección (QC)</b><br>• <i>Entradas:</i> Pieza dimensionada, instrumentos de medición.<br>• <i>Variables:</i> Tolerancias de planos, rugosidad esperada.<br>• <i>Salidas:</i> Pieza aprobada, reporte de control."):::inspeccion
+
+    Op4("<b>4. Rectificado</b><br>• <i>Entradas:</i> Muela abrasiva, emulsión refrigerante.<br>• <i>Variables:</i> Velocidad de la muela, avance micrométrico.<br>• <i>Salidas:</i> Pieza con acabado final, lodos abrasivos."):::operacion
+
+    End["Fin: Despacho del producto final"]:::iniciofin
 
     %% Conexiones
-    Inicio --> Op1
+    Start --> Op1
     Op1 --> Op2
     Op2 --> Op3
-    Op3 --> Insp1
-    Insp1 --> Op4
-    Op4 --> Fin
-    Doc --> Insp1
+    Op3 --> Insp
+    Trz --> Insp
+    Insp --> Op4
+    Op4 --> End
+    
+    %% Enlace invisible para mejorar la alineación visual (Trazabilidad a la derecha)
+    Op2 ~~~ Trz
