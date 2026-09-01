@@ -1,34 +1,24 @@
-flowchart TD
-    %% Definición de estilos para mantener los colores del diagrama original
-    classDef iniciofin fill:#e0e0e0,stroke:#888,stroke-width:2px,color:#000;
-    classDef operacion fill:#5dade2,stroke:#2874a6,stroke-width:2px,color:#000,text-align:left;
-    classDef traza fill:#fcf3cf,stroke:#d4ac0d,stroke-width:2px,color:#000,text-align:left;
-    classDef inspeccion fill:#f0b27a,stroke:#d35400,stroke-width:2px,color:#000,text-align:left;
+graph TD
+    classDef inicioFin fill:#e0e0e0,stroke:#333,stroke-width:2px,color:black;
+    classDef operacion fill:#6baed6,stroke:#333,stroke-width:2px,color:black,text-align:left;
+    classDef inspeccion fill:#fdae6b,stroke:#333,stroke-width:2px,color:black,text-align:left;
+    classDef trazabilidad fill:#fee391,stroke:#333,stroke-width:2px,color:black,text-align:left;
 
-    Start["Inicio: Recepción de materia prima"]:::iniciofin
-
-    Op1("<b>1. Forja</b><br>• <i>Entradas:</i> Material en bruto, energía térmica extrema.<br>• <i>Variables:</i> Presión de prensa, temp. de deformación.<br>• <i>Salidas:</i> Pieza preformada volumétricamente."):::operacion
-
-    Op2("<b>2. Tratamiento térmico</b><br>• <i>Entradas:</i> Energía térmica, gases de atmósfera controlada.<br>• <i>Variables:</i> Temp. crítica, tiempo de retención, tasa de enfriamiento.<br>• <i>Salidas:</i> Pieza con microestructura alterada (mayor dureza)."):::operacion
-
-    Op3("<b>3. Mecanizado</b><br>• <i>Entradas:</i> Herramientas de corte, fluidos refrigerantes.<br>• <i>Variables:</i> Velocidad de corte, avance, RPM del husillo.<br>• <i>Salidas:</i> Pieza dimensionada, viruta metálica/scrap."):::operacion
-
-    Trz("<b>Ø Trazabilidad:</b><br>- Hoja de Ruta<br>- Código de parte<br>- Sello de QC<br>- Parámetros reales"):::traza
-
-    Insp("<b>1. Inspección (QC)</b><br>• <i>Entradas:</i> Pieza dimensionada, instrumentos de medición.<br>• <i>Variables:</i> Tolerancias de planos, rugosidad esperada.<br>• <i>Salidas:</i> Pieza aprobada, reporte de control."):::inspeccion
-
-    Op4("<b>4. Rectificado</b><br>• <i>Entradas:</i> Muela abrasiva, emulsión refrigerante.<br>• <i>Variables:</i> Velocidad de la muela, avance micrométrico.<br>• <i>Salidas:</i> Pieza con acabado final, lodos abrasivos."):::operacion
-
-    End["Fin: Despacho del producto final"]:::iniciofin
-
-    %% Conexiones
-    Start --> Op1
-    Op1 --> Op2
-    Op2 --> Op3
-    Op3 --> Insp
-    Trz --> Insp
-    Insp --> Op4
-    Op4 --> End
+    Inicio["Inicio: Recepción de materia prima"]:::inicioFin --> A
     
-    %% Enlace invisible para mejorar la alineación visual (Trazabilidad a la derecha)
-    Op2 ~~~ Trz
+    A(("<b>1. Forja</b><br>• Entradas: Material en bruto, energía térmica extrema.<br>• Variables: Presión de prensa, temp. de deformación.<br>• Salidas: Pieza preformada volumétricamente.")):::operacion --> B
+    
+    B(("<b>2. Tratamiento térmico</b><br>• Entradas: Energía térmica, gases de atmósfera controlada.<br>• Variables: Temp. crítica, tiempo de retención, tasa de enfriamiento.<br>• Salidas: Pieza con microestructura alterada (mayor dureza).")):::operacion --> C
+    
+    C(("<b>3. Mecanizado</b><br>• Entradas: Herramientas de corte, fluidos refrigerantes.<br>• Variables: Velocidad de corte, avance, RPM del husillo.<br>• Salidas: Pieza dimensionada, viruta metálica/scrap.")):::operacion --> D
+    
+    D["<b>1. Inspección (QC)</b><br>• Entradas: Pieza dimensionada, instrumentos de medición.<br>• Variables: Tolerancias de planos, rugosidad esperada.<br>• Salidas: Pieza aprobada, reporte de control."]:::inspeccion
+    
+    E(("<b>4. Rectificado</b><br>• Entradas: Muela abrasiva, emulsión refrigerante.<br>• Variables: Velocidad de la muela, avance micrométrico.<br>• Salidas: Pieza con acabado final, lodos abrasivos.")):::operacion
+    
+    Tz["<b>Ø Trazabilidad:</b><br>- Hoja de Ruta<br>- Código de parte<br>- Sello de QC<br>- Parámetros reales"]:::trazabilidad
+    
+    C --> D
+    Tz --> D
+    D --> E
+    E --> Fin["Fin: Despacho del producto final"]:::inicioFin
