@@ -1,35 +1,31 @@
-graph TD
-    %% Definición de estilos basados en normas 
-    classDef operacion_down fill:#90CAF9,stroke:#0D47A1,stroke-width:2px,color:#0A0A0A;
-    classDef inspeccion fill:#FFB74D,stroke:#E65100,stroke-width:2px,color:#111111;
-    classDef iniciofin fill:#BDBDBD,stroke:#212121,stroke-width:2px,color:#111111;
-    classDef documento fill:#FFF59D,stroke:#F9A825,stroke-width:2px,color:#111111;
+graph TB
+    %% Definición de estilos
+    classDef operacion fill:#6baed6,stroke:#08519c,stroke-width:2px,color:#000
+    classDef inspeccion fill:#fdae6b,stroke:#e6550d,stroke-width:2px,color:#000
+    classDef tramite fill:#ffeda0,stroke:#e31a1c,stroke-width:2px,color:#000
+    classDef terminal fill:#d9d9d9,stroke:#666,stroke-width:2px,color:#000
 
-    subgraph Downstream ["PRODUCTO TERMINADO (DOWNSTREAM)"]
-        direction TB
-        
-        Inicio2(["Inicio: Recepción de materia prima"]):::iniciofin
-        Op6((Mecanizado)):::operacion_down
-        Op7((Forja)):::operacion_down
-        Op8((Tratamiento térmico)):::operacion_down
-        Insp1["Inspección (QC)"]:::inspeccion
-        Op9((Rectificado)):::operacion_down
-        Fin2(["Fin: Despacho del producto final"]):::iniciofin
+    %% Nodos
+    Inicio["Inicio: Recepción de materia prima"]
+    Op1("1<br>Forja")
+    Op2("2<br>Tratamiento térmico")
+    Op3("3<br>Mecanizado")
+    Insp1["1<br>Inspección (QC)"]
+    Op4("4<br>Rectificado")
+    Doc("Ø<br>Trazabilidad:<br>- Hoja de Ruta<br>- Código de parte<br>- Sello de QC<br>- Parámetros reales")
+    Fin["Fin: Despacho del producto final"]
 
-        Doc2[/"Documentos y Trazabilidad:
-        - Hoja de Ruta (Traveler)
-        - Código de parte
-        - Sello de aprobación (QC)
-        - Parámetros reales registrados"/]:::documento
+    %% Aplicar estilos
+    class Inicio,Fin terminal
+    class Op1,Op2,Op3,Op4 operacion
+    class Insp1 inspeccion
+    class Doc tramite
 
-        Inicio2 --> Op6
-        Op6 --> Op7
-        Op7 --> Op8
-        Op8 --> Insp1
-        Insp1 --> Op9
-        Op9 --> Fin2
-
-        %% Conexión de los elementos de trazabilidad
-        Doc2 -.-> Insp1
-        Doc2 -.-> Fin2
-    end
+    %% Conexiones
+    Inicio --> Op1
+    Op1 --> Op2
+    Op2 --> Op3
+    Op3 --> Insp1
+    Insp1 --> Op4
+    Op4 --> Fin
+    Doc --> Insp1
